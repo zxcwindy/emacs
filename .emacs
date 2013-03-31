@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(js2-idle-timer-delay 2.5)
  '(make-backup-files nil)
- '(safe-local-variable-values (quote ((require-final-newline . t))))
+ '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
  '(size-indication-mode t)
  '(tool-bar-mode nil)
@@ -24,13 +24,19 @@
 (add-to-list 'load-path "~/.emacs.d/el")
 ;; yasnippet
 (add-to-list 'load-path "~/git/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
 ;;slime
 (add-to-list 'load-path "~/.emacs.d/slime/")
+(require 'slime)
+(slime-setup)
+;;(add-to-list 'load-path "~/git/slime/")
+
 ;;weibo
 (add-to-list 'load-path "~/.emacs.d/el/weibo")
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
-(require 'slime)
-(slime-setup)
+(require 'weibo)
+
 ;;js2-mode
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -44,25 +50,58 @@
     (eval-print-last-sexp)))
 (el-get 'sync)
 
+;;paredit-hook
+(mapcar #'(lambda (x)
+	    (add-hook x 'my-paredit-mode))
+	'(comint-mode-hook lisp-mode-hook))
+(defun my-paredit-mode ()
+  (enable-paredit-mode)
+  (global-set-key (kbd "C-; C-f") 'paredit-forward)
+  (global-set-key (kbd "C-; C-b") 'paredit-backward))
+;; (add-hook 'comint-mode-hook 'enable-paredit-mode)
+;; (add-hook 'lisp-mode-hook 'enable-paredit-mode)
 
-;;(require 'session)
+(require 'session)
+(add-hook 'after-init-hook 'session-initialize)
+
+(load "desktop") 
+(desktop-load-default) 
+(desktop-read)
+
 (require 'tabbar)
 (tabbar-mode 1)
 
-(require 'yasnippet)
-(yas-global-mode 1)
+;;paredit
+(autoload 'enable-paredit-mode "paredit"
+  "Turn on pseudo-structural editing of Lisp code."
+  t)
 
-;;weibo
-(require 'weibo)
+(require 'ibuffer)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(require 'ido)
+(ido-mode t)
+
+;;swank.js
+(global-set-key [f6] 'slime-js-reload)
+(add-hook 'js2-mode-hook
+	  (lambda ()
+	    (slime-js-minor-mode 1)))
+(add-hook 'css-mode-hook
+	  (lambda ()
+	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
+	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
 
 (display-time-mode 1)
 ;;-----------
 ;;自定义快捷键
 (global-set-key [C-f6] 'set-mark-command)
+(global-set-key [f1] 'help-command)
 (global-set-key (kbd "M-RET") 'cua-mode)
 (global-set-key (kbd "C-; w") 'zxc-copy-word-at-point)
 (global-set-key (kbd "C-; r") 'zxc-copy-line-at-point)
 (global-set-key (kbd "C-; y") 'zxc-delete-and-yank)
+(global-set-key (kbd "C-; x") 'zxc-delete-current-word)
 (global-set-key (kbd "<up>")    'tabbar-backward-group)
 (global-set-key (kbd "<down>")  'tabbar-forward-group)
 (global-set-key (kbd "<left>")  'tabbar-backward-tab)
@@ -75,7 +114,16 @@
 (global-set-key (kbd "C-c .") 'ska-jump-to-register)
 (global-set-key (kbd "S-<left>") 'scroll-right)
 (global-set-key (kbd "S-<right>") 'scroll-left)
-;; (global-set-key (kbd "M-f") 'forward-word)
+(global-set-key (kbd "C-h d") 'kill-whole-line)
+(global-set-key (kbd "C-h C-v") 'scroll-other-window)
+(global-set-key [f5] 'speedbar)
+
+;;sql-model-hook
+(add-hook 'sql-interactive-mode-hook
+	  (function (lambda ()
+		      (setq comint-output-filter-functions 'comint-truncate-buffer))))
+
+
 ;;-----------------------
 ;;开启大小写转换和y/n回答
 (put 'downcase-region 'disabled nil)
@@ -114,7 +162,7 @@
 ;;------------------
 ;;防止页面滚动时跳动， scroll-margin 3 可以在靠近屏幕边沿
 ;;3行时就开始滚动，可以很好的看到上下文
-(setq scroll-margin 3)
+(setq scroll-margin 1)
 (setq kill-ring-max 200)
 
 ;;-----------------------
@@ -178,6 +226,7 @@ that was stored with ska-point-to-register."
 ;;   (backward-word)
 ;;   (mark-word)
 ;;   )
+
 ;;替换后一个单词
 (defun zxc-delete-and-yank()
   (interactive)
@@ -185,8 +234,14 @@ that was stored with ska-point-to-register."
   (forward-word)
   (backward-word)
   (yank)
-  (kill-word 1)
-  )
+  (kill-word 1))
+
+;;删除当前所在的单词
+(defun zxc-delete-current-word()
+  (interactive)
+  (backward-word)
+  (kill-word 1))
+
 ;;自定义关闭按键
 (defun myclose(str)
   (interactive "sAre you sure to kill this emacs process:y(es)/n(o)")
@@ -240,5 +295,4 @@ that was stored with ska-point-to-register."
 (modify-syntax-entry ?- "w")
 
 ;; todo list
-;;SLIME
 (put 'scroll-left 'disabled nil)
