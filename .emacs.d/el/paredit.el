@@ -300,11 +300,11 @@ Paredit behaves badly if parentheses are imbalanced, so exercise
                  "(a b [|] c d)")
                 ("(foo \"bar |baz\" quux)"
                  "(foo \"bar [baz\" quux)"))
-   ("]"         paredit-close-square
-                ("(define-key keymap [frob|  ] 'frobnicate)"
-                 "(define-key keymap [frob]| 'frobnicate)")
-                ("; [Bar.|"
-                 "; [Bar.]|"))
+   ;; ("]"         paredit-close-square
+   ;;              ("(define-key keymap [frob|  ] 'frobnicate)"
+   ;;               "(define-key keymap [frob]| 'frobnicate)")
+   ;;              ("; [Bar.|"
+   ;;               "; [Bar.]|"))
    ("\""        paredit-doublequote
                 ("(frob grovel |full lexical)"
                  "(frob grovel \"|\" full lexical)")
@@ -672,7 +672,7 @@ Used by `paredit-yank-pop'; for internal paredit use only.")
   'paredit-close-round-and-newline)
 
 (defalias 'paredit-open-bracket 'paredit-open-square)
-(defalias 'paredit-close-bracket 'paredit-close-square)
+;;(defalias 'paredit-close-bracket 'paredit-close-square)
 (defalias 'paredit-close-bracket-and-newline
   'paredit-close-square-and-newline)
 

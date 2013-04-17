@@ -3,8 +3,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(desktop-save t)
  '(js2-idle-timer-delay 2.5)
  '(make-backup-files nil)
+ '(outline-minor-mode-prefix (kbd "C-;"))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
  '(size-indication-mode t)
@@ -21,60 +23,62 @@
 (server-start)
 
 ;;加载插件位置
-(add-to-list 'load-path "~/.emacs.d/el")
-;; yasnippet
-(add-to-list 'load-path "~/git/yasnippet")
-(require 'yasnippet)
-(yas-global-mode 1)
-;;slime
-(add-to-list 'load-path "~/.emacs.d/slime/")
+(mapcar #'(lambda (path)
+	    (add-to-list 'load-path path))
+	'("~/.emacs.d/el"
+	  "~/.emacs.d/slime"
+	  "~/.emacs.d/swank-js"
+	  ))
+
 (require 'slime)
 (slime-setup)
-;;(add-to-list 'load-path "~/git/slime/")
+(global-set-key "\C-hj" 'slime-hyperspec-lookup)
+(setq common-lisp-hyperspec-root "/home/asiainfo/api/HyperSpec-7-0/HyperSpec/")
 
-;;weibo
-(add-to-list 'load-path "~/.emacs.d/el/weibo")
+;;swank-js
+(require 'slime-js)
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(package-initialize)
+
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+
+(require 'yasnippet)
+(yas-global-mode 1)
+
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
-(require 'weibo)
+;; (setq inferior-lisp-program "/usr/bin/lispworks-personal-6-1-1-x86-linux")
 
 ;;js2-mode
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-;; el-get
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-(el-get 'sync)
-
-;;paredit-hook
-(mapcar #'(lambda (x)
-	    (add-hook x 'my-paredit-mode))
-	'(comint-mode-hook lisp-mode-hook))
-(defun my-paredit-mode ()
-  (enable-paredit-mode)
-  (global-set-key (kbd "C-; C-f") 'paredit-forward)
-  (global-set-key (kbd "C-; C-b") 'paredit-backward))
-;; (add-hook 'comint-mode-hook 'enable-paredit-mode)
-;; (add-hook 'lisp-mode-hook 'enable-paredit-mode)
 
 (require 'session)
 (add-hook 'after-init-hook 'session-initialize)
 
-(load "desktop") 
-(desktop-load-default) 
-(desktop-read)
-
-(require 'tabbar)
-(tabbar-mode 1)
 
 ;;paredit
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code."
   t)
+
+;;paredit-hook
+(defun my-paredit-mode ()
+  (enable-paredit-mode)
+  (global-set-key (kbd "C-; C-f") 'paredit-forward)
+  (global-set-key (kbd "C-; C-b") 'paredit-backward))
+;; (mapcar #'(lambda (x)
+;; 	    (add-hook x 'my-paredit-mode))
+;; 	'('comint-mode-hook 'lisp-mode-hook))
+
+(desktop-read)
+
+(require 'tabbar)
+(tabbar-mode 1)
 
 (require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -86,13 +90,19 @@
 (global-set-key [f6] 'slime-js-reload)
 (add-hook 'js2-mode-hook
 	  (lambda ()
-	    (slime-js-minor-mode 1)))
+	    (slime-js-minor-mode 1)
+	    (global-set-key (kbd "C-; C-a") 'js2-mode-show-all)
+	    (global-set-key (kbd "C-; C-d") 'js2-mode-hide-element)
+	    (global-set-key (kbd "C-; C-s") 'js2-mode-show-element)
+	    (global-set-key (kbd "C-; C-q") 'js2-mode-toggle-hide-functions)))
+
 (add-hook 'css-mode-hook
 	  (lambda ()
 	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
 	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
 
-(display-time-mode 1)
+(add-hook 'sql-interactive-mode-hook 'toggle-truncate-lines)
+
 ;;-----------
 ;;自定义快捷键
 (global-set-key [C-f6] 'set-mark-command)
@@ -106,7 +116,6 @@
 (global-set-key (kbd "<down>")  'tabbar-forward-group)
 (global-set-key (kbd "<left>")  'tabbar-backward-tab)
 (global-set-key (kbd "<right>") 'tabbar-forward-tab)
-(setq outline-minor-mode-prefix (kbd "C-;"))
 (global-set-key (kbd "C-z") 'shell)
 (global-set-key [f11] 'my-fullscreen)
 (global-set-key (kbd "C-,") 'zxc-point-to-register)
@@ -117,18 +126,47 @@
 (global-set-key (kbd "C-h d") 'kill-whole-line)
 (global-set-key (kbd "C-h C-v") 'scroll-other-window)
 (global-set-key [f5] 'speedbar)
+(global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 
 ;;sql-model-hook
 (add-hook 'sql-interactive-mode-hook
 	  (function (lambda ()
 		      (setq comint-output-filter-functions 'comint-truncate-buffer))))
 
+(require 'js2-refactor)
+(js2r-add-keybindings-with-prefix  "C-c m")
 
+;;w3m
+;;(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+
+(defun get-browse (url  &rest args)
+  (if (let ((list '(lisp-interaction-mode lisp-mode)))
+	(do* ((lt list (cdr lt))
+	      (mode-1 (car lt) (car lt))
+	      (mode major-mode))
+	    ((or (equal lt nil)
+		 (equal mode mode-1))
+	     (equal mode mode-1))))
+      (w3m-browse-url url args)
+    (browse-url-firefox url args)))
+
+(setq browse-url-browser-function #'get-browse)
+
+(setq w3m-use-cookies t)
+(setq w3m-coding-system 'utf-8
+      w3m-file-coding-system 'utf-8
+      w3m-file-name-coding-system 'utf-8
+      w3m-input-coding-system 'utf-8
+      w3m-output-coding-system 'utf-8
+      w3m-terminal-coding-system 'utf-8)
 ;;-----------------------
 ;;开启大小写转换和y/n回答
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+;;各种配置
+(display-time-mode 1)
+(pending-delete-mode)
 
 ;;------------------
 ;;关闭边框
@@ -283,6 +321,7 @@ that was stored with ska-point-to-register."
 ;;zen coding
 (require 'zencoding-mode)
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
+(add-hook 'nxml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 (setq auto-mode-alist (cons '(".jsp$" . html-mode) auto-mode-alist))
 ;;format
 (defun indent-whole ()
@@ -296,3 +335,4 @@ that was stored with ska-point-to-register."
 
 ;; todo list
 (put 'scroll-left 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
