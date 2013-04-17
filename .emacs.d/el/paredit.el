@@ -300,11 +300,11 @@ Paredit behaves badly if parentheses are imbalanced, so exercise
                  "(a b [|] c d)")
                 ("(foo \"bar |baz\" quux)"
                  "(foo \"bar [baz\" quux)"))
-   ;; ("]"         paredit-close-square
-   ;;              ("(define-key keymap [frob|  ] 'frobnicate)"
-   ;;               "(define-key keymap [frob]| 'frobnicate)")
-   ;;              ("; [Bar.|"
-   ;;               "; [Bar.]|"))
+   ("]"         paredit-close-square
+                ("(define-key keymap [frob|  ] 'frobnicate)"
+                 "(define-key keymap [frob]| 'frobnicate)")
+                ("; [Bar.|"
+                 "; [Bar.]|"))
    ("\""        paredit-doublequote
                 ("(frob grovel |full lexical)"
                  "(frob grovel \"|\" full lexical)")

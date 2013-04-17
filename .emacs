@@ -3,7 +3,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(desktop-save t)
+ '(desktop-path (quote ("~/.emacs.d/")))
+;; '(desktop-save t)
  '(js2-idle-timer-delay 2.5)
  '(make-backup-files nil)
  '(outline-minor-mode-prefix (kbd "C-;"))
@@ -58,8 +59,8 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 (require 'session)
+(autoload 'session-initialize "session" nil t)
 (add-hook 'after-init-hook 'session-initialize)
-
 
 ;;paredit
 (autoload 'enable-paredit-mode "paredit"
@@ -71,11 +72,13 @@
   (enable-paredit-mode)
   (global-set-key (kbd "C-; C-f") 'paredit-forward)
   (global-set-key (kbd "C-; C-b") 'paredit-backward))
-;; (mapcar #'(lambda (x)
-;; 	    (add-hook x 'my-paredit-mode))
-;; 	'('comint-mode-hook 'lisp-mode-hook))
+(mapcar #'(lambda (x)
+	    (add-hook x 'my-paredit-mode))
+	'(comint-mode-hook lisp-mode-hook))
 
-(desktop-read)
+;;desktop
+(desktop-save-mode 1)
+;;(desktop-read)
 
 (require 'tabbar)
 (tabbar-mode 1)
