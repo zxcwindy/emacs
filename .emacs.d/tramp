@@ -1,4 +1,4 @@
-;; -*- emacs-lisp -*- <13/04/03 10:24:51 /home/asiainfo/.emacs.d/tramp>
+;; -*- emacs-lisp -*- <13/05/09 17:20:19 /home/asiainfo/.emacs.d/tramp>
 ;; Tramp connection history.  Don't change this file.
 ;; You can delete it, forcing Tramp to reapply the checks.
 
@@ -67,5 +67,52 @@
   ("remote-shell" "/bin/sh")
   ("busybox" nil)
   ("file-exists" "test -e"))
- (["ssh" nil "192.168.1.203" nil]
-  nil))
+ (["scpc" "aiweb" "10.109.1.8" nil]
+  ("uname" "SunOS 5.10")
+  ("test" "test")
+  ("remote-path"
+   ("/usr/xpg4/bin" "/usr/ccs/bin" "/usr/bin" "/bin" "/usr/sbin" "/usr/local/bin"))
+  ("remote-shell" "/usr/bin/bash")
+  ("busybox" nil)
+  ("ls" "/usr/xpg4/bin/ls")
+  ("ls-dired" nil)
+  ("stat" nil)
+  ("perl-file-spec" t)
+  ("perl-cwd-realpath" t)
+  ("perl" "\\perl")
+  ("id" "/usr/xpg4/bin/id")
+  ("gid-integer" 1000)
+  ("file-exists" "test -e")
+  ("readlink" nil)
+  ("trash" nil)
+  ("local-encoding" base64-encode-region)
+  ("local-decoding" base64-decode-region)
+  ("remote-encoding" tramp-perl-encode-with-module)
+  ("remote-decoding" tramp-perl-decode-with-module)
+  ("inline-compress" "gzip")
+  ("inline-decompress" "gzip -d")
+  ("uid-integer" 103)
+  ("~" "/web"))
+ (["scpc" "db2inst1" "10.109.1.8" nil]
+  ("uname" "SunOS 5.10")
+  ("test" "test")
+  ("remote-path"
+   ("/usr/xpg4/bin" "/usr/ccs/bin" "/usr/bin" "/bin" "/usr/sbin" "/usr/local/bin"))
+  ("remote-shell" "/usr/bin/bash")
+  ("busybox" nil)
+  ("ls" "/usr/xpg4/bin/ls")
+  ("ls-dired" nil)
+  ("stat" nil)
+  ("perl-file-spec" t)
+  ("perl-cwd-realpath" t)
+  ("perl" "\\perl")
+  ("id" "/usr/xpg4/bin/id")
+  ("gid-integer" 104)
+  ("file-exists" "test -e")
+  ("readlink" nil)
+  ("local-encoding" base64-encode-region)
+  ("local-decoding" base64-decode-region)
+  ("remote-encoding" tramp-perl-encode-with-module)
+  ("remote-decoding" tramp-perl-decode-with-module)
+  ("inline-compress" "gzip")
+  ("inline-decompress" "gzip -d")))

@@ -130,6 +130,7 @@
 (global-set-key (kbd "C-h C-v") 'scroll-other-window)
 (global-set-key [f5] 'speedbar)
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
+(global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 
 ;;sql-model-hook
 (add-hook 'sql-interactive-mode-hook
