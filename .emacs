@@ -28,8 +28,7 @@
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/slime"
-	  "~/.emacs.d/swank-js"
-	  ))
+	  "~/.emacs.d/swank-js"))
 
 (require 'slime)
 (slime-setup)
@@ -61,6 +60,8 @@
 (require 'session)
 (autoload 'session-initialize "session" nil t)
 (add-hook 'after-init-hook 'session-initialize)
+
+(require 'zxc-http)
 
 ;;paredit
 (autoload 'enable-paredit-mode "paredit"
@@ -337,6 +338,7 @@ that was stored with ska-point-to-register."
 (modify-syntax-entry ?_ "w")
 (modify-syntax-entry ?- "w")
 
-;; todo list
 (put 'scroll-left 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
+;; todo list
+;; emms
