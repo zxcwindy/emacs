@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(desktop-path (quote ("~/.emacs.d/")))
-;; '(desktop-save t)
+ ;; '(desktop-save t)
  '(js2-idle-timer-delay 2.5)
  '(make-backup-files nil)
  '(outline-minor-mode-prefix (kbd "C-;"))
@@ -62,6 +62,9 @@
 (add-hook 'after-init-hook 'session-initialize)
 
 (require 'zxc-http)
+
+(require 'openwith)
+(openwith-mode t)
 
 ;;paredit
 (autoload 'enable-paredit-mode "paredit"
