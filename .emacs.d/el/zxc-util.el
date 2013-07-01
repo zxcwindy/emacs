@@ -30,6 +30,13 @@
 	((string-match-p (format-type-split-char lisp-format) str) lisp-format)
 	(t java-format)))
 
+(defun get-target-format-type ()
+  (cond ((equal major-mode 'sql-mode) sql-format)
+	((or (equal major-mode 'lisp-interaction-mode)
+	     (equal major-mode 'lisp-mode))
+	 lisp-format)
+	(t java-format)))
+
 (defun upcasep (index str)
   (and (>= (get-byte index str) (get-byte 0 "A"))
        (< (get-byte index str) (get-byte 0 "a"))))
@@ -55,26 +62,29 @@ return the positions list "
     (nreverse result)))
 
 
-(defun convert-format (str source target)
-  "source : get-str-format"
-  (if (equal (format-type-type-name source) (format-type-type-name target))
-      str
-    (let (strs)
-      (if (equal (format-type-type-name source) (format-type-type-name java-format))
-	  (setf strs (split-string-upper str))
-	(setf strs (split-string str ( format-type-split-char source))))
-      (cond ((equal (format-type-type-name target) (format-type-type-name java-format))
-	     (concatenate 'string (car strs)
-			  (mapconcat #'(lambda (str)
-					 (capitalize str))
-				     (cdr strs) "")))
-	    (t (mapconcat #'(lambda (str)
-			      (downcase str))
-			  strs (format-type-split-char target)))))))
+(defun convert-format ()
+  "convert code format"
+  (let* ((str (filter-buffer-substring (point) (mark) t))
+	 (source (get-format-type str))
+	 (target (get-target-format-type)))
+    (if (equal (format-type-type-name source) (format-type-type-name target))
+	str
+      (let (strs)
+	(if (equal (format-type-type-name source) (format-type-type-name java-format))
+	    (setf strs (split-string-upper str))
+	  (setf strs (split-string str ( format-type-split-char source))))
+	(cond ((equal (format-type-type-name target) (format-type-type-name java-format))
+	       (concatenate 'string (car strs)
+			    (mapconcat #'(lambda (str)
+					   (capitalize str))
+				       (cdr strs) "")))
+	      (t (mapconcat #'(lambda (str)
+				(downcase str))
+			    strs (format-type-split-char target))))))))
 
 (defun concat-string-by-backslash (&rest strs)
   (mapconcat #'(lambda (str)
-	      str)
-	  strs "/"))
+		 str)
+	     strs "/"))
 
 (provide 'zxc-util)

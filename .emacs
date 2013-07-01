@@ -55,6 +55,7 @@
 
 ;;js2-mode
 (autoload 'js2-mode "js2" nil t)
+;; Create the syntax table for js2 mode.
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 (require 'session)
@@ -340,8 +341,14 @@ that was stored with ska-point-to-register."
   (message "format successfully"))
 (global-set-key (kbd "C-c f")  'indent-whole)
 ;;字符串分割
-(modify-syntax-entry ?_ "w")
-(modify-syntax-entry ?- "w")
+(defvar text-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?_ "w" st)
+    (modify-syntax-entry ?- "w" st)
+    st)
+  "Syntax table used while in `text-mode'.")
+;; (modify-syntax-entry ?_ "w")
+;; (modify-syntax-entry ?- "w")
 
 (put 'scroll-left 'disabled nil)
 (put 'narrow-to-region 'disabled nil)

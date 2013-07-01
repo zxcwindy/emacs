@@ -35,18 +35,26 @@
 (defvar db-name "db2" "database name")
 
 (define-key zxc-mode-map (kbd  "C-; cs") #'insert-sql-format)
+(define-key zxc-mode-map (kbd  "C-; cf") #'code-format)
 
 (defun get-table-meta (db-name table-name)
   (http-get-json (concat-string-by-backslash host db-meta db-name table-name)))
 
 (defun insert-sql-format ()
-"insert sql statment with table name"
+  "insert sql statment with table name"
   (interactive)
-  (let ((table-name (filter-buffer-substring (point) (mark))))
-    (insert "select " (mapconcat #'(lambda(col)
-				     (plist-get col :colName))
-				 (plist-get (get-table-meta db-name table-name) :colsList) ",")
-	    " from ")))
+  (let* ((table-name (filter-buffer-substring (point) (mark)))
+	 (table-meta (get-table-meta db-name table-name))
+	 (cols-list (plist-get table-meta :colsList)))
+    (when (> (length cols-list) 0)
+      (insert "select " (mapconcat #'(lambda(col)
+				       (plist-get col :colName))
+				   cols-list    ",")
+	      " from "))))
+
+(defun code-format ()
+  (interactive)
+  (insert (convert-format)))
 
 
 (provide 'zxc)
