@@ -61,7 +61,7 @@
 (autoload 'session-initialize "session" nil t)
 (add-hook 'after-init-hook 'session-initialize)
 
-(require 'zxc-http)
+(require 'zxc)
 
 (require 'openwith)
 (openwith-mode t)
@@ -135,6 +135,8 @@
 (global-set-key [f5] 'speedbar)
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
+(global-set-key (kbd "C-w") 'backward-kill-word)
+(global-set-key (kbd "C-<backspace>") 'kill-region)
 
 ;;sql-model-hook
 (add-hook 'sql-interactive-mode-hook

@@ -34,11 +34,13 @@
 
 (defun http-json-2-lisp (lst)
   "when the response status is 200 and it's data is a json string,
-convert a json string to alist object"
+convert a json string to plist object"
   (multiple-value-bind (data head status) lst
     (if (= status 200)
 	(condition-case err
-	    (setf http-data (json-read-from-string data))
+	    (let ((json-object-type 'plist)
+		  (json-array-type 'list))
+	      (setf http-data (json-read-from-string (decode-coding-string data 'utf-8))))
 	  (json-readtable-error
 	   (message "返回的不是正确的json字符串")))
       (minibuffer-message status))))

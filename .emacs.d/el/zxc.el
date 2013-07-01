@@ -1,6 +1,6 @@
 ;; zxc.el --- my util tools collection
 
-;; Author: zxc
+;; Author: zhengxc
 ;; Keywords: util tools
 
 ;; This program is free software; you can redistribute it and/or
@@ -18,8 +18,35 @@
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
 (require 'cl)
+(require 'zxc-util)
+(require 'zxc-http)
 
-(defun convert-format (str)
-  (cond ((mapconcat #'capitalize (split-string (downcase str) "_" flag-char) ""))))
+;;;; Minor Mode Definition
+
+(defvar zxc-mode-map (make-sparse-keymap)
+  "Keymap for the zxc minor mode.")
+
+(define-minor-mode zxc-mode
+  "Minor mode for Zxc"
+  :lighter " Zxc")
+
+(defvar host "http://localhost:8080")
+(defvar db-meta "service/dbMeta" "dbmeta uri")
+(defvar db-name "db2" "database name")
+
+(define-key zxc-mode-map (kbd  "C-; cs") #'insert-sql-format)
+
+(defun get-table-meta (db-name table-name)
+  (http-get-json (concat-string-by-backslash host db-meta db-name table-name)))
+
+(defun insert-sql-format ()
+"insert sql statment with table name"
+  (interactive)
+  (let ((table-name (filter-buffer-substring (point) (mark))))
+    (insert "select " (mapconcat #'(lambda(col)
+				     (plist-get col :colName))
+				 (plist-get (get-table-meta db-name table-name) :colsList) ",")
+	    " from ")))
+
 
 (provide 'zxc)
