@@ -1,7 +1,7 @@
 ;; zxc.el --- my util tools collection
 
 ;; Author: zhengxc
-;; Keywords: util tools
+;; Keywords: tools
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as1

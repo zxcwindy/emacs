@@ -79,7 +79,7 @@
   (global-set-key (kbd "C-; C-b") 'paredit-backward))
 (mapcar #'(lambda (x)
 	    (add-hook x 'my-paredit-mode))
-	'(comint-mode-hook lisp-mode-hook))
+	'(comint-mode-hook lisp-mode-hook emacs-lisp-mode-hook lisp-interaction-mode-hook))
 
 ;;desktop
 (desktop-save-mode 1)
@@ -138,6 +138,7 @@
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 (global-set-key (kbd "C-w") 'backward-kill-word)
 (global-set-key (kbd "C-<backspace>") 'kill-region)
+(global-set-key (kbd "C-; C-c") 'zxc-mode)
 
 ;;sql-model-hook
 (add-hook 'sql-interactive-mode-hook
@@ -170,6 +171,10 @@
       w3m-input-coding-system 'utf-8
       w3m-output-coding-system 'utf-8
       w3m-terminal-coding-system 'utf-8)
+
+;;email config
+;;(require 'zxc-email)
+
 ;;-----------------------
 ;;开启大小写转换和y/n回答
 (put 'downcase-region 'disabled nil)

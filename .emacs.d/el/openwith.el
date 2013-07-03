@@ -46,6 +46,7 @@
 (defcustom openwith-associations
   '(;; ("\\.pdf\\'" "acroread" (file))
     ("\\.pdf\\'" "okular" (file))
+    ("\\.class\\'" "jad" ("-p" file))
     ("\\.mp3\\'" "xmms" (file))
     ("\\.\\(?:mpe?g\\|avi\\|wmv\\)\\'" "mplayer" ("-idx" file))
     ;; ("\\.\\(?:jp?g\\|png\\)\\'" "display" (file))
@@ -66,6 +67,9 @@ where the symbol 'file' is replaced by the file to be opened."
   :group 'openwith
   :type 'boolean)
 
+(defun format-file-name (file)
+  (car (last (split-string file "/" ))))
+
 (defun openwith-file-handler (operation &rest args)
   "Open file with external program, if an association is configured."
   (when (and openwith-mode (not (buffer-modified-p)) (zerop (buffer-size)))
@@ -83,11 +87,19 @@ where the symbol 'file' is replaced by the file to be opened."
             (when (or (not openwith-confirm-invocation)
                       (y-or-n-p (format "%s %s? " (cadr oa)
                                         (mapconcat #'identity params " "))))
-              (apply #'start-process "openwith-process" nil (cadr oa) params)
-              (kill-buffer nil)
-              ;; inhibit further actions
-              (error "Opened %s in external program"
-                     (file-name-nondirectory file))))))))
+	      (if (equal (cadr oa) "jad")
+		  (let* ((filename (format-file-name file))
+			 (temp-buffer-name (concatenate 'string "*" filename "*")))
+		    (apply #'call-process "jad" nil temp-buffer-name nil params )
+		    (switch-to-buffer temp-buffer-name)
+		    (java-mode)
+		    (kill-buffer filename))
+		(progn 
+		  (apply #'start-process "openwith-process" nil (cadr oa) params)
+		  (kill-buffer nil)
+		  ;; inhibit further actions
+		  (error "Opened %s in external program"
+			 (file-name-nondirectory file))))))))))
   ;; when no association was found, relay the operation to other handlers
   (let ((inhibit-file-name-handlers
          (cons 'openwith-file-handler

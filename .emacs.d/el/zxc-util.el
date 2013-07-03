@@ -26,11 +26,13 @@
 (defvar java-format (make-format-type :type-name "java"))
 
 (defun get-format-type (str)
+  "根据字符串格式判断格式类型"
   (cond ((string-match-p (format-type-split-char sql-format) str) sql-format)
 	((string-match-p (format-type-split-char lisp-format) str) lisp-format)
 	(t java-format)))
 
 (defun get-target-format-type ()
+  "根据当前模式获得目标格式类型"
   (cond ((equal major-mode 'sql-mode) sql-format)
 	((or (equal major-mode 'lisp-interaction-mode)
 	     (equal major-mode 'lisp-mode))
@@ -74,12 +76,10 @@ return the positions list "
 	    (setf strs (split-string-upper str))
 	  (setf strs (split-string str ( format-type-split-char source))))
 	(cond ((equal (format-type-type-name target) (format-type-type-name java-format))
-	       (concatenate 'string (car strs)
-			    (mapconcat #'(lambda (str)
-					   (capitalize str))
+	       (concatenate 'string (downcase (car strs))
+			    (mapconcat #'capitalize
 				       (cdr strs) "")))
-	      (t (mapconcat #'(lambda (str)
-				(downcase str))
+	      (t (mapconcat #'downcase
 			    strs (format-type-split-char target))))))))
 
 (defun concat-string-by-backslash (&rest strs)
