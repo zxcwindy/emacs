@@ -26,33 +26,34 @@
 
 (defvar http-data nil "response text")
 
-(defun http-method (url method)
+(defun http-method (url method &optional fields)
   "GET or POST method for http request,returning the response head,status code,data"
   (if (string= (upcase method) "POST")
-      (http-post-simple url nil)
-    (http-get-simple url nil)))
+      (http-post-simple url fields)
+    (http-get-simple url fields)))
 
 (defun http-json-2-lisp (lst)
   "when the response status is 200 and it's data is a json string,
 convert a json string to plist object"
   (multiple-value-bind (data head status) lst
+    (setf data (decode-coding-string data 'utf-8))
     (if (= status 200)
 	(condition-case err
 	    (let ((json-object-type 'plist)
 		  (json-array-type 'list))
-	      (setf http-data (json-read-from-string (decode-coding-string data 'utf-8))))
+	      (setf http-data (json-read-from-string data)))
 	  (json-readtable-error
-	   (message "返回的不是正确的json字符串")))
+	   (message "返回的不是正确的json字符串:%s" data)))
       (minibuffer-message status))))
 
-(defun http-get-json (url)
+(defun http-get (url &optional fields)
   "GET method"
-  (http-json-2-lisp (http-method url "GET")))
+  (http-json-2-lisp (http-method url "GET" fields)))
 
 
-(defun http-post-json (url)
+(defun http-post (url &optional fields)
   "POST method"
-  (http-json-2-lisp (http-method url "POST")))
+  (http-json-2-lisp (http-method url "POST" fields)))
 
 
 (provide 'zxc-http)

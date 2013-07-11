@@ -138,6 +138,9 @@
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 (global-set-key (kbd "C-w") 'backward-kill-word)
 (global-set-key (kbd "C-<backspace>") 'kill-region)
+(global-set-key (kbd "C-x k") #'(lambda ()
+				  (interactive)
+				  (kill-buffer (current-buffer))))
 (global-set-key (kbd "C-; C-c") 'zxc-mode)
 
 ;;sql-model-hook
@@ -352,6 +355,7 @@ that was stored with ska-point-to-register."
     (modify-syntax-entry ?- "w" st)
     st)
   "Syntax table used while in `text-mode'.")
+
 ;; (modify-syntax-entry ?_ "w")
 ;; (modify-syntax-entry ?- "w")
 

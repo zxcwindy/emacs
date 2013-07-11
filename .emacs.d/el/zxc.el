@@ -31,14 +31,14 @@
   :lighter " Zxc")
 
 (defvar host "http://localhost:8080")
-(defvar db-meta "service/dbMeta" "dbmeta uri")
+(defvar db-meta "service/rest/dbMeta" "dbmeta uri")
 (defvar db-name "db2" "database name")
 
 (define-key zxc-mode-map (kbd  "C-; cs") #'insert-sql-format)
 (define-key zxc-mode-map (kbd  "C-; cf") #'code-format)
 
 (defun get-table-meta (db-name table-name)
-  (http-get-json (concat-string-by-backslash host db-meta db-name table-name)))
+  (http-get (concat-string-by-backslash host db-meta db-name table-name)))
 
 (defun insert-sql-format ()
   "insert sql statment with table name"
