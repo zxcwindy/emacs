@@ -35,7 +35,8 @@
   "根据当前模式获得目标格式类型"
   (cond ((equal major-mode 'sql-mode) sql-format)
 	((or (equal major-mode 'lisp-interaction-mode)
-	     (equal major-mode 'lisp-mode))
+	     (equal major-mode 'lisp-mode)
+	     (equal major-mode 'emacs-lisp-mode))
 	 lisp-format)
 	(t java-format)))
 

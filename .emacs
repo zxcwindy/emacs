@@ -4,12 +4,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(desktop-path (quote ("~/.emacs.d/")))
- ;; '(desktop-save t)
  '(js2-idle-timer-delay 2.5)
  '(make-backup-files nil)
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
+ ;;'(session-use-package t nil (session))
  '(size-indication-mode t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil))
@@ -21,7 +21,9 @@
  '(default ((t (:family "宋体" :foundry "unknown" :slant normal :weight normal :height 158 :width normal)))))
 ;;------------
 ;;用服务的方式启动
-(server-start)
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 ;;加载插件位置
 (mapcar #'(lambda (path)
@@ -42,6 +44,7 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+;;auto-complete expand-region js2-refactor js2-mode w3m yasnippet multiple-cursors
 (package-initialize)
 
 (require 'expand-region)
@@ -49,6 +52,9 @@
 
 (require 'yasnippet)
 (yas-global-mode 1)
+
+(require 'auto-complete-config)
+(ac-config-default)
 
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
 ;; (setq inferior-lisp-program "/usr/bin/lispworks-personal-6-1-1-x86-linux")
@@ -63,6 +69,7 @@
 (add-hook 'after-init-hook 'session-initialize)
 
 (require 'zxc)
+(require 'zxc-comet)
 
 (require 'openwith)
 (openwith-mode t)
@@ -109,11 +116,24 @@
 	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
 	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
 
+;;(require 'coffee-mode)
+
 (add-hook 'sql-interactive-mode-hook 'toggle-truncate-lines)
+
+(require 'multiple-cursors)
+(global-set-key (kbd "C-c o") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-c O") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-o") 'mc/mark-all-like-this)
+
+(global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
+(global-set-key (kbd "C-c c c") 'mc/edit-lines)
+(global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
+(global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
 
 ;;-----------
 ;;自定义快捷键
 (global-set-key [C-f6] 'set-mark-command)
+(global-set-key (kbd "C-x C-<f6>") 'pop-global-mark)
 (global-set-key [f1] 'help-command)
 (global-set-key (kbd "M-RET") 'cua-mode)
 (global-set-key (kbd "C-; w") 'zxc-copy-word-at-point)
@@ -142,6 +162,11 @@
 				  (interactive)
 				  (kill-buffer (current-buffer))))
 (global-set-key (kbd "C-; C-c") 'zxc-mode)
+(global-set-key (kbd "<f2> m") 'rename-buffer)
+(global-set-key (kbd "C-'") #'(lambda ()
+				  (interactive)
+				  (switch-to-buffer (other-buffer))))
+(global-set-key (kbd "C-c j") 'join-line)
 
 ;;sql-model-hook
 (add-hook 'sql-interactive-mode-hook
@@ -363,3 +388,7 @@ that was stored with ska-point-to-register."
 (put 'narrow-to-region 'disabled nil)
 ;; todo list
 ;; emms
+
+;;alpha
+;;(set-frame-parameter (selected-frame) 'alpha '(100 100))
+(put 'set-goal-column 'disabled nil)

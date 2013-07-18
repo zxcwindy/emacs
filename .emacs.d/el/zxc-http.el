@@ -40,7 +40,8 @@ convert a json string to plist object"
     (if (= status 200)
 	(condition-case err
 	    (let ((json-object-type 'plist)
-		  (json-array-type 'list))
+		  (json-array-type 'list)
+		  (json-false nil))
 	      (setf http-data (json-read-from-string data)))
 	  (json-readtable-error
 	   (message "返回的不是正确的json字符串:%s" data)))
@@ -54,6 +55,25 @@ convert a json string to plist object"
 (defun http-post (url &optional fields)
   "POST method"
   (http-json-2-lisp (http-method url "POST" fields)))
+
+(defun ajax-post (url object)
+  "ajax post method"
+  (http-json-2-lisp (http-post-ajax-simple url object)))
+
+(defun http-post-ajax-simple (url object &optional charset)
+  "Send object to URL as an HTTP POST request, returning the response
+and response headers.
+object is an json, eg {key:value} they are encoded using CHARSET,
+which defaults to 'utf-8"
+  (http-post-simple-internal
+   url
+   (json-encode object)
+   charset
+   `(("Content-Type"
+      .
+      ,(http-post-content-type
+        "application/json"
+        (or charset 'utf-8))))))
 
 
 (provide 'zxc-http)
