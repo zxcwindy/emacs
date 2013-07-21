@@ -21,11 +21,22 @@
 
 (require 'zxc-http)
 
+(defconst comet-path "cometd")
 (defvar comet-id 0)
 (defvar comet-client-id nil)
-(defvar comet-url "http://localhost:8080/cometd-java-examples/cometd/")
+(defvar comet-url "http://localhost:8080/service/cometd/")
+(defvar comet-current-channel nil )
+(defvar comet-is-connected nil)
+(defvar comet-channel-prefix "/developMode")
 
 (defvar comet-timer nil)
+
+(defun comet-set-url (url)
+  "Splicing URL with \"/\" "
+  (interactive "s输入网站的contextPath：")
+  (if (s-ends-with? "/" url)
+      (setf comet-url (concatenate 'string url comet-path))
+    (setf comet-url (concat-string-by-backslash url comet-path))))
 
 (defun comet-next-id (&optional is-init)
   (when is-init
@@ -128,6 +139,7 @@ An example unsuccessful handshake response is:
 							       (comet-handshake-request)))))
     (if (equal (getf comet-handshake-response :successful) t)
 	(progn
+	  (setf comet-is-connected t)
 	  (setf comet-client-id (getf comet-handshake-response :clientId))
 	  (when comet-timer
 	    (cancel-timer comet-timer))
@@ -159,11 +171,25 @@ An example failed subscribe response is:
    }
 ]
 "
-  (let ((comet-subscribe-response (car (comet-convert-response comet-url
-							       (comet-subscribe-request channel)))))
-    (if (equal (getf comet-subscribe-response :successful) t)
+  (interactive "s输入页面url地址：")
+  (unless comet-is-connected
+    (comet-handshake))
+  (let ((new-channel (concatenate 'string comet-channel-prefix channel)))
+    ;; (comet-unsubscribe new-channel)
+    (let ((comet-subscribe-response (car (comet-convert-response comet-url
+								 (comet-subscribe-request new-channel)))))
+      (if (equal (getf comet-subscribe-response :successful) t)
+	  (progn
+	    (setf comet-current-channel new-channel)
+	    (message "successful"))
+	(error (getf comet-subscribe-response :error))))))
+
+(defun comet-unsubscribe (channel)
+  (let ((comet-unsubscribe-response (car (comet-convert-response comet-url
+								 (comet-unsubscribe-request channel)))))
+    (if (equal (getf comet-unsubscribe-response :successful) t)
 	(message "successful")
-      (error (getf comet-subscribe-response :error)))))
+      (error (getf comet-unsubscribe-response :error)))))
 
 (defun comet-connect ()
   "An example connect response is:
@@ -185,9 +211,9 @@ An example failed subscribe response is:
     ;; 	(with-output-to-temp-buffer "*response*"
     ;; 	  (prin1 comet-connect-response))
     ;;   (error (getf comet-connect-response :error)))
-    (when (equal (getf (car comet-connect-response) :channel) "/chat/demo")
+    (when (equal (getf (car comet-connect-response) :channel) comet-current-channel)
       (with-output-to-temp-buffer "*response*"
-	(prin1 (getf (getf (car comet-connect-response) :data) :chat))))))
+	(prin1 (getf (getf (car comet-connect-response) :data) :message))))))
 
 (defun comet-publish (channel data)
   "An example event reponse message is:
@@ -200,8 +226,9 @@ An example failed subscribe response is:
   }
 ]
 "
-  (let ((comet-publish-response (comet-convert-response comet-url
-							(comet-publish-request channel data))))
+  (let* ((publish-channel (or channel comet-current-channel))
+	 (comet-publish-response (comet-convert-response comet-url
+							 (comet-publish-request publish-channel data))))
     ;; (if (equal (getf comet-publish-response :successful) t)
     ;; 	(message "successful")
     ;;   (error (getf comet-publish-response :error)))
@@ -209,13 +236,32 @@ An example failed subscribe response is:
     (run-with-timer 3 nil 'set-frame-parameter (selected-frame) 'alpha '(100 100))
     comet-publish-response))
 
+(defun comet-publish-region (start end)
+  "publish a region to the channel."
+  (interactive "r")
+  (comet-publish nil (list :message (buffer-substring-no-properties start end))))
+
+
+(defun comet-publish-paragraph ()
+  "publish the current paragraph to the channel"
+  (interactive)
+  (let ((start (save-excursion
+		 (backward-paragraph)
+		 (point)))
+	(end (save-excursion
+	       (forward-paragraph)
+	       (point))))
+    (comet-publish-region start end)))
+
 (defun comet-disconnect ()
+  
   (let ((comet-disconnect-response (car (comet-convert-response comet-url
 								(comet-disconnect-request)))))
     (if (equal (getf comet-disconnect-response :successful) t)
 	(progn
 	  (setf comet-client-id (getf comet-disconnect-response :clientId))
-	  (cancel-timer comet-timer))
+	  (cancel-timer comet-timer)
+	  (setf comet-is-connected nil))
       (error (getf comet-disconnect-response :error)))))
 
 (provide 'zxc-comet)

@@ -69,7 +69,7 @@
 (add-hook 'after-init-hook 'session-initialize)
 
 (require 'zxc)
-(require 'zxc-comet)
+(add-hook 'zxc-mode-hook #'comet-disconnect)
 
 (require 'openwith)
 (openwith-mode t)
@@ -161,7 +161,7 @@
 (global-set-key (kbd "C-x k") #'(lambda ()
 				  (interactive)
 				  (kill-buffer (current-buffer))))
-(global-set-key (kbd "C-; C-c") 'zxc-mode)
+(global-set-key (kbd "C-; C-;") 'zxc-mode)
 (global-set-key (kbd "<f2> m") 'rename-buffer)
 (global-set-key (kbd "C-'") #'(lambda ()
 				  (interactive)

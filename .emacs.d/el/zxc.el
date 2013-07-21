@@ -17,9 +17,11 @@
 ;; License along with this program; if not, write to the Free
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
+
 (require 'cl)
 (require 'zxc-util)
 (require 'zxc-http)
+(require 'zxc-comet)
 
 ;;;; Minor Mode Definition
 
@@ -36,6 +38,10 @@
 
 (define-key zxc-mode-map (kbd  "C-; cs") #'insert-sql-format)
 (define-key zxc-mode-map (kbd  "C-; cf") #'code-format)
+(define-key zxc-mode-map (kbd  "C-; ch") #'comet-set-url)
+(define-key zxc-mode-map (kbd  "C-; cu") #'comet-subscribe)
+(define-key zxc-mode-map (kbd  "C-; cc") #'comet-publish-paragraph)
+(define-key zxc-mode-map (kbd  "C-; cr") #'comet-publish-region)
 
 (defun get-table-meta (db-name table-name)
   (http-get (concat-string-by-backslash host db-meta db-name table-name)))
