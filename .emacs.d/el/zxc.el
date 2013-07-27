@@ -42,6 +42,7 @@
 (define-key zxc-mode-map (kbd  "C-; cu") #'comet-subscribe)
 (define-key zxc-mode-map (kbd  "C-; cc") #'comet-publish-paragraph)
 (define-key zxc-mode-map (kbd  "C-; cr") #'comet-publish-region)
+(define-key zxc-mode-map (kbd  "C-; cx") #'comet-publish-html)
 
 (defun get-table-meta (db-name table-name)
   (http-get (concat-string-by-backslash host db-meta db-name table-name)))

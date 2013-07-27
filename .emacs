@@ -30,7 +30,8 @@
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/slime"
-	  "~/.emacs.d/swank-js"))
+	  ;; "~/.emacs.d/swank-js"
+	  ))
 
 (require 'slime)
 (slime-setup)
@@ -38,7 +39,7 @@
 (setq common-lisp-hyperspec-root "/home/asiainfo/api/HyperSpec-7-0/HyperSpec/")
 
 ;;swank-js
-(require 'slime-js)
+;;(require 'slime-js)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -63,6 +64,25 @@
 (autoload 'js2-mode "js2" nil t)
 ;; Create the syntax table for js2 mode.
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+(require 'js-comint)
+(setq inferior-js-program-command "node --interactive")
+(setq inferior-js-mode-hook
+      (lambda ()
+        ;; We like nice colors
+        (ansi-color-for-comint-mode-on)
+        ;; Deal with some prompt nonsense
+        (add-to-list
+         'comint-preoutput-filter-functions
+         (lambda (output)
+           (replace-regexp-in-string "\033\\[[0-9]+[GK]" "" output)))))
+
+(add-hook 'js2-mode-hook '(lambda () 
+			    (local-set-key "\C-c\C-c" 'js-send-last-sexp)
+			    (local-set-key "\C-c\C-r" 'js-send-region)
+			    (local-set-key "\C-cb" 'js-send-buffer)
+			    (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
+			    (local-set-key "\C-cl" 'node-load-file)))
 
 (require 'session)
 (autoload 'session-initialize "session" nil t)
@@ -102,19 +122,19 @@
 (ido-mode t)
 
 ;;swank.js
-(global-set-key [f6] 'slime-js-reload)
+;;(global-set-key [f6] 'slime-js-reload)
 (add-hook 'js2-mode-hook
 	  (lambda ()
-	    (slime-js-minor-mode 1)
+	    ;; (slime-js-minor-mode 1)
 	    (global-set-key (kbd "C-; C-a") 'js2-mode-show-all)
 	    (global-set-key (kbd "C-; C-d") 'js2-mode-hide-element)
 	    (global-set-key (kbd "C-; C-s") 'js2-mode-show-element)
 	    (global-set-key (kbd "C-; C-q") 'js2-mode-toggle-hide-functions)))
 
-(add-hook 'css-mode-hook
-	  (lambda ()
-	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
-	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
+;; (add-hook 'css-mode-hook
+;; 	  (lambda ()
+;; 	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
+;; 	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
 
 ;;(require 'coffee-mode)
 
@@ -129,6 +149,10 @@
 (global-set-key (kbd "C-c c c") 'mc/edit-lines)
 (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
 (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
+
+(require 'vc-svn)
+(autoload 'svn-status "dsvn" "Run `svn status'." t)
+(autoload 'svn-update "dsvn" "Run `svn update'." t)
 
 ;;-----------
 ;;自定义快捷键
@@ -156,7 +180,7 @@
 (global-set-key [f5] 'speedbar)
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
-(global-set-key (kbd "C-w") 'backward-kill-word)
+(global-set-key (kbd "C-w") 'my-delete-or-kill)
 (global-set-key (kbd "C-<backspace>") 'kill-region)
 (global-set-key (kbd "C-x k") #'(lambda ()
 				  (interactive)
@@ -164,8 +188,8 @@
 (global-set-key (kbd "C-; C-;") 'zxc-mode)
 (global-set-key (kbd "<f2> m") 'rename-buffer)
 (global-set-key (kbd "C-'") #'(lambda ()
-				  (interactive)
-				  (switch-to-buffer (other-buffer))))
+				(interactive)
+				(switch-to-buffer (other-buffer))))
 (global-set-key (kbd "C-c j") 'join-line)
 
 ;;sql-model-hook
@@ -361,6 +385,13 @@ that was stored with ska-point-to-register."
    nil 0 nil "_NET_WM_STATE" 32
    '(2 "_NET_WM_STATE_FULLSCREEN" 0))
   )
+
+;;delete word or kill-region
+(defun my-delete-or-kill ()
+  (interactive)
+  (if (region-active-p)
+      (kill-region (region-beginning) (region-end))
+    (backward-kill-word 1)))
 
 ;;zen coding
 (require 'zencoding-mode)
