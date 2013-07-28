@@ -18,9 +18,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "宋体" :foundry "unknown" :slant normal :weight normal :height 158 :width normal)))))
-;;------------
+ )
 
+;;------------
 ;;加载插件位置
 (mapcar #'(lambda (path)
 	    (add-to-list 'load-path path))
@@ -135,7 +135,6 @@
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 (global-set-key (kbd "C-w") 'my-delete-or-kill)
-(global-set-key (kbd "C-<backspace>") 'kill-region)
 (global-set-key (kbd "C-x k") #'(lambda ()
 				  (interactive)
 				  (kill-buffer (current-buffer))))
@@ -153,11 +152,20 @@
 (global-set-key (kbd "C-c f")  'indent-whole)
 
 (require 'magit)
+(global-set-key (kbd "C-<backspace>")  'magit-status)
 (require 'w3m)
 
 ;;zen coding
-(require 'zencoding-mode)
-(add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
-(add-hook 'nxml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
+(require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'nxml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (setq auto-mode-alist (cons '(".jsp$" . html-mode) auto-mode-alist))
 
+(autoload 'ace-jump-mode "ace-jump-mode" "Emacs quick move minor mode" t)
+(autoload 'ace-jump-mode-pop-mark "ace-jump-mode" "Ace jump back:-)" t)
+(eval-after-load "ace-jump-mode" '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+(autoload 'idomenu "idomenu" nil t)
+(define-key global-map (kbd "C-x C-i") 'ido-imenu)

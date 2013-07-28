@@ -57,7 +57,7 @@
 
 ;;-------------------
 ;;修改字体
-(set-default-font"-outline-宋体-normal-normal-normal-*-22-*-*-*-p-*-iso8859-1")
+(set-default-font "-monotype-Courier New-normal-normal-normal-*-19-*-*-*-m-0-iso10646-1")
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------
