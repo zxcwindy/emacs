@@ -6,10 +6,12 @@
  '(desktop-path (quote ("~/.emacs.d/")))
  '(js2-idle-timer-delay 2.5)
  '(make-backup-files nil)
+ '(minimap-dedicated-window t)
+ '(minimap-window-location (quote right))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
- ;;'(session-use-package t nil (session))
+ '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil))
@@ -26,6 +28,7 @@
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/slime"
+	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
 	  ))
 
@@ -40,15 +43,15 @@
 
 (require 'el-package)
 
+(require 'yasnippet)
+(yas-global-mode 1)
+
 (require 'auto-complete)
 (require 'expand-region)
 (require 'undo-tree)
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
-
-(require 'yasnippet)
-(yas-global-mode 1)
 
 (require 'auto-complete-config)
 (ac-config-default)
@@ -169,3 +172,17 @@
 
 (autoload 'idomenu "idomenu" nil t)
 (define-key global-map (kbd "C-x C-i") 'ido-imenu)
+
+;;; not very insteresting
+;; (require 'ecb)
+;; (load "jde")
+(require 'minimap)
+(global-set-key [f6] #'(lambda ()
+			 (interactive)
+			 (if (null minimap-bufname)
+			     (progn 
+			       (scroll-bar-mode -1)
+			       (minimap-create))
+			   (progn
+			     (minimap-kill)
+			     (scroll-bar-mode 1)))))
