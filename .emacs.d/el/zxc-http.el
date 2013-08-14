@@ -22,6 +22,7 @@
 
 (require 'http-post-simple)
 (require 'http-get-simple)
+(require 'deferred)
 (require 'json)
 
 (defvar http-data nil "response text")

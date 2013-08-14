@@ -4,6 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(desktop-path (quote ("~/.emacs.d/")))
+ '(ecb-options-version "2.40")
  '(js2-idle-timer-delay 2.5)
  '(make-backup-files nil)
  '(minimap-dedicated-window t)
@@ -11,8 +12,9 @@
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
- '(session-use-package t nil (session))
+;; '(session-use-package t nil (session))
  '(size-indication-mode t)
+ '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil))
 (custom-set-faces
@@ -68,7 +70,7 @@
 (require 'el-js-comint)
 
 (require 'session)
-(autoload 'session-initialize "session" nil t)
+(setq session-save-file "~/.emacs.d/.session")
 (add-hook 'after-init-hook 'session-initialize)
 
 (require 'zxc)
@@ -93,9 +95,6 @@
 (ido-mode t)
 
 (require 'el-dired)
-
-(require 'dired-details)
-(dired-details-install)
 
 (require 'multiple-cursors)
 (global-set-key (kbd "C-c o") 'mc/mark-next-like-this)
@@ -134,7 +133,6 @@
 (global-set-key (kbd "S-<right>") 'scroll-left)
 (global-set-key (kbd "C-h d") 'kill-whole-line)
 (global-set-key (kbd "C-h C-v") 'scroll-other-window)
-(global-set-key [f5] 'speedbar)
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 (global-set-key (kbd "C-w") 'my-delete-or-kill)
@@ -171,18 +169,28 @@
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
 (autoload 'idomenu "idomenu" nil t)
-(define-key global-map (kbd "C-x C-i") 'ido-imenu)
+(define-key global-map (kbd "C-x C-i") 'idomenu)
 
 ;;; not very insteresting
-;; (require 'ecb)
+(require 'ecb)
+(global-set-key [f7] #'(lambda ()
+			 (interactive)
+			 (ecb-minor-mode)))
 ;; (load "jde")
 (require 'minimap)
 (global-set-key [f6] #'(lambda ()
 			 (interactive)
 			 (if (null minimap-bufname)
-			     (progn 
-			       (scroll-bar-mode -1)
-			       (minimap-create))
-			   (progn
-			     (minimap-kill)
-			     (scroll-bar-mode 1)))))
+			     (minimap-create)
+			   (minimap-kill))))
+
+(require 'browse-kill-ring)
+(global-set-key (kbd "C-c k") 'browse-kill-ring)
+
+(require 'helm-config)
+(global-set-key (kbd "C-c h") 'helm-mini)
+;;; auto-rever-tail-mode
+;;; follow-mode
+
+(require 'sr-speedbar)
+(global-set-key [f5] 'sr-speedbar-toggle)

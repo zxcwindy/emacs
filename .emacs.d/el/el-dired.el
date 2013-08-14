@@ -1,4 +1,6 @@
 (require 'dired)
+(require 'dired-details)
+(dired-details-install)
 
 (defun dired-back-to-top ()
   (interactive)
@@ -16,4 +18,5 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
+(setf dired-listing-switches (purecopy "-lah"))
 (provide 'el-dired)

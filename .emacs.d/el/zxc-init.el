@@ -33,12 +33,12 @@
 
 (defun get-browse (url  &rest args)
   (if (let ((list '(lisp-interaction-mode lisp-mode)))
-	(do* ((lt list (cdr lt))
-	      (mode-1 (car lt) (car lt))
-	      (mode major-mode))
-	    ((or (equal lt nil)
-		 (equal mode mode-1))
-	     (equal mode mode-1))))
+		(do* ((lt list (cdr lt))
+			  (mode-1 (car lt) (car lt))
+			  (mode major-mode))
+			((or (equal lt nil)
+				 (equal mode mode-1))
+			 (equal mode mode-1))))
       (w3m-browse-url url args)
     (browse-url-firefox url args)))
 
@@ -57,7 +57,7 @@
 
 ;;-------------------
 ;;修改字体
-(set-default-font "-monotype-Courier New-normal-normal-normal-*-19-*-*-*-m-0-iso10646-1")
+(set-frame-font "-monotype-Courier New-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------
@@ -144,10 +144,11 @@ that was stored with ska-point-to-register."
   (kill-word 1))
 
 ;;自定义关闭按键
-(defun myclose(str)
-  (interactive "sAre you sure to kill this emacs process:y(es)/n(o)")
-  (if (string= str "y") (save-buffers-kill-terminal))
-  )
+(defun myclose()
+  (interactive)
+  (when (y-or-n-p  "Are you sure to kill this emacs process:")
+    (save-buffers-kill-terminal)))
+
 (define-key global-map (kbd "C-x C-c") 'myclose)
 ;;背景颜色
 (set-background-color "#CCE8CF")
@@ -218,7 +219,8 @@ that was stored with ska-point-to-register."
 
 ;;sql-model-hook
 (add-hook 'sql-interactive-mode-hook
-	  (function (lambda ()
-		      (setq comint-output-filter-functions 'comint-truncate-buffer))))
+		  (function (lambda ()
+					  (setq comint-output-filter-functions 'comint-truncate-buffer))))
 
+(setq tab-width 4)
 (provide 'zxc-init)
