@@ -33,12 +33,12 @@
 
 (defun get-browse (url  &rest args)
   (if (let ((list '(lisp-interaction-mode lisp-mode)))
-		(do* ((lt list (cdr lt))
-			  (mode-1 (car lt) (car lt))
-			  (mode major-mode))
-			((or (equal lt nil)
-				 (equal mode mode-1))
-			 (equal mode mode-1))))
+	(do* ((lt list (cdr lt))
+	      (mode-1 (car lt) (car lt))
+	      (mode major-mode))
+	    ((or (equal lt nil)
+		 (equal mode mode-1))
+	     (equal mode mode-1))))
       (w3m-browse-url url args)
     (browse-url-firefox url args)))
 
@@ -219,8 +219,8 @@ that was stored with ska-point-to-register."
 
 ;;sql-model-hook
 (add-hook 'sql-interactive-mode-hook
-		  (function (lambda ()
-					  (setq comint-output-filter-functions 'comint-truncate-buffer))))
+	  (function (lambda ()
+		      (setq comint-output-filter-functions 'comint-truncate-buffer))))
 
 (setq tab-width 4)
 (provide 'zxc-init)

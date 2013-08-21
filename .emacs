@@ -10,9 +10,10 @@
  '(minimap-dedicated-window t)
  '(minimap-window-location (quote right))
  '(outline-minor-mode-prefix (kbd "C-;"))
+ '(recentf-max-saved-items 200)
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
-;; '(session-use-package t nil (session))
+ ;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
@@ -151,10 +152,13 @@
 
 (require 'zxc-init)
 (global-set-key (kbd "C-c f")  'indent-whole)
+(define-key org-mode-map (kbd "C-'") nil)
+(define-key org-mode-map (kbd "C-c SPC") nil)
+;;(define-key shell-mode-map (kbd "C-c SPC") nil)
 
 (require 'magit)
 (global-set-key (kbd "C-<backspace>")  'magit-status)
-(require 'w3m)
+;;(require 'w3m)
 
 ;;zen coding
 (require 'emmet-mode)
@@ -194,3 +198,10 @@
 
 (require 'sr-speedbar)
 (global-set-key [f5] 'sr-speedbar-toggle)
+
+(require 'edbi)
+
+(require 'zxc-remote)
+;; (require 'scim-bridge)
+;; (require 'scim-bridge-zh-si)
+;; (add-hook 'after-init-hook 'scim-mode-on)
