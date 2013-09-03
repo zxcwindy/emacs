@@ -32,7 +32,7 @@
   "Minor mode for Zxc"
   :lighter " Zxc")
 
-(defvar host "http://localhost:8080")
+(defvar zxc-host "http://localhost:9990")
 (defvar db-meta "service/rest/dbMeta" "dbmeta uri")
 (defvar db-name "db2" "database name")
 
@@ -45,19 +45,21 @@
 (define-key zxc-mode-map (kbd  "C-; cx") #'comet-publish-html)
 
 (defun get-table-meta (db-name table-name)
-  (http-get (concat-string-by-backslash host db-meta db-name table-name)))
+  (http-get (concat-string-by-backslash zxc-host db-meta db-name table-name)))
 
-(defun insert-sql-format ()
+(defun insert-sql-format (beg end)
   "insert sql statment with table name"
-  (interactive)
-  (let* ((table-name (filter-buffer-substring (point) (mark)))
+  (interactive "r")
+  (let* ((table-name (filter-buffer-substring beg end))
 	 (table-meta (get-table-meta db-name table-name))
 	 (cols-list (plist-get table-meta :colsList)))
     (when (> (length cols-list) 0)
+      (when (region-active-p)
+	(kill-region (region-beginning) (region-end)))
       (insert "select " (mapconcat #'(lambda(col)
 				       (plist-get col :colName))
 				   cols-list    ",")
-	      " from "))))
+	      " from " table-name))))
 
 (defun code-format ()
   (interactive)

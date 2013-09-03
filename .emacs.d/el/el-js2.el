@@ -18,5 +18,5 @@
 ;; 	  (lambda ()
 ;; 	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
 ;; 	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
-
+(modify-syntax-entry ?_ "w" js2-mode-syntax-table)
 (provide 'el-js2)

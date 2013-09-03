@@ -137,6 +137,7 @@
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 (global-set-key (kbd "C-w") 'my-delete-or-kill)
+(global-set-key (kbd "M-h") 'my-mark-paragraph)
 (global-set-key (kbd "C-x k") #'(lambda ()
 				  (interactive)
 				  (kill-buffer (current-buffer))))
@@ -152,6 +153,7 @@
 
 (require 'zxc-init)
 (global-set-key (kbd "C-c f")  'indent-whole)
+(global-set-key (kbd "C-x C-<f6>")  'pop-global-mark)
 (define-key org-mode-map (kbd "C-'") nil)
 (define-key org-mode-map (kbd "C-c SPC") nil)
 ;;(define-key shell-mode-map (kbd "C-c SPC") nil)
@@ -205,3 +207,4 @@
 ;; (require 'scim-bridge)
 ;; (require 'scim-bridge-zh-si)
 ;; (add-hook 'after-init-hook 'scim-mode-on)
+;; (scim-define-common-key (kbd "C-SPC") t)

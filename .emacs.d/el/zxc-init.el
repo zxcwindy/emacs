@@ -102,8 +102,9 @@ that was stored with ska-point-to-register."
     (jump-to-register 8)
     (set-register 8 tmp)))
 
-;;选中复制单词
+
 (defun zxc-copy-word-at-point ()
+  "选中复制单词"
   (interactive)
   (backward-char)
   (forward-word)
@@ -128,14 +129,15 @@ that was stored with ska-point-to-register."
 ;;   (mark-word)
 ;;   )
 
-;;替换后一个单词
+
 (defun zxc-delete-and-yank()
+  "替换后一个单词"
   (interactive)
   (backward-char)
   (forward-word)
   (backward-word)
-  (yank)
-  (kill-word 1))
+  (kill-word 1)
+  (yank 2))
 
 ;;删除当前所在的单词
 (defun zxc-delete-current-word()
@@ -195,6 +197,13 @@ that was stored with ska-point-to-register."
   (indent-region (point-min) (point-max))
   (message "format successfully"))
 
+(defun my-mark-paragraph ()
+  (interactive)
+  (mark-paragraph)
+  (unless (= (line-number-at-pos) 1)
+    (next-line)
+    (move-beginning-of-line 1)))
+
 ;;字符串分割
 (defvar text-mode-syntax-table
   (let ((st (make-syntax-table)))
@@ -222,5 +231,5 @@ that was stored with ska-point-to-register."
 	  (function (lambda ()
 		      (setq comint-output-filter-functions 'comint-truncate-buffer))))
 
-(setq tab-width 4)
+;;(setq tab-width 4)
 (provide 'zxc-init)

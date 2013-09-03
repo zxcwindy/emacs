@@ -3325,7 +3325,7 @@ for the current line."
     (if (first expr)
         (list (first expr) start end))))
 
-(defcustom emmet-indentation 4
+(defcustom emmet-indentation 1
   "Number of spaces used for indentation."
   :type '(number :tag "Spaces")
   :group 'emmet)
