@@ -1,6 +1,6 @@
 (require 'dired)
 (require 'dired-details)
-(dired-details-install)
+;;(dired-details-install)
 
 (defun dired-back-to-top ()
   (interactive)

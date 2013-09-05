@@ -133,7 +133,7 @@
 (global-set-key (kbd "S-<left>") 'scroll-right)
 (global-set-key (kbd "S-<right>") 'scroll-left)
 (global-set-key (kbd "C-h d") 'kill-whole-line)
-(global-set-key (kbd "C-h C-v") 'scroll-other-window)
+(global-set-key (kbd "C-M-i") 'scroll-other-window-down)
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 (global-set-key (kbd "C-w") 'my-delete-or-kill)
@@ -153,6 +153,7 @@
 
 (require 'zxc-init)
 (global-set-key (kbd "C-c f")  'indent-whole)
+(global-set-key (kbd "C-SPC")  'nil)
 (global-set-key (kbd "C-x C-<f6>")  'pop-global-mark)
 (define-key org-mode-map (kbd "C-'") nil)
 (define-key org-mode-map (kbd "C-c SPC") nil)
@@ -204,7 +205,8 @@
 (require 'edbi)
 
 (require 'zxc-remote)
-;; (require 'scim-bridge)
+
 ;; (require 'scim-bridge-zh-si)
 ;; (add-hook 'after-init-hook 'scim-mode-on)
 ;; (scim-define-common-key (kbd "C-SPC") t)
+;; (scim-define-common-key ?\C-/ nil)
