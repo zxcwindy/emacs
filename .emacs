@@ -147,17 +147,20 @@
 				(interactive)
 				(switch-to-buffer (other-buffer))))
 (global-set-key (kbd "C-c j") 'join-line)
+(global-set-key [f5] #'(lambda ()
+			 (interactive)
+			 (revert-buffer :noconfirm t)))
 
 (require 'js2-refactor)
 (js2r-add-keybindings-with-prefix  "C-c m")
 
 (require 'zxc-init)
 (global-set-key (kbd "C-c f")  'indent-whole)
-(global-set-key (kbd "C-SPC")  'nil)
 (global-set-key (kbd "C-x C-<f6>")  'pop-global-mark)
 (define-key org-mode-map (kbd "C-'") nil)
 (define-key org-mode-map (kbd "C-c SPC") nil)
-;;(define-key shell-mode-map (kbd "C-c SPC") nil)
+(add-hook 'shell-mode-hook #'(lambda ()
+			       (define-key shell-mode-map (kbd "C-c SPC") nil)))
 
 (require 'magit)
 (global-set-key (kbd "C-<backspace>")  'magit-status)
@@ -179,10 +182,10 @@
 (define-key global-map (kbd "C-x C-i") 'idomenu)
 
 ;;; not very insteresting
-(require 'ecb)
-(global-set-key [f7] #'(lambda ()
-			 (interactive)
-			 (ecb-minor-mode)))
+;; (require 'ecb)
+;; (global-set-key [f7] #'(lambda ()
+;; 			 (interactive)
+;; 			 (ecb-minor-mode)))
 ;; (load "jde")
 (require 'minimap)
 (global-set-key [f6] #'(lambda ()
@@ -200,13 +203,11 @@
 ;;; follow-mode
 
 (require 'sr-speedbar)
-(global-set-key [f5] 'sr-speedbar-toggle)
+(global-set-key [f7] 'sr-speedbar-toggle)
 
 (require 'edbi)
 
 (require 'zxc-remote)
 
-;; (require 'scim-bridge-zh-si)
-;; (add-hook 'after-init-hook 'scim-mode-on)
-;; (scim-define-common-key (kbd "C-SPC") t)
-;; (scim-define-common-key ?\C-/ nil)
+(require 'el-ibus)
+(global-set-key [f12] 'el-ibus-on-off)
