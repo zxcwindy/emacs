@@ -31,6 +31,7 @@
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/slime"
+	  "/usr/local/share/emacs/site-lisp/mu4e"
 	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
 	  ))
@@ -211,3 +212,5 @@
 
 (require 'el-ibus)
 (global-set-key [f12] 'el-ibus-on-off)
+
+(require 'el-mu4e)
