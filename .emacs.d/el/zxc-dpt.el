@@ -25,15 +25,15 @@
 			      (pwd "123456"))
   "用户名/密码")
 
-(defvar dpt-query-param '((command "init")
-			  (start "0")
-			  (limit "25")
-			  (root "root")
-			  (dataSource "DWDB"))
+(defvar dpt-query-param '((command . "init")
+			  (start . "0")
+			  (limit . "100")
+			  (root . "root")
+			  (dataSource . "DWDB"))
   "查询语句默认参数")
 
-(defvar dpt-exec-param '((command "executeSQL")
-			 (dataSource "DWDB"))
+(defvar dpt-exec-param '((command . "executeSQL")
+			 (dataSource . "DWDB"))
   "其他语句默认参数")
 
 (defvar dpt-result nil
@@ -45,12 +45,26 @@
   (minibuffer-message (http-post (concat dpt-host "/core/login")
 				 dpt-user-info-param)))
 
-(defun dpt-exec-sql (sql-param sql)
-  "查询"
-  (setf dpt-result (http-post "http://10.95.239.158:8080/core/newrecordService"
-			      (append sql-param (list (list 'initSql sql))))))
 
-
+(defun dpt-send (object dpt-callback)
+  "Send object to URL as an HTTP POST request, returning the response
+and response headers.
+object is an json, eg {key:value} they are encoded using CHARSET,
+which defaults to 'utf-8"
+  (lexical-let ((dpt-callback dpt-callback))
+    (deferred:$
+      (deferred:url-get (concat dpt-host "/core/newrecordService") object)
+      (deferred:nextc it
+	(lambda (buf)
+	  (let ((data (with-current-buffer buf (buffer-string)))
+		(json-object-type 'plist)
+		(json-array-type 'list)
+		(json-false nil))
+	    (kill-buffer buf)
+	    (setf dpt-result (json-read-from-string (decode-coding-string data 'utf-8))))))
+      (deferred:nextc it
+	(lambda (response)
+	  (funcall dpt-callback))))))
 
 (defun dpt-create-column ()
   "创建表头"
@@ -80,17 +94,6 @@
 	   :data (dpt-get-data)))))
     (pop-to-buffer (ctbl:cp-get-buffer cp))))
 
-(defun dpt-send-paragraph ()
-  "执行SQL段落"
-  (interactive)
-  (let ((start (save-excursion
-		 (backward-paragraph)
-		 (point)))
-	(end (save-excursion
-	       (forward-paragraph)
-	       (point))))
-    (dpt-send-region start end)))
-
 (defun dpt-get-buffer-sql ()
   "取得当前SQL语句"
   (if (region-active-p)
@@ -103,29 +106,30 @@
 		 (point))))
       (buffer-substring-no-properties start end))))
 
-(defun dpt-send-region-query ()
-  "查询当前区域SQL"
-  (interactive)
-  (dpt-exec-sql dpt-query-param (dpt-get-buffer-sql))
+(defun dpt-query-callback ()
+  "查询结果回调函数"
   (let ((error-msg (getf dpt-result :errorMsg)))
     (if (null error-msg)
 	(dpt-create-table-buffer)
       (with-current-buffer (get-buffer-create "*dpt-log*")
 	(insert (concat "\n" error-msg)))
-      (pop-to-buffer "*dpt-log*")
-      ;; (with-output-to-temp-buffer "*dpt-log*"
-      ;; 	(princ error-msg))
-      )))
+      (pop-to-buffer "*dpt-log*"))))
+
+(defun dpt-exec-callback ()
+  "执行结果回调函数"
+  (with-current-buffer (get-buffer-create "*dpt-log*")
+    (insert (concat "\n" (getf dpt-result :msg))))
+  (pop-to-buffer "*dpt-log*"))
+
+
+(defun dpt-send-region-query ()
+  "查询当前区域SQL"
+  (interactive)
+  (dpt-send (append dpt-query-param (list (cons 'initSql (dpt-get-buffer-sql)))) #'dpt-query-callback))
 
 (defun dpt-send-region-exec ()
   "执行当前区域SQL"
   (interactive)
-  (dpt-exec-sql dpt-exec-param (dpt-get-buffer-sql))
-  (with-current-buffer (get-buffer-create "*dpt-log*")
-    (insert (concat "\n" (getf dpt-result :msg))))
-  (pop-to-buffer "*dpt-log*")
-  ;; (with-output-to-temp-buffer "*dpt-log*"
-  ;;   (princ (getf dpt-result :msg)))
-  )
+  (dpt-send (append dpt-exec-param (list (cons 'initSql (dpt-get-buffer-sql)))) #'dpt-exec-callback))
 
 (provide 'zxc-dpt)
