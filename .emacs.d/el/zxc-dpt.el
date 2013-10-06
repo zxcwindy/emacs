@@ -77,7 +77,7 @@ which defaults to 'utf-8"
   (mapcar #'(lambda (datas)
 	      (let (row-data)
 		(mapcar #'(lambda (data)
-			    (unless (symbolp data)
+			    (unless (and (symbolp data) data)
 			      (setf row-data (cons data row-data))))
 			datas)
 		row-data))
