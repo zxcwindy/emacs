@@ -212,7 +212,10 @@ that was stored with ska-point-to-register."
     st)
   "Syntax table used while in `text-mode'.")
 
-;; (modify-syntax-entry ?_ "w")
+(add-hook 'tcl-mode-hook #'(lambda ()
+			     (modify-syntax-entry ?_ "w" tcl-mode-syntax-table)))
+(add-hook 'sql-mode-hook #'(lambda ()
+			     (modify-syntax-entry ?_ "w" sql-mode-syntax-table)))
 ;; (modify-syntax-entry ?- "w")
 
 (put 'scroll-left 'disabled nil)

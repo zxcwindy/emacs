@@ -25,15 +25,18 @@
 			      (pwd "123456"))
   "用户名/密码")
 
-(defvar dpt-query-param '((command . "init")
+(defvar dpt-datasource "DWDB"
+  "数据源别名")
+
+(defvar dpt-query-param `((command . "init")
 			  (start . "0")
 			  (limit . "100")
 			  (root . "root")
-			  (dataSource . "DWDB"))
+			  (dataSource . ,dpt-datasource))
   "查询语句默认参数")
 
-(defvar dpt-exec-param '((command . "executeSQL")
-			 (dataSource . "DWDB"))
+(defvar dpt-exec-param `((command . "executeSQL")
+			 (dataSource . ,dpt-datasource))
   "其他语句默认参数")
 
 (defvar dpt-result nil
@@ -43,7 +46,18 @@
   "登录"
   (interactive)
   (minibuffer-message (http-post (concat dpt-host "/core/login")
-				 dpt-user-info-param)))
+				 dpt-user-info-param))
+  (dpt-keep-session))
+
+(defun dpt-keep-session ()
+  "保持登录"
+  (let ((host dpt-host))
+    (run-with-timer 30 300 #'(lambda ()
+			      (deferred:$
+				(deferred:url-retrieve (concat dpt-host "/core/frame/deskTop.html"))
+				(deferred:nextc it
+				  (lambda (buf)
+				    (kill-buffer buf))))))))
 
 
 (defun dpt-send (object dpt-callback)
@@ -112,13 +126,17 @@ which defaults to 'utf-8"
     (if (null error-msg)
 	(dpt-create-table-buffer)
       (with-current-buffer (get-buffer-create "*dpt-log*")
-	(insert (concat "\n" error-msg)))
+	(goto-char (point-max))
+	(insert (concat "\n" error-msg))
+	(goto-char (point-max)))
       (pop-to-buffer "*dpt-log*"))))
 
 (defun dpt-exec-callback ()
   "执行结果回调函数"
   (with-current-buffer (get-buffer-create "*dpt-log*")
-    (insert (concat "\n" (getf dpt-result :msg))))
+    (goto-char (point-max))
+    (insert (concat "\n" (getf dpt-result :msg)))
+    (goto-char (point-max)))
   (pop-to-buffer "*dpt-log*"))
 
 

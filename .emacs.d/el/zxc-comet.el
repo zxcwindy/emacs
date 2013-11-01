@@ -2,7 +2,7 @@
 
 ;; Author: zhengxc
 ;; Email: david.c.aq@gmail.com
-;; Keywords: comet
+;; Keywords: comet long-polling
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as1
@@ -251,12 +251,13 @@ An example failed subscribe response is:
   (comet-publish nil (list :message (concat func "(\" " (buffer-substring-no-properties (region-beginning) (region-end)) " \")"))))
 
 (defun comet-disconnect ()
-  (setf comet-is-connected nil)
   (setf comet-client-id nil)
-  (comet-send comet-url (comet-disconnect-request)
-	      #'(lambda (response)
-		  (let ((comet-disconnect-response (car response)))
-		    (if (equal (getf comet-disconnect-response :successful) t)
-		      (error (getf comet-disconnect-response :error)))))))
+  (when comet-is-connected
+    (comet-send comet-url (comet-disconnect-request)
+		#'(lambda (response)
+		    (let ((comet-disconnect-response (car response)))
+		      (if (equal (getf comet-disconnect-response :successful) t)
+			  (error (getf comet-disconnect-response :error)))))))
+  (setf comet-is-connected nil))
 
 (provide 'zxc-comet)

@@ -3,9 +3,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (subatomic-enhanced)))
+ '(custom-safe-themes (quote ("a6d1fe054734e915a88becc28befe1036c91ba829b6007854180f04bbca20d3e" default)))
  '(desktop-path (quote ("~/.emacs.d/")))
  '(ecb-options-version "2.40")
  '(js2-idle-timer-delay 2.5)
+ '(linum-format (quote dynamic))
  '(make-backup-files nil)
  '(minimap-dedicated-window t)
  '(minimap-window-location (quote right))
@@ -53,7 +56,7 @@
 
 (require 'auto-complete)
 (require 'expand-region)
-(require 'undo-tree)
+;;(require 'undo-tree)
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -88,8 +91,8 @@
 (desktop-save-mode 1)
 ;;(desktop-read)
 
-(require 'tabbar)
-(tabbar-mode 1)
+;; (require 'tabbar)
+;; (tabbar-mode 1)
 
 (require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -215,3 +218,12 @@
 (global-set-key [f12] 'el-ibus-on-off)
 
 (require 'el-mu4e)
+
+(require 'shell-here)
+(global-set-key (kbd "C-c C-z") 'shell-here)
+
+(require 'move-text)
+(move-text-default-bindings)
+
+(load-theme 'subatomic-enhanced)
+
