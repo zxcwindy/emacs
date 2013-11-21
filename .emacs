@@ -165,7 +165,8 @@
 (define-key org-mode-map (kbd "C-'") nil)
 (define-key org-mode-map (kbd "C-c SPC") nil)
 (add-hook 'shell-mode-hook #'(lambda ()
-			       (define-key shell-mode-map (kbd "C-c SPC") nil)))
+			       (define-key shell-mode-map (kbd "C-c SPC") nil)
+			       (disable-paredit-mode)))
 
 (require 'magit)
 (global-set-key (kbd "C-<backspace>")  'magit-status)

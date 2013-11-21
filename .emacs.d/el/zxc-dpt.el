@@ -31,12 +31,10 @@
 (defvar dpt-query-param `((command . "init")
 			  (start . "0")
 			  (limit . "100")
-			  (root . "root")
-			  (dataSource . ,dpt-datasource))
+			  (root . "root"))
   "查询语句默认参数")
 
-(defvar dpt-exec-param `((command . "executeSQL")
-			 (dataSource . ,dpt-datasource))
+(defvar dpt-exec-param `((command . "executeSQL"))
   "其他语句默认参数")
 
 (defvar dpt-result nil
@@ -54,7 +52,8 @@
   (let ((host dpt-host))
     (run-with-timer 30 300 #'(lambda ()
 			      (deferred:$
-				(deferred:url-retrieve (concat dpt-host "/core/frame/deskTop.html"))
+				;; (deferred:url-retrieve (concat dpt-host "/core/frame/deskTop.html"))
+				(deferred:url-get (concat dpt-host "/core/newrecordService") (append dpt-exec-param (list (cons 'initSql "values 1"))))
 				(deferred:nextc it
 				  (lambda (buf)
 				    (kill-buffer buf))))))))
@@ -143,11 +142,11 @@ which defaults to 'utf-8"
 (defun dpt-send-region-query ()
   "查询当前区域SQL"
   (interactive)
-  (dpt-send (append dpt-query-param (list (cons 'initSql (dpt-get-buffer-sql)))) #'dpt-query-callback))
+  (dpt-send (append dpt-query-param (list (cons 'dataSource dpt-datasource) (cons 'initSql (dpt-get-buffer-sql)))) #'dpt-query-callback))
 
 (defun dpt-send-region-exec ()
   "执行当前区域SQL"
   (interactive)
-  (dpt-send (append dpt-exec-param (list (cons 'initSql (dpt-get-buffer-sql)))) #'dpt-exec-callback))
+  (dpt-send (append dpt-exec-param (list (cons 'dataSource dpt-datasource) (cons 'initSql (dpt-get-buffer-sql)))) #'dpt-exec-callback))
 
 (provide 'zxc-dpt)
