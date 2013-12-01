@@ -40,6 +40,9 @@
 (defvar dpt-result nil
   "返回结果集")
 
+(defvar dpt-timer nil
+  "timer")
+
 (defun dpt-login ()
   "登录"
   (interactive)
@@ -50,13 +53,16 @@
 (defun dpt-keep-session ()
   "保持登录"
   (let ((host dpt-host))
-    (run-with-timer 30 300 #'(lambda ()
-			      (deferred:$
-				;; (deferred:url-retrieve (concat dpt-host "/core/frame/deskTop.html"))
-				(deferred:url-get (concat dpt-host "/core/newrecordService") (append dpt-exec-param (list (cons 'initSql "values 1"))))
-				(deferred:nextc it
-				  (lambda (buf)
-				    (kill-buffer buf))))))))
+    (when dpt-timer
+      (cancel-timer dpt-timer))
+    (setf dpt-timer (run-with-timer 300 300
+				    #'(lambda ()
+					(deferred:$
+					  (deferred:url-post-json (concat dpt-host "/core/login")
+					    dpt-user-info-param)
+					  (deferred:nextc it
+					    (lambda (buf)
+					      (kill-buffer buf)))))))))
 
 
 (defun dpt-send (object dpt-callback)

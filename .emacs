@@ -3,8 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (subatomic-enhanced)))
- '(custom-safe-themes (quote ("a6d1fe054734e915a88becc28befe1036c91ba829b6007854180f04bbca20d3e" default)))
+ '(custom-enabled-themes (quote (misterioso)))
  '(desktop-path (quote ("~/.emacs.d/")))
  '(ecb-options-version "2.40")
  '(js2-idle-timer-delay 2.5)
@@ -16,7 +15,7 @@
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
-;; '(session-use-package t nil (session))
+ ;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
@@ -105,11 +104,13 @@
 (require 'multiple-cursors)
 (global-set-key (kbd "C-c o") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-c O") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-o") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-x b") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
 (global-set-key (kbd "C-c c c") 'mc/edit-lines)
 (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
 (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
+
+(global-set-key (kbd "C-o") 'switch-to-buffer)
 
 (require 'vc-svn)
 (require 'dsvn)
@@ -226,5 +227,8 @@
 (require 'move-text)
 (move-text-default-bindings)
 
-(load-theme 'subatomic-enhanced)
+(require 'shell-session-keep)
+(shell-session-keep)
+(setf shell-session-keep-filter-names (list "158" "118" "134" "166"))
 
+(load-theme 'misterioso)
