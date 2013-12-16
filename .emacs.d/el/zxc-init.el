@@ -153,7 +153,7 @@ that was stored with ska-point-to-register."
 
 (define-key global-map (kbd "C-x C-c") 'myclose)
 ;;背景颜色
-(set-background-color "#CCE8CF")
+;;(set-background-color "#CCE8CF")
 
 ;; 最大化
 (defun my-maximized ()

@@ -21,8 +21,8 @@
 (defvar dpt-host "http://10.95.239.158:8080"
   "平台地址")
 
-(defvar dpt-user-info-param '((userId "zhengxc")
-			      (pwd "123456"))
+(defvar dpt-user-info-param '((userId . "sys")
+			      (pwd . "123456"))
   "用户名/密码")
 
 (defvar dpt-datasource "DWDB"
@@ -55,10 +55,10 @@
   (let ((host dpt-host))
     (when dpt-timer
       (cancel-timer dpt-timer))
-    (setf dpt-timer (run-with-timer 300 300
+    (setf dpt-timer (run-with-timer 600 600
 				    #'(lambda ()
 					(deferred:$
-					  (deferred:url-post-json (concat dpt-host "/core/login")
+					  (deferred:url-post (concat dpt-host "/core/login")
 					    dpt-user-info-param)
 					  (deferred:nextc it
 					    (lambda (buf)

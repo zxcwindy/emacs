@@ -48,7 +48,7 @@
     ("\\.pdf\\'" "okular" (file))
     ("\\.class\\'" "jad" ("-p" file))
     ("\\.mp3\\'" "xmms" (file))
-    ;;("\\.chm\\'" "kchmviewer" (file))
+    ("\\.chm\\'" "kchmviewer" (file))
     ("\\.\\(?:xls\\|doc\\|ods\\)\\'" "soffice" (file))
     ("\\.\\(?:mpe?g\\|avi\\|wmv\\)\\'" "mplayer" ("-idx" file))
     ;; ("\\.\\(?:jp?g\\|png\\)\\'" "display" (file))

@@ -3,7 +3,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(case-fold-search t)
  '(custom-enabled-themes (quote (misterioso)))
+ '(custom-safe-themes (quote ("abb2d3efec52d71fe3857e3ac2e41579a68f7d8c35815c8a1e1f154826e210ac" default)))
  '(desktop-path (quote ("~/.emacs.d/")))
  '(ecb-options-version "2.40")
  '(js2-idle-timer-delay 2.5)
@@ -127,17 +129,17 @@
 (global-set-key (kbd "C-; r") 'zxc-copy-line-at-point)
 (global-set-key (kbd "C-; y") 'zxc-delete-and-yank)
 (global-set-key (kbd "C-; x") 'zxc-delete-current-word)
-(global-set-key (kbd "<up>")    'tabbar-backward-group)
-(global-set-key (kbd "<down>")  'tabbar-forward-group)
-(global-set-key (kbd "<left>")  'tabbar-backward-tab)
-(global-set-key (kbd "<right>") 'tabbar-forward-tab)
+(global-set-key (kbd "<up>")    'move-text-up)
+(global-set-key (kbd "<down>")  'move-text-down)
+;; (global-set-key (kbd "<left>")  'tabbar-backward-tab)
+;; (global-set-key (kbd "<right>") 'tabbar-forward-tab)
 (global-set-key (kbd "C-z") 'shell)
 (global-set-key [f11] 'my-fullscreen)
 (global-set-key (kbd "C-,") 'zxc-point-to-register)
 (global-set-key (kbd "C-.") 'zxc-point-to-jump)
 (global-set-key (kbd "C-c .") 'ska-jump-to-register)
-(global-set-key (kbd "S-<left>") 'scroll-right)
-(global-set-key (kbd "S-<right>") 'scroll-left)
+(global-set-key (kbd "<left>") 'scroll-right)
+(global-set-key (kbd "<right>") 'scroll-left)
 (global-set-key (kbd "C-h d") 'kill-whole-line)
 (global-set-key (kbd "C-M-i") 'scroll-other-window-down)
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
@@ -220,15 +222,16 @@
 (global-set-key [f12] 'el-ibus-on-off)
 
 (require 'el-mu4e)
+(global-set-key (kbd "M-<backspace>") 'mu4e)
 
 (require 'shell-here)
 (global-set-key (kbd "C-c C-z") 'shell-here)
 
 (require 'move-text)
-(move-text-default-bindings)
 
 (require 'shell-session-keep)
 (shell-session-keep)
-(setf shell-session-keep-filter-names (list "158" "118" "134" "166"))
+(setf shell-session-keep-filter-names (list "1" "7" "88" "242"))
 
 (load-theme 'misterioso)
+(require 'el-kbd)
