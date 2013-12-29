@@ -6,6 +6,7 @@
  '(case-fold-search t)
  '(custom-enabled-themes (quote (misterioso)))
  '(custom-safe-themes (quote ("abb2d3efec52d71fe3857e3ac2e41579a68f7d8c35815c8a1e1f154826e210ac" default)))
+ '(desktop-globals-to-save (quote (desktop-missing-file-warning)))
  '(desktop-path (quote ("~/.emacs.d/")))
  '(ecb-options-version "2.40")
  '(js2-idle-timer-delay 2.5)
@@ -17,7 +18,7 @@
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
  '(send-mail-function (quote mailclient-send-it))
- ;; '(session-use-package t nil (session))
+;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
@@ -77,7 +78,7 @@
 (require 'el-js-comint)
 
 (require 'session)
-(setq session-save-file "~/.emacs.d/.session")
+;;(setq session-save-file "~/.emacs.d/.session")
 (add-hook 'after-init-hook 'session-initialize)
 
 (require 'zxc)
@@ -231,7 +232,7 @@
 
 (require 'shell-session-keep)
 (shell-session-keep)
-(setf shell-session-keep-filter-names (list "1" "7" "88" "242"))
+(setf shell-session-keep-filter-names (list "1" "7" "88" "242" "5"))
 
 (load-theme 'misterioso)
 (require 'el-kbd)
