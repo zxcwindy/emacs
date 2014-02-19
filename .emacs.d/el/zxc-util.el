@@ -88,4 +88,15 @@ return the positions list "
 		 str)
 	     strs "/"))
 
+(defun sexpr-xml (sexpr result)
+  "convert sexpr to xml"
+  (let ((tag (car sexpr)))
+    (setf result (concat result (format "<%s>" tag)))
+    (dolist (o (cdr sexpr))
+      (cond ((atom o)
+	     (setf result (concat result (format "%s" o))))
+	    ((consp o)
+	     (setf result (sexpr-xml o result)))))
+    (setf result (concat result (format "</%s>" tag)))))
+
 (provide 'zxc-util)
