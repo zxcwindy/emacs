@@ -22,7 +22,7 @@
 (require 'zxc-util)
 (require 'zxc-http)
 (require 'zxc-comet)
-(require 'zxc-dpt)
+(require 'zxc-db)
 
 ;;;; Minor Mode Definition
 
@@ -44,9 +44,14 @@
 (define-key zxc-mode-map (kbd  "C-; cc") #'comet-publish-paragraph)
 (define-key zxc-mode-map (kbd  "C-; cr") #'comet-publish-region)
 (define-key zxc-mode-map (kbd  "C-; cx") #'comet-publish-html)
-(define-key zxc-mode-map (kbd  "C-; dl") #'dpt-login)
-(define-key zxc-mode-map (kbd  "C-; de") #'dpt-send-region-exec)
-(define-key zxc-mode-map (kbd  "C-; ds") #'dpt-send-region-query)
+;; (define-key zxc-mode-map (kbd  "C-; dl") #'dpt-login)
+;; (define-key zxc-mode-map (kbd  "C-; de") #'dpt-send-region-exec)
+;; (define-key zxc-mode-map (kbd  "C-; ds") #'dpt-send-region-query)
+(define-key zxc-mode-map (kbd  "C-; dl") #'zxc-db-login)
+(define-key zxc-mode-map (kbd  "C-; de") #'zxc-db-send-region-exec)
+(define-key zxc-mode-map (kbd  "C-; ds") #'zxc-db-send-region-query)
+(define-key zxc-mode-map (kbd  "C-; aa") #'zxc-db-ac-set-db-alias)
+(define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)
 
 (defun get-table-meta (db-name table-name)
   (http-get (concat-string-by-backslash zxc-host db-meta db-name table-name)))

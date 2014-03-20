@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(case-fold-search t)
  '(custom-enabled-themes (quote (misterioso)))
- '(custom-safe-themes (quote ("abb2d3efec52d71fe3857e3ac2e41579a68f7d8c35815c8a1e1f154826e210ac" default)))
+ '(custom-safe-themes (quote ("d55c0b7612a1c63e5e12f9778b8a59effb87044ab61f1617440e577257f0d851" default)))
  '(desktop-globals-to-save (quote (desktop-missing-file-warning)))
  '(desktop-path (quote ("~/.emacs.d/")))
  '(ecb-options-version "2.40")
@@ -23,7 +23,8 @@
  '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
- '(url-show-status nil))
+ '(url-show-status nil)
+ '(w3m-home-page "http://10.95.239.158:8080/log.html"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -78,7 +79,7 @@
 (require 'el-js-comint)
 
 (require 'session)
-;;(setq session-save-file "~/.emacs.d/.session")
+(setq session-save-file "~/.emacs.d/.session")
 (add-hook 'after-init-hook 'session-initialize)
 
 (require 'zxc)
@@ -166,11 +167,13 @@
 (require 'zxc-init)
 (global-set-key (kbd "C-c f")  'indent-whole)
 (global-set-key (kbd "C-x C-<f6>")  'pop-global-mark)
+(global-set-key "\M-;" 'qiang-comment-dwim-line)
 (define-key org-mode-map (kbd "C-'") nil)
 (define-key org-mode-map (kbd "C-c SPC") nil)
 (add-hook 'shell-mode-hook #'(lambda ()
 			       (define-key shell-mode-map (kbd "C-c SPC") nil)
 			       (disable-paredit-mode)))
+(require 'zxc-db-ac)
 
 (require 'magit)
 (global-set-key (kbd "C-<backspace>")  'magit-status)
@@ -197,12 +200,21 @@
 ;; 			 (interactive)
 ;; 			 (ecb-minor-mode)))
 ;; (load "jde")
-(require 'minimap)
+;; (require 'minimap)
+;; (global-set-key [f6] #'(lambda ()
+;; 			 (interactive)
+;; 			 (if (null minimap-bufname)
+;; 			     (minimap-create)
+;; 			   (minimap-kill))))
+(defvar is-alpha nil)
 (global-set-key [f6] #'(lambda ()
 			 (interactive)
-			 (if (null minimap-bufname)
-			     (minimap-create)
-			   (minimap-kill))))
+			 (if is-alpha
+			     (progn
+			       (set-frame-parameter (selected-frame) 'alpha '(100 100))
+			       (setf is-alpha nil))
+			   (set-frame-parameter (selected-frame) 'alpha '(65 80))
+			   (setf is-alpha t))))
 
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-c k") 'browse-kill-ring)
@@ -232,7 +244,9 @@
 
 (require 'shell-session-keep)
 (shell-session-keep)
-(setf shell-session-keep-filter-names (list "1" "7" "88" "242" "5"))
+(setf shell-session-keep-filter-names (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0"))
 
 (load-theme 'misterioso)
 (require 'el-kbd)
+
+(require 'my-yas-var)

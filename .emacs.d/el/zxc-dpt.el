@@ -111,7 +111,7 @@ which defaults to 'utf-8"
 	  (make-ctbl:model
 	   :column-model (dpt-create-column)
 	   :data (dpt-get-data)))))
-    (pop-to-buffer (ctbl:cp-get-buffer cp))))
+    (display-buffer (ctbl:cp-get-buffer cp))))
 
 (defun dpt-get-buffer-sql ()
   "取得当前SQL语句"
@@ -134,7 +134,7 @@ which defaults to 'utf-8"
 	(goto-char (point-max))
 	(insert (concat "\n" error-msg))
 	(goto-char (point-max)))
-      (pop-to-buffer "*dpt-log*"))))
+      (display-buffer "*dpt-log*"))))
 
 (defun dpt-exec-callback ()
   "执行结果回调函数"
@@ -142,7 +142,7 @@ which defaults to 'utf-8"
     (goto-char (point-max))
     (insert (concat "\n" (getf dpt-result :msg)))
     (goto-char (point-max)))
-  (pop-to-buffer "*dpt-log*"))
+  (display-buffer "*dpt-log*"))
 
 
 (defun dpt-send-region-query ()
