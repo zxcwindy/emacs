@@ -216,11 +216,13 @@ that was stored with ska-point-to-register."
 
 (add-hook 'sql-mode-hook #'(lambda ()
 			     (modify-syntax-entry ?_ "w" sql-mode-syntax-table)
-			     (modify-syntax-entry ?. "w" sql-mode-syntax-table)))
+			     (modify-syntax-entry ?. "w" sql-mode-syntax-table)
+			     (sql-highlight-db2-keywords)))
 
 (add-hook 'shell-mode-hook #'(lambda ()
 			       (modify-syntax-entry ?. "w" shell-mode-syntax-table)
-			       (modify-syntax-entry ?_ "w" shell-mode-syntax-table)))
+			       (modify-syntax-entry ?_ "w" shell-mode-syntax-table)
+			       (setf ac-sources nil)))
 
 (add-to-list 'ac-modes 'shell-mode)
 

@@ -22,6 +22,7 @@
 ;;; Commentary:
 
 
+(require 'zxc-db-ac)
 (defvar zxc-db-host "http://10.95.239.158:8080"
   "平台地址")
 
@@ -29,20 +30,22 @@
 
 (defvar zxc-db-exec-param nil "其他语句默认参数")
 
+(defvar zxc-db-get-create-sql-url "%s/service/rest/dbMeta/getCreateSql/%s/%s" "tablename service url")
+
 (defvar zxc-db-result nil
   "返回结果集")
 
 (defvar zxc-db-timer nil
   "timer")
 
-(defun zxc-db-send (object zxc-db-callback)
+(defun zxc-db-send (uri object zxc-db-callback)
   "Send object to URL as an HTTP POST request, returning the response
 and response headers.
 object is an json, eg {key:value} they are encoded using CHARSET,
 which defaults to 'utf-8"
   (lexical-let ((zxc-db-callback zxc-db-callback))
     (deferred:$
-      (deferred:url-post (format "http://localhost:9990/service/rest/data/query/%s" "1") object)
+      (deferred:url-post (format "%s/service/rest/data/%s/%s" zxc-db-host uri zxc-db-ac-db-alias) object)
       (deferred:nextc it
 	(lambda (buf)
 	  (let ((data (with-current-buffer buf (buffer-string)))
@@ -99,7 +102,8 @@ which defaults to 'utf-8"
   "执行结果回调函数"
   (with-current-buffer (get-buffer-create "*zxc-db-log*")
     (goto-char (point-max))
-    (insert (concat "\n" (getf zxc-db-result :msg)))
+    ;; (insert (concat "\n" (getf zxc-db-result :msg)))
+    (insert (concat "\n" (int-to-string zxc-db-result)))
     (goto-char (point-max)))
   (display-buffer "*zxc-db-log*"))
 
@@ -107,11 +111,16 @@ which defaults to 'utf-8"
 (defun zxc-db-send-region-query ()
   "查询当前区域SQL"
   (interactive)
-  (zxc-db-send  (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-query-callback))
+  (zxc-db-send "query" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-query-callback))
 
 (defun zxc-db-send-region-exec ()
   "执行当前区域SQL"
   (interactive)
-  (zxc-db-send (append zxc-db-exec-param (list (cons 'dataSource zxc-db-datasource) (cons 'initSql (zxc-db-get-buffer-sql)))) #'zxc-db-exec-callback))
+  (zxc-db-send "exec" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-exec-callback))
+
+(defun zxc-db-get-table-sql ()
+  "执行当前区域SQL"
+  (interactive)
+  (zxc-db-send "exec" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-exec-callback))
 
 (provide 'zxc-db)

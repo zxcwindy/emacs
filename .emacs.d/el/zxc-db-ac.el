@@ -23,11 +23,7 @@
 
 (require 'deferred)
 
-(defvar zxc-db-ac-host "http://10.95.239.158:8080")
-
-(defvar zxc-db-ac-tablename-url "%s/service/rest/dbMeta/%s/%s" "tablename service url")
-
-(defvar zxc-db-ac-get-create-sql-url "%s/service/rest/dbMeta/getCreateSql/%s/%s" "tablename service url")
+(defvar zxc-db-ac-tablename-url "%s/service/rest/dbMeta/%s/%s" "host,alias,tablename service url")
 
 (defvar zxc-db-ac-db-alias "1" "数据库别名")
 
@@ -38,7 +34,8 @@
 (defvar zxc-db-ac-source
   '((candidates . zxc-db-ac-tablename-candidates)
     ;; (symbol . "a")
-    (cache))
+    ;; (cache)
+    )
   "table name candidates")
 
 
@@ -52,7 +49,7 @@
 return json format [{tableSchema:\"schema\",tableName:\"tablename\"},...]
 "
   (deferred:$
-    (deferred:url-get (format zxc-db-ac-tablename-url zxc-db-ac-host zxc-db-ac-db-alias (zxc-db-ac-previous-word)))
+    (deferred:url-get (format zxc-db-ac-tablename-url zxc-db-host zxc-db-ac-db-alias (zxc-db-ac-previous-word)))
     (deferred:nextc it
       (lambda (buf)
 	(let ((data (with-current-buffer buf (buffer-string)))
@@ -62,12 +59,9 @@ return json format [{tableSchema:\"schema\",tableName:\"tablename\"},...]
 	  (kill-buffer buf)
 	  (json-read-from-string data))))
     (deferred:nextc it
-      (lambda (array)
-	(setf zxc-db-ac-table-name-candidates (mapcar #'(lambda (table-info)
-							  (format "%s.%s"
-								  (plist-get table-info :tableScheam)
-								  (plist-get table-info :tableName)))
-						      array))))))
+      (lambda (result)
+	(when (> (length result) 0)
+	  (setf zxc-db-ac-table-name-candidates result))))))
 
 (defun zxc-db-ac-previous-word ()
   "get previous word as tablename prefix"
@@ -88,12 +82,9 @@ return json format [{tableSchema:\"schema\",tableName:\"tablename\"},...]
   "toggle ac db sources"
   (interactive)
   (if (equal ac-sources '(zxc-db-ac-source))
-      (setq ac-sources zxc-db-ac-default-sources)
-    (setq ac-sources '(zxc-db-ac-source))))
-
-(defun dpt-get-create-sql ()
-  "获得建表语句"
-  (interactive))
-
+      (progn (setq ac-sources zxc-db-ac-default-sources)
+	     (message "复位ac"))
+    (setq ac-sources '(zxc-db-ac-source))
+    (message "启用db-ac")))
 
 (provide 'zxc-db-ac)
