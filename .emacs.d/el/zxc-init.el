@@ -3,6 +3,7 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+
 ;;各种配置
 (display-time-mode 1)
 (pending-delete-mode)
@@ -57,7 +58,7 @@
 
 ;;-------------------
 ;;修改字体
-(set-frame-font "-monotype-Courier New-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
+;;(set-frame-font "-monotype-Courier-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------

@@ -8,6 +8,7 @@
  '(custom-safe-themes (quote ("d55c0b7612a1c63e5e12f9778b8a59effb87044ab61f1617440e577257f0d851" default)))
  '(desktop-globals-to-save (quote (desktop-missing-file-warning)))
  '(desktop-path (quote ("~/.emacs.d/")))
+ '(display-time-mode t)
  '(ecb-options-version "2.40")
  '(js2-idle-timer-delay 2.5)
  '(linum-format (quote dynamic))
@@ -17,7 +18,7 @@
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
- '(send-mail-function (quote mailclient-send-it))
+ ;; '(send-mail-function (quote mailclient-send-it))
 ;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(sr-speedbar-right-side nil)
@@ -30,7 +31,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 143 :width normal)))))
 
 ;;------------
 ;;加载插件位置
@@ -38,7 +39,7 @@
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/slime"
-	  "/usr/local/share/emacs/site-lisp/mu4e"
+	  "/usr/share/emacs/site-lisp/mu4e"
 	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
 	  ))

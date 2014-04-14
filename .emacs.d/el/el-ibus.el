@@ -3,7 +3,7 @@
 ;; export XMODIFIERS="@im=ibus"
 ;; export XIM="ibus"
 
-(call-process "xmodmap" nil nil nil "/home/asiainfo/.emacs.d/el/my.map")
+(call-process "xmodmap" nil nil nil "~/.emacs.d/el/my.map")
 (require 'ibus)
 (defvar el-ibus-status nil "ibus模式启动标示")
 

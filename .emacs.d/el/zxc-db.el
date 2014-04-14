@@ -72,8 +72,11 @@ which defaults to 'utf-8"
 	  :model
 	  (make-ctbl:model
 	   :column-model (zxc-db-create-column)
-	   :data (getf zxc-db-result :data)))))
-    (display-buffer (ctbl:cp-get-buffer cp))))
+	   :data (getf zxc-db-result :data))))
+	(pre-10-tbl (get-buffer (format "*Table: %d*" (- ctbl:uid 10)))))
+    (display-buffer (ctbl:cp-get-buffer cp))
+    (when pre-10-tbl
+      (kill-buffer pre-10-tbl))))
 
 (defun zxc-db-get-buffer-sql ()
   "取得当前SQL语句"
