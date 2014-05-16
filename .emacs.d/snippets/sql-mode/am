@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: alter table modifity
+# key: am
+# --
+ALTER TABLE $1 ALTER $2 SET DATA TYPE $3 $0

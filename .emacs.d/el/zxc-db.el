@@ -23,7 +23,7 @@
 
 
 (require 'zxc-db-ac)
-(defvar zxc-db-host "http://10.95.239.158:8080"
+(defvar zxc-db-host "http://localhost:9990"
   "平台地址")
 
 (defvar zxc-db-query-param nil "查询语句默认参数")
@@ -94,7 +94,8 @@ which defaults to 'utf-8"
   "查询结果回调函数"
   (let ((error-msg (getf zxc-db-result :errorMsg)))
     (if (null error-msg)
-	(zxc-db-create-table-buffer)
+	(save-excursion
+	  (zxc-db-create-table-buffer))
       (with-current-buffer (get-buffer-create "*zxc-db-log*")
 	(goto-char (point-max))
 	(insert (concat "\n" error-msg))
@@ -103,12 +104,13 @@ which defaults to 'utf-8"
 
 (defun zxc-db-exec-callback ()
   "执行结果回调函数"
-  (with-current-buffer (get-buffer-create "*zxc-db-log*")
-    (goto-char (point-max))
-    ;; (insert (concat "\n" (getf zxc-db-result :msg)))
-    (insert (concat "\n" (int-to-string zxc-db-result)))
-    (goto-char (point-max)))
-  (display-buffer "*zxc-db-log*"))
+  ;; (with-current-buffer (get-buffer-create "*zxc-db-log*")
+  ;;   (goto-char (point-max))
+  ;;   ;; (insert (concat "\n" (getf zxc-db-result :msg)))
+  ;;   (insert (concat "\n" (int-to-string zxc-db-result)))
+  ;;   (goto-char (point-max)))
+  ;; (display-buffer "*zxc-db-log*")
+  (message (concat "更新" (int-to-string zxc-db-result) "条记录")))
 
 
 (defun zxc-db-send-region-query ()

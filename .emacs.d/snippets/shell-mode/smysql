@@ -1,0 +1,4 @@
+# name: sudo mysql
+# key: smysql
+# --
+sudo mysqld_safe --user=mysql &$0

@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: alter table add
+# key: aa
+# --
+ALTER TABLE $1 ADD $2 $3$0

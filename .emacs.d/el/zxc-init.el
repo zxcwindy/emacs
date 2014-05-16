@@ -58,7 +58,7 @@
 
 ;;-------------------
 ;;修改字体
-;;(set-frame-font "-monotype-Courier-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
+(set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------
@@ -223,7 +223,7 @@ that was stored with ska-point-to-register."
 (add-hook 'shell-mode-hook #'(lambda ()
 			       (modify-syntax-entry ?. "w" shell-mode-syntax-table)
 			       (modify-syntax-entry ?_ "w" shell-mode-syntax-table)
-			       (setf ac-sources nil)))
+			       (setf ac-sources '(ac-source-dictionary))))
 
 (add-to-list 'ac-modes 'shell-mode)
 
@@ -259,5 +259,8 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
   (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
       (comment-or-uncomment-region (line-beginning-position) (line-end-position))
     (comment-dwim arg)))
+
+;;切换窗口
+(global-set-key (kbd "C-x o") 'switch-window)
 ;;(setq tab-width 4)
 (provide 'zxc-init)

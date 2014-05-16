@@ -42,6 +42,7 @@
 (defun zxc-db-ac-set-db-alias (alias)
   "database alias"
   (interactive "s输入数据库别名：")
+  (setf zxc-mode-lighter (format "Zxc[%s]" alias))
   (setf zxc-db-ac-db-alias alias))
 
 (defun zxc-db-ac-get-tables ()

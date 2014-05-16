@@ -18,7 +18,7 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
-(setf dired-listing-switches (purecopy "-la"))
+(setf dired-listing-switches (purecopy "-lah"))
 (add-hook 'dired-mode-hook #'(lambda ()
 			       (define-key dired-mode-map (kbd "C-o") nil)))
 (provide 'el-dired)

@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: create table like
+# key: c
+# --
+create table $1 like $2 $0

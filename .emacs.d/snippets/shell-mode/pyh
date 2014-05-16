@@ -1,0 +1,4 @@
+# name: python HTTPServer
+# key: pyh
+# --
+python -m SimpleHTTPServer $0

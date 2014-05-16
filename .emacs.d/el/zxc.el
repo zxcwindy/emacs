@@ -29,9 +29,12 @@
 (defvar zxc-mode-map (make-sparse-keymap)
   "Keymap for the zxc minor mode.")
 
+(defvar zxc-mode-lighter "Zxc")
+
 (define-minor-mode zxc-mode
   "Minor mode for Zxc"
-  :lighter " Zxc")
+  :lighter (" " zxc-mode-lighter))
+
 
 (defvar zxc-host "http://localhost:9990")
 (defvar db-meta "service/rest/dbMeta" "dbmeta uri")
