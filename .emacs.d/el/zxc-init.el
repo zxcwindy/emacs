@@ -58,7 +58,7 @@
 
 ;;-------------------
 ;;修改字体
-(set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
+(set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------
@@ -224,6 +224,10 @@ that was stored with ska-point-to-register."
 			       (modify-syntax-entry ?. "w" shell-mode-syntax-table)
 			       (modify-syntax-entry ?_ "w" shell-mode-syntax-table)
 			       (setf ac-sources '(ac-source-dictionary))))
+
+(add-hook 'org-mode-hook #'(lambda ()
+			       (modify-syntax-entry ?. "w" org-mode-syntax-table)
+			       (modify-syntax-entry ?_ "w" org-mode-syntax-table)))
 
 (add-to-list 'ac-modes 'shell-mode)
 
