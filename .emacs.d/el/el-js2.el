@@ -19,4 +19,12 @@
 ;; 	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
 ;; 	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
 (modify-syntax-entry ?_ "w" js2-mode-syntax-table)
+
+(defun json-format ()
+  "格式化json"
+  (interactive)
+  (save-excursion
+    (shell-command-on-region (mark) (point) "jq ." (buffer-name) t)))
+
+
 (provide 'el-js2)

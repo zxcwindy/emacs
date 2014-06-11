@@ -110,17 +110,18 @@ that was stored with ska-point-to-register."
   (forward-word)
   (let ((end (point)))
     (backward-word)
-    (copy-region-as-kill end (point)))
+    (kill-ring-save end (point)))
   (message "copy success"))
 
-;;复制当前行
-(defun zxc-copy-line-at-point ()
-  (interactive)
-  (move-beginning-of-line 1)
-  (let ((end (point)))
-    (move-end-of-line 1)
-    (copy-region-as-kill end (point)))
+(defun zxc-copy-line-or-region (beg end)
+  "选中时复制选中区域，没有选中复制当前行"
+  (interactive (if (use-region-p)
+		   (list (region-beginning) (region-end))
+		 (list (line-beginning-position)
+		       (line-end-position))))
+  (kill-ring-save beg end)
   (message "copy sentence success"))
+
 ;;选中单词
 ;; (defun mark-word-at-point()
 ;;   (interactive)
@@ -139,14 +140,14 @@ that was stored with ska-point-to-register."
   (kill-word 1)
   (yank 2))
 
-;;删除当前所在的单词
 (defun zxc-delete-current-word()
+  "删除当前所在的单词"
   (interactive)
   (backward-word)
   (kill-word 1))
 
-;;自定义关闭按键
 (defun myclose()
+  "自定义关闭按键"
   (interactive)
   (when (y-or-n-p  "Are you sure to kill this emacs process:")
     (save-buffers-kill-terminal)))
@@ -226,8 +227,8 @@ that was stored with ska-point-to-register."
 			       (setf ac-sources '(ac-source-dictionary))))
 
 (add-hook 'org-mode-hook #'(lambda ()
-			       (modify-syntax-entry ?. "w" org-mode-syntax-table)
-			       (modify-syntax-entry ?_ "w" org-mode-syntax-table)))
+			     (modify-syntax-entry ?. "w" org-mode-syntax-table)
+			     (modify-syntax-entry ?_ "w" org-mode-syntax-table)))
 
 (add-to-list 'ac-modes 'shell-mode)
 
@@ -267,4 +268,12 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;;切换窗口
 (global-set-key (kbd "C-x o") 'switch-window)
 ;;(setq tab-width 4)
+
+;;; scratch
+(autoload 'scratch "scratch" nil t)
+
+;;; smex
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+
 (provide 'zxc-init)

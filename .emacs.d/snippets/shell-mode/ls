@@ -1,0 +1,4 @@
+# name: avl
+# key: lsl
+# --
+ls -al /d1_data4/sccrm/yz/recv/data/`(format-time-string "%Y%02m%02d" (current-time))`/$1*.avl$0

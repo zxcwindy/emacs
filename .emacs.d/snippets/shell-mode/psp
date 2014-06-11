@@ -1,0 +1,4 @@
+# name: pst-proc
+# key: psp
+# --
+ps -ef|grep ${1:pst-proc}$0

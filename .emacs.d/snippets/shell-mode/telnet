@@ -1,0 +1,4 @@
+# name: telnet 134
+# key: tel
+# --
+telnet 10.112.1.134

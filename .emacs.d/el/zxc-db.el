@@ -58,6 +58,22 @@ which defaults to 'utf-8"
 	(lambda (response)
 	  (funcall zxc-db-callback))))))
 
+;;temp-func
+(defun zxc-db-get (uri object zxc-db-callback)
+  "Send object to URL as an HTTP GET request, returning the response
+and response headers, object is an text."
+  (lexical-let ((zxc-db-callback zxc-db-callback))
+    (deferred:$
+      (deferred:url-get (format zxc-db-get-create-sql-url zxc-db-host zxc-db-ac-db-alias object))
+      (deferred:nextc it
+	(lambda (buf)
+	  (let ((data (with-current-buffer buf (buffer-string))))
+	    (kill-buffer buf)
+	    (setf zxc-db-result (decode-coding-string data 'utf-8)))))
+      (deferred:nextc it
+	(lambda (response)
+	  (funcall zxc-db-callback))))))
+
 (defun zxc-db-create-column ()
   "创建表头"
   (mapcar #'(lambda (meta-info)
@@ -90,6 +106,19 @@ which defaults to 'utf-8"
 		 (point))))
       (buffer-substring-no-properties start end))))
 
+(defun zxc-db-get-table-name ()
+  "取得表名"
+  (if (region-active-p)
+      (buffer-substring-no-properties (region-beginning) (region-end))
+    (let ((start (save-excursion
+		   (forward-char)
+		   (backward-word)
+		   (point)))
+	  (end (save-excursion
+		 (forward-word)
+		 (point))))
+      (buffer-substring-no-properties start end))))
+
 (defun zxc-db-query-callback ()
   "查询结果回调函数"
   (let ((error-msg (getf zxc-db-result :errorMsg)))
@@ -112,6 +141,14 @@ which defaults to 'utf-8"
   ;; (display-buffer "*zxc-db-log*")
   (message (concat "更新" (int-to-string zxc-db-result) "条记录")))
 
+(defun zxc-db-get-callback ()
+  "普通方式结果回调函数"
+  (if (region-active-p)
+      (delete-region (region-beginning) (region-end))
+    (zxc-delete-current-word))
+  (save-excursion
+    (insert zxc-db-result)))
+
 
 (defun zxc-db-send-region-query ()
   "查询当前区域SQL"
@@ -123,9 +160,10 @@ which defaults to 'utf-8"
   (interactive)
   (zxc-db-send "exec" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-exec-callback))
 
+;;temp-func
 (defun zxc-db-get-table-sql ()
-  "执行当前区域SQL"
+  "获取建表语句"
   (interactive)
-  (zxc-db-send "exec" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-exec-callback))
+  (zxc-db-get nil (zxc-db-get-table-name) #'zxc-db-get-callback))
 
 (provide 'zxc-db)

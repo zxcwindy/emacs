@@ -1,0 +1,4 @@
+# name: hadoop -ls
+# key: hf
+# --
+hadoop fs -ls /ods/2_0/$1/pt_time=`(format-time-string "%Y%02m%02d"  (current-time))`/$0

@@ -53,6 +53,7 @@
 (define-key zxc-mode-map (kbd  "C-; dl") #'zxc-db-login)
 (define-key zxc-mode-map (kbd  "C-; de") #'zxc-db-send-region-exec)
 (define-key zxc-mode-map (kbd  "C-; ds") #'zxc-db-send-region-query)
+(define-key zxc-mode-map (kbd  "C-; dt") #'zxc-db-get-table-sql)
 (define-key zxc-mode-map (kbd  "C-; aa") #'zxc-db-ac-set-db-alias)
 (define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)
 

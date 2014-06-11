@@ -1,0 +1,4 @@
+# name: new55
+# key: db2
+# --
+db2 connect to new55 user aiapp using aiapp123$0

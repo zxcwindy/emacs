@@ -1,0 +1,4 @@
+# name: 78
+# key: ssh
+# --
+ssh ocdc@10.95.239.78
