@@ -1,7 +1,7 @@
 ;;; zxc-db.el --- database client
 
 ;; Author: zhengxc <david.c.aq@gmail.com>
-;; Keywords: database 
+;; Keywords: database
 ;; version: 0.1.0
 
 ;; This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 
 
 (require 'zxc-db-ac)
-(defvar zxc-db-host "http://localhost:9990"
+(defvar zxc-db-host "http://10.95.239.158:8080"
   "平台地址")
 
 (defvar zxc-db-query-param nil "查询语句默认参数")
@@ -139,7 +139,14 @@ and response headers, object is an text."
   ;;   (insert (concat "\n" (int-to-string zxc-db-result)))
   ;;   (goto-char (point-max)))
   ;; (display-buffer "*zxc-db-log*")
-  (message (concat "更新" (int-to-string zxc-db-result) "条记录")))
+  (let ((error-msg (getf zxc-db-result :errorMsg)))
+    (if (null error-msg)
+	(message (concat "更新" (int-to-string (getf zxc-db-result :result)) "条记录"))
+      (with-current-buffer (get-buffer-create "*zxc-db-log*")
+	(goto-char (point-max))
+	(insert (concat "\n" error-msg))
+	(goto-char (point-max)))
+      (display-buffer "*zxc-db-log*"))))
 
 (defun zxc-db-get-callback ()
   "普通方式结果回调函数"

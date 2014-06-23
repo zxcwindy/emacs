@@ -23,7 +23,7 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-;;支持emacs和外部程序的粘贴 
+;;支持emacs和外部程序的粘贴
 ;;(setq x-select-enable-clipboard t)
 
 ;;为文本模式打开outline
@@ -275,5 +275,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;;; smex
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
+
+;;rainbow
+(dolist (hook '(js2-mode-hook js-mode-hook json-mode-hook lisp-interaction-mode-hook emacs-lisp-mode-hook))
+  (add-hook hook 'rainbow-delimiters-mode))
 
 (provide 'zxc-init)

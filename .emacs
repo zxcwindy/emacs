@@ -45,6 +45,8 @@
 ;;用服务的方式启动
 (require 'el-server)
 
+(require 'init-utils)
+
 (require 'el-slime)
 (global-set-key "\C-hj" 'slime-hyperspec-lookup)
 
@@ -254,11 +256,6 @@
 (require 'keyfreq)
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
-
-(require 'init-utils)
-(after-load 'coffee-mode
-  (define-key coffee-mode-map (kbd  "C-c C-,") #'coffee-indent-shift-left)
-  (define-key coffee-mode-map (kbd  "C-c C-.") #'coffee-indent-shift-right))
 
 ;; (require 'page-break-lines)
 (global-page-break-lines-mode)
