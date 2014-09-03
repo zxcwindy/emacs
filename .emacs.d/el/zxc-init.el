@@ -219,7 +219,7 @@ that was stored with ska-point-to-register."
 (add-hook 'sql-mode-hook #'(lambda ()
 			     (modify-syntax-entry ?_ "w" sql-mode-syntax-table)
 			     (modify-syntax-entry ?. "w" sql-mode-syntax-table)
-			     (sql-highlight-db2-keywords)))
+			     (sql-highlight-oracle-keywords)))
 
 (add-hook 'shell-mode-hook #'(lambda ()
 			       (modify-syntax-entry ?. "w" shell-mode-syntax-table)
@@ -276,8 +276,11 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 
-;;rainbow
+;;rainbow-delimiters
 (dolist (hook '(js2-mode-hook js-mode-hook json-mode-hook lisp-interaction-mode-hook emacs-lisp-mode-hook))
   (add-hook hook 'rainbow-delimiters-mode))
+
+(dolist (hook '(css-mode-hook less-mode))
+  (add-hook hook 'rainbow-mode))
 
 (provide 'zxc-init)

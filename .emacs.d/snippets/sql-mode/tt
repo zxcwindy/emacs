@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: target_table_name=''
+# key: tt
+# --
+target_table_name='$0'

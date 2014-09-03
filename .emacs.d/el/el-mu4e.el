@@ -19,14 +19,14 @@
 	 ("/Sent"  . ?s)))
 
 (add-to-list 'mu4e-view-actions
-	     '("ViewInBrowser" . mu4e-action-view-in-browser) t) 
+	     '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
 (setq mu4e-headers-fields
       '((:date . 18)
-        (:flags . 6)
-        (:maildir . 10)
-        (:from-or-to . 20)
-        (:subject)))
+	(:flags . 6)
+	(:maildir . 10)
+	(:from-or-to . 20)
+	(:subject)))
 
 (setq mail-user-agent 'mu4e-user-agent)
 
@@ -48,20 +48,20 @@
 ;;             smtpmail-smtp-service 587)
 
 (setq
- user-mail-address "zhengxc@asiainfo-linkage.com"
+ user-mail-address "zhengxc@asiainfo.com"
  user-full-name "zhengxc"
  message-signature
  (concat
   "郑晓畅 \n"
   "亚信联创科技（成都）有限公司 \n"
   "四川省成都市高新区高朋大道3号东方希望科研楼12层\n"
-  "Email: zhengxc@asiainfo-linkage.com\n"
+  "Email: zhengxc@asiainfo.com\n"
   "Tel: 13668292628"))
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-stream-type nil
-      smtpmail-default-smtp-server "mail.asiainfo-linkage.com"
-      smtpmail-smtp-server "mail.asiainfo-linkage.com")
+      smtpmail-default-smtp-server "mail.asiainfo.com"
+      smtpmail-smtp-server "mail.asiainfo.com")
 
 ;; don't keep message buffers around
 (setq message-kill-buffer-on-exit t)

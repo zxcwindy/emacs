@@ -86,6 +86,7 @@ return json format [{tableSchema:\"schema\",tableName:\"tablename\"},...]
       (progn (setq ac-sources zxc-db-ac-default-sources)
 	     (message "复位ac"))
     (setq ac-sources '(zxc-db-ac-source))
+    (auto-complete-mode t)
     (message "启用db-ac")))
 
 (provide 'zxc-db-ac)

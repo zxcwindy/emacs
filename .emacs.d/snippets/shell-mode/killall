@@ -1,0 +1,4 @@
+# name: kill all
+# key: killall
+# --
+ps -ef|grep $1 | awk '{print \$2}' | xargs -n1 kill -9$0

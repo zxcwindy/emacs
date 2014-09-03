@@ -23,7 +23,7 @@
 
 
 (require 'zxc-db-ac)
-(defvar zxc-db-host "http://10.95.239.158:8080"
+(defvar zxc-db-host "http://10.70.215.14:9000"
   "平台地址")
 
 (defvar zxc-db-query-param nil "查询语句默认参数")
@@ -59,12 +59,12 @@ which defaults to 'utf-8"
 	  (funcall zxc-db-callback))))))
 
 ;;temp-func
-(defun zxc-db-get (uri object zxc-db-callback)
+(defun zxc-db-get (uri zxc-db-callback)
   "Send object to URL as an HTTP GET request, returning the response
 and response headers, object is an text."
   (lexical-let ((zxc-db-callback zxc-db-callback))
     (deferred:$
-      (deferred:url-get (format zxc-db-get-create-sql-url zxc-db-host zxc-db-ac-db-alias object))
+      (deferred:url-get uri)
       (deferred:nextc it
 	(lambda (buf)
 	  (let ((data (with-current-buffer buf (buffer-string))))
@@ -171,6 +171,6 @@ and response headers, object is an text."
 (defun zxc-db-get-table-sql ()
   "获取建表语句"
   (interactive)
-  (zxc-db-get nil (zxc-db-get-table-name) #'zxc-db-get-callback))
+  (zxc-db-get (format "%s/service/rest/dbMeta/getCreateSql/%s/%s" zxc-db-host zxc-db-ac-db-alias (zxc-db-get-table-name))  #'zxc-db-get-callback))
 
 (provide 'zxc-db)

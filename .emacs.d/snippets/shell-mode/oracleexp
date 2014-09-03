@@ -1,0 +1,4 @@
+# name: oracle export
+# key: oracleexp
+# --
+exp $1/$2@$3 file=$4 owner=$5 $0

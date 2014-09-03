@@ -1,0 +1,4 @@
+# name: mysql import
+# key: mysqlimp
+# --
+mysql -u$1 -p$2 ${3:} < $4 $0

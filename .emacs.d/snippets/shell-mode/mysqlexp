@@ -1,0 +1,4 @@
+# name: mysql export
+# key: mysqlexp
+# --
+mysqldump -uroot -p ${1:md} ${2:} > $1`(format-time-string "%Y%m%d")`.sql$0

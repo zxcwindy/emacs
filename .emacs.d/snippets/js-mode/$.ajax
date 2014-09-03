@@ -1,0 +1,13 @@
+# contributor: david <david.c.aq@gmail.com>
+# name: jquery ajax
+# key: $.ajax
+# --
+$.ajax({
+    url:$1
+    ,type:"GET"
+    ,contentType:"application/json;charset=utf-8;"
+    ,dataType:"${2:json}"
+    ,success:function(data){
+	$0
+    }
+});
