@@ -1,0 +1,4 @@
+# name: db2 import table
+# key: db2imp
+# --
+db2 "import from $1.$2 of $2 $3 into $1"$0

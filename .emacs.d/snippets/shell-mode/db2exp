@@ -1,0 +1,4 @@
+# name: db2 export table
+# key: db2exp
+# --
+db2 "export to $1.$2 of $2 select * from $1 with ur"$0

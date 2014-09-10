@@ -27,14 +27,17 @@
   (unless (process-status "httpd")
     (let ((httpd-port 9991))
       (httpd-start)
-      (message "server..."))))
+      (httpd-def-file-servlet bootstrap "/home/david/git/bootstrap")
+      (httpd-def-file-servlet jquery "/home/david/git/jquery")
+      (httpd-def-file-servlet js "/home/david/svn/DMP/BASELINE/DMP-DP-DIP/03 代码/core/lib")
+      (message "server started..."))))
 
 
 (defmacro zxc-httpd-set-root ()
   "当前buffer的文件夹为根路径，如果buffer没有关联文件则设置默认文件夹"
   (let ((root (cond ((buffer-file-name) (file-name-directory (buffer-file-name)))
 		    (t "/home/david/tmp"))))
-    `(httpd-def-file-servlet a ,root)))
+    `(httpd-def-file-servlet my ,root)))
 
 (defun zxc-httpd-imp ()
   "为当前buffer提供2个视图"

@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: quicklisp install module
+# key: ql-install
+# --
+(ql:quickload "$1")$0

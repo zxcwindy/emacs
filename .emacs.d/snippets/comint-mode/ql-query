@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: quicklisp query module
+# key: ql-query
+# --
+(ql:system-apropos "$1")$0

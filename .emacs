@@ -40,10 +40,10 @@
 (mapcar #'(lambda (path)
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
-	  "~/.emacs.d/slime"
 	  "/usr/share/emacs/site-lisp/mu4e"
 	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
+	  "~/git/ecb"
 	  ))
 
 ;;用服务的方式启动
@@ -51,13 +51,13 @@
 
 (require 'init-utils)
 
-(require 'el-slime)
-(global-set-key "\C-hj" 'slime-hyperspec-lookup)
-
 ;;swank-js
 ;;(require 'slime-js)
 
 (require 'el-package)
+
+(require 'el-slime)
+(global-set-key "\C-hj" 'slime-hyperspec-lookup)
 
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -219,7 +219,7 @@
 			     (progn
 			       (set-frame-parameter (selected-frame) 'alpha '(100 100))
 			       (setf is-alpha nil))
-			   (set-frame-parameter (selected-frame) 'alpha '(35 80))
+			   (set-frame-parameter (selected-frame) 'alpha '(35 40))
 			   (setf is-alpha t))))
 
 (require 'browse-kill-ring)
@@ -266,3 +266,4 @@
 
 (require 'zxc-theme)
 (require 'zxc-httpd)
+(require 'zxc-cedet-ecb)
