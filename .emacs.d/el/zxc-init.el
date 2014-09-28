@@ -65,7 +65,7 @@
 ;;防止页面滚动时跳动， scroll-margin 3 可以在靠近屏幕边沿
 ;;3行时就开始滚动，可以很好的看到上下文
 (setq scroll-margin 1)
-(setq kill-ring-max 200)
+(setq kill-ring-max 1000)
 
 ;;-----------------------
 ;;临时记号
@@ -178,12 +178,13 @@ that was stored with ska-point-to-register."
 ;;   )
 
 ;;全屏
-(defun my-fullscreen ()
-  (interactive)
-  (x-send-client-message
-   nil 0 nil "_NET_WM_STATE" 32
-   '(2 "_NET_WM_STATE_FULLSCREEN" 0))
-  )
+(fullscreen-mode 1)
+;; (defun my-fullscreen ()
+;;   (interactive)
+;;   (x-send-client-message
+;;    nil 0 nil "_NET_WM_STATE" 32
+;;    '(2 "_NET_WM_STATE_FULLSCREEN" 0))
+;;   )
 
 ;;delete word or kill-region
 (defun my-delete-or-kill ()
@@ -229,6 +230,9 @@ that was stored with ska-point-to-register."
 (add-hook 'org-mode-hook #'(lambda ()
 			     (modify-syntax-entry ?. "w" org-mode-syntax-table)
 			     (modify-syntax-entry ?_ "w" org-mode-syntax-table)))
+
+(add-hook 'java-mode-hook #'(lambda ()
+			      (modify-syntax-entry ?_ "w" java-mode-syntax-table)))
 
 (add-to-list 'ac-modes 'shell-mode)
 
@@ -282,5 +286,17 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 
 (dolist (hook '(css-mode-hook less-mode))
   (add-hook hook 'rainbow-mode))
+
+(setq frame-title-format "emacs@ %f")
+
+(setq calendar-time-zone 480)		;;GMT+8 (8*60)
+(setq calendar-latitude 30.3)          ;;纬度，正数北纬
+(setq calendar-longitude 120.2)        ;;经度，正数东经
+(setq calendar-location-name "杭州") ;;地名
+
+
+;; 水平分隔window
+;; (setq split-height-threshold 0)
+;; (setq split-width-threshold nil)
 
 (provide 'zxc-init)

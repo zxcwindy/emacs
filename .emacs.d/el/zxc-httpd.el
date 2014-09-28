@@ -33,11 +33,11 @@
       (message "server started..."))))
 
 
-(defmacro zxc-httpd-set-root ()
+(defun zxc-httpd-set-root ()
   "当前buffer的文件夹为根路径，如果buffer没有关联文件则设置默认文件夹"
   (let ((root (cond ((buffer-file-name) (file-name-directory (buffer-file-name)))
 		    (t "/home/david/tmp"))))
-    `(httpd-def-file-servlet my ,root)))
+    (eval `(httpd-def-file-servlet my ,root))))
 
 (defun zxc-httpd-imp ()
   "为当前buffer提供2个视图"
@@ -64,7 +64,7 @@
       (httpd-redirect proc (concat path "/")))
      ((not (imp-buffer-enabled-p buffer)) (imp--private proc buffer-name))
      (t
-      (with-httpd-buffer proc "application/json"
+      (with-httpd-buffer proc "application/json;charset=utf-8"
 	(insert-buffer-substring buffer))))))
 
 
