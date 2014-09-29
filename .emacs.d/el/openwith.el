@@ -49,10 +49,10 @@
     ("\\.class\\'" "jad" ("-p" file))
     ("\\.mp3\\'" "xmms" (file))
     ("\\.chm\\'" "kchmviewer" (file))
-    ("\\.\\(?:xls\\|doc\\|ods\\)\\'" "soffice" (file))
+    ;;("\\.\\(?:xls\\|doc\\|ods\\)\\'" "soffice" (file))
     ("\\.\\(?:mpe?g\\|avi\\|wmv\\)\\'" "mplayer" ("-idx" file))
     ;; ("\\.\\(?:jp?g\\|png\\)\\'" "display" (file))
-    ("\\.\\(?:xls?x\\|doc?x\\|ods\\)\\'" "soffice" (file))
+    ;; ("\\.\\(?:xls?x\\|doc?x\\|ods\\)\\'" "soffice" (file))
     )
   "Associations of file patterns to external programs.
 File pattern is a regular expression describing the files to
@@ -61,8 +61,8 @@ strings and symbols and are passed to the program on invocation,
 where the symbol 'file' is replaced by the file to be opened."
   :group 'openwith
   :type '(repeat (list (regexp :tag "Files")
-                       (string :tag "Program")
-                       (sexp :tag "Parameters"))))
+		       (string :tag "Program")
+		       (sexp :tag "Parameters"))))
 
 (defcustom openwith-confirm-invocation nil
   "Ask for confirmation before invoking external programs."
@@ -76,19 +76,19 @@ where the symbol 'file' is replaced by the file to be opened."
   "Open file with external program, if an association is configured."
   (when (and openwith-mode (not (buffer-modified-p)) (zerop (buffer-size)))
     (let ((assocs openwith-associations)
-          (file (car args))
-          oa)
+	  (file (car args))
+	  oa)
       ;; do not use `dolist' here, since some packages (like cl)
       ;; temporarily unbind it
       (while assocs
-        (setq oa (car assocs)
-              assocs (cdr assocs))
-        (when (save-match-data (string-match (car oa) file))
-          (let ((params (mapcar (lambda (x) (if (eq x 'file) file x))
-                                (nth 2 oa))))
-            (when (or (not openwith-confirm-invocation)
-                      (y-or-n-p (format "%s %s? " (cadr oa)
-                                        (mapconcat #'identity params " "))))
+	(setq oa (car assocs)
+	      assocs (cdr assocs))
+	(when (save-match-data (string-match (car oa) file))
+	  (let ((params (mapcar (lambda (x) (if (eq x 'file) file x))
+				(nth 2 oa))))
+	    (when (or (not openwith-confirm-invocation)
+		      (y-or-n-p (format "%s %s? " (cadr oa)
+					(mapconcat #'identity params " "))))
 	      (if (equal (cadr oa) "jad")
 		  (let* ((filename (format-file-name file))
 			 (temp-buffer-name (concatenate 'string "*" filename "*")))
@@ -96,7 +96,7 @@ where the symbol 'file' is replaced by the file to be opened."
 		    (switch-to-buffer temp-buffer-name)
 		    (java-mode)
 		    (kill-buffer filename))
-		(progn 
+		(progn
 		  (apply #'start-process "openwith-process" nil (cadr oa) params)
 		  (kill-buffer nil)
 		  ;; inhibit further actions
@@ -104,10 +104,10 @@ where the symbol 'file' is replaced by the file to be opened."
 			 (file-name-nondirectory file))))))))))
   ;; when no association was found, relay the operation to other handlers
   (let ((inhibit-file-name-handlers
-         (cons 'openwith-file-handler
-               (and (eq inhibit-file-name-operation operation)
-                    inhibit-file-name-handlers)))
-        (inhibit-file-name-operation operation))
+	 (cons 'openwith-file-handler
+	       (and (eq inhibit-file-name-operation operation)
+		    inhibit-file-name-handlers)))
+	(inhibit-file-name-operation operation))
     (apply operation args)))
 
 ;;;###autoload
@@ -117,12 +117,12 @@ where the symbol 'file' is replaced by the file to be opened."
   :global t
   (if openwith-mode
       (progn
-        ;; register `openwith-file-handler' for all files
-        (put 'openwith-file-handler 'safe-magic t)
-        (put 'openwith-file-handler 'operations '(insert-file-contents))
-        (add-to-list 'file-name-handler-alist '("" . openwith-file-handler)))
+	;; register `openwith-file-handler' for all files
+	(put 'openwith-file-handler 'safe-magic t)
+	(put 'openwith-file-handler 'operations '(insert-file-contents))
+	(add-to-list 'file-name-handler-alist '("" . openwith-file-handler)))
     (setq file-name-handler-alist
-          (delete '("" . openwith-file-handler) file-name-handler-alist))))
+	  (delete '("" . openwith-file-handler) file-name-handler-alist))))
 
 (provide 'openwith)
 
