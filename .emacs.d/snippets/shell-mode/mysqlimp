@@ -1,4 +1,4 @@
 # name: mysql import
 # key: mysqlimp
 # --
-mysql -u$1 -p$2 ${3:} < $4 $0
+mysql -u${1:root} -p${2:newpass} ${3:} < $4 $0

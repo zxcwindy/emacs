@@ -42,14 +42,14 @@
 (defun shell-session-keep-filter (names)
   "filter buffers which contains names"
   (let (filter-buffers)
-    (mapcar #'(lambda (buffer)
-		(when (some #'(lambda (buf-name)
-				(and (string= "shell-mode"
-					      (buffer-local-value 'major-mode buffer))
-				     (s-contains?  buf-name (buffer-name buffer))))
-			    names)
-		  (push buffer filter-buffers)))
-	    (buffer-list))
+    (mapc #'(lambda (buffer)
+	      (when (some #'(lambda (buf-name)
+			      (and (string= "shell-mode"
+					    (buffer-local-value 'major-mode buffer))
+				   (s-contains?  buf-name (buffer-name buffer))))
+			  names)
+		(push buffer filter-buffers)))
+	  (buffer-list))
     filter-buffers))
 
 (defun shell-session-keep ()

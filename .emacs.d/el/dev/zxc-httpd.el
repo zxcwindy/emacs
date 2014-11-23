@@ -32,10 +32,36 @@
       (httpd-def-file-servlet js "/home/david/svn/DMP/BASELINE/DMP-DP-DIP/03 代码/core/lib")
       (message "server started..."))))
 
+(defun httpd-send-directory (proc path uri-path)
+  "redefine Serve a file listing to the client. If PROC is T use the
+`httpd-current-proc' as the process."
+  (httpd-discard-buffer)
+  (let ((title (concat "Directory listing for "
+		       (url-insert-entities-in-string uri-path))))
+    (if (equal "/" (substring uri-path -1))
+	(with-temp-buffer
+	  (httpd-log `(directory ,path))
+	  (set-buffer-multibyte t)
+	  (insert "<!DOCTYPE html>\n")
+	  (insert "<html>\n<head><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" /><title>" title "</title></head>\n")
+	  (insert "<body>\n<h2>" title "</h2>\n<hr/>\n<ul>")
+	  (dolist (file (directory-files path))
+	    (unless (eq ?. (aref file 0))
+	      (let* ((full (expand-file-name file path))
+		     (tail (if (file-directory-p full) "/" ""))
+		     (f  file)
+		     (l file))
+		(insert (format "<li><a href=\"%s%s\">%s%s</a></li>\n"
+				l tail f tail)))))
+	  (insert "</ul>\n<hr/>\n</body>\n</html>")
+	  (httpd-send-header proc "text/html;charset=utf-8" 200))
+      (httpd-redirect proc (concat uri-path "/")))))
+
 
 (defun zxc-httpd-set-root ()
   "当前buffer的文件夹为根路径，如果buffer没有关联文件则设置默认文件夹"
   (let ((root (cond ((buffer-file-name) (file-name-directory (buffer-file-name)))
+		    ((eq major-mode 'dired-mode) (dired-current-directory))
 		    (t "/home/david/tmp"))))
     (eval `(httpd-def-file-servlet my ,root))))
 

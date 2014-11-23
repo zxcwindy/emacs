@@ -1,5 +1,6 @@
 (require 'js2-mode)
 (require 'js2-refactor)
+(require 'jquery-doc)
 
 ;;(autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -15,6 +16,8 @@
 	    (global-set-key (kbd "C-; C-q") 'js2-mode-toggle-hide-functions)))
 
 (add-hook 'js2-mode-hook 'ac-js2-mode)
+(add-hook 'js2-mode-hook 'jquery-doc-setup)
+(add-hook 'js2-mode-hook 'zxc-paredit-nonlisp-mode)
 
 ;; (add-hook 'css-mode-hook
 ;;	  (lambda ()
@@ -35,7 +38,7 @@
 
 (setq whitespace-action '(auto-cleanup))
 (setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab))
-(setq global-whitespace-mode t)
+
 (custom-set-variables '(coffee-tab-width 4))
 (setq coffee-args-compile '("-c" "-b" ""))
 
@@ -83,5 +86,25 @@ See `coffee-compile-jump-to-error'."
 	    (coffee-command-compile-arg-as-string output)
 	    (shell-quote-argument output-dir)
 	    (shell-quote-argument full-file-name))))
+
+;; (defun zxc-paredit-nonlisp ()
+;;   "Turn on paredit mode for non-lisps."
+;;   (interactive)
+;;   (set (make-local-variable 'paredit-space-for-delimiter-predicates)
+;;        '((lambda (endp delimiter) nil))))
+
+
+(define-minor-mode zxc-paredit-nonlisp-mode
+  "非lisp的paredit模式"
+  :lighter " NLParedit"
+  ;; If we're enabling paredit-mode, the prefix to this code that
+  ;; DEFINE-MINOR-MODE inserts will have already set PAREDIT-MODE to
+  ;; true.  If this is the case, then first check the parentheses, and
+  ;; if there are any imbalanced ones we must inhibit the activation of
+  ;; paredit mode.  We skip the check, though, if the user supplied a
+  ;; prefix argument interactively.
+  (set (make-local-variable 'paredit-space-for-delimiter-predicates)
+       '((lambda (endp delimiter) nil)))
+  (paredit-mode 1))
 
 (provide 'el-js2)

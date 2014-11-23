@@ -287,14 +287,16 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (dolist (hook '(css-mode-hook less-mode))
   (add-hook hook 'rainbow-mode))
 
-(setq frame-title-format "emacs@ %f")
+(setq frame-title-format "emacs@%f")
 
 (setq calendar-time-zone 480)	       ;;GMT+8 (8*60)
 (setq calendar-latitude 30.3)          ;;纬度，正数北纬
 (setq calendar-longitude 120.2)        ;;经度，正数东经
 (setq calendar-location-name "杭州")    ;;地名
 
-
+(setq emmet-preview-default nil)
+(setq global-whitespace-mode t)
+(setq ediff-diff-options "-w")
 ;; 水平分隔window
 ;; (setq split-height-threshold 0)
 ;; (setq split-width-threshold nil)

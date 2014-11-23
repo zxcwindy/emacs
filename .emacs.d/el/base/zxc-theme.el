@@ -34,7 +34,7 @@
 
 (change-theme #'color-theme-sanityinc-solarized-light
 	      #'(lambda ()
-		  (load-theme 'misterioso)))
+		  (switch-theme 'sanityinc-solarized-light 'misterioso)))
 
 ;; (setq theme-changer-mode "color-theme")
 ;;(change-theme 'sanityinc-solarized-light 'misterioso)

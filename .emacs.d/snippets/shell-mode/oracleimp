@@ -1,4 +1,4 @@
 # name: oracle import
 # key: oracleimp
 # --
-imp $1/$2@$3 file=$4 ignore=y TABLESPACES=$5 $0
+imp ${1:md}/${2:md999}@${3:xe} file=$4 ignore=y TABLESPACES=$5 $0

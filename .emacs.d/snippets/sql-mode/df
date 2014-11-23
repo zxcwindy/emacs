@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: delete from
+# key: df
+# --
+delete from $0

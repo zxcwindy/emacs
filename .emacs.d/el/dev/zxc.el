@@ -29,7 +29,8 @@
 (defvar zxc-mode-map (make-sparse-keymap)
   "Keymap for the zxc minor mode.")
 
-(defvar zxc-mode-lighter "Zxc")
+(make-variable-buffer-local
+ (defvar zxc-mode-lighter "Zxc"))
 
 (define-minor-mode zxc-mode
   "Minor mode for Zxc"
@@ -40,8 +41,8 @@
 (defvar db-meta "service/rest/dbMeta" "dbmeta uri")
 (defvar db-name "db2" "database name")
 
-(define-key zxc-mode-map (kbd  "C-; cs") #'insert-sql-format)
-(define-key zxc-mode-map (kbd  "C-; cf") #'code-format)
+(define-key zxc-mode-map (kbd  "C-; cs") #'zxc-db-get-select-sql)
+(define-key zxc-mode-map (kbd  "C-; cf") #'code-)
 (define-key zxc-mode-map (kbd  "C-; ch") #'comet-set-url)
 (define-key zxc-mode-map (kbd  "C-; cu") #'comet-subscribe)
 (define-key zxc-mode-map (kbd  "C-; cc") #'comet-publish-paragraph)
@@ -56,23 +57,6 @@
 (define-key zxc-mode-map (kbd  "C-; dt") #'zxc-db-get-table-sql)
 (define-key zxc-mode-map (kbd  "C-; aa") #'zxc-db-ac-set-db-alias)
 (define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)
-
-(defun get-table-meta (db-name table-name)
-  (http-get (concat-string-by-backslash zxc-host db-meta db-name table-name)))
-
-(defun insert-sql-format (beg end)
-  "insert sql statment with table name"
-  (interactive "r")
-  (let* ((table-name (filter-buffer-substring beg end))
-	 (table-meta (get-table-meta db-name table-name))
-	 (cols-list (plist-get table-meta :colsList)))
-    (when (> (length cols-list) 0)
-      (when (region-active-p)
-	(kill-region (region-beginning) (region-end)))
-      (insert "select " (mapconcat #'(lambda(col)
-				       (plist-get col :colName))
-				   cols-list    ",")
-	      " from " table-name))))
 
 (defun code-format ()
   (interactive)

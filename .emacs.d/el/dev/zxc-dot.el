@@ -4,6 +4,6 @@
 					      (interactive)
 					      (save-buffer)
 					      (compile compile-command)
-					      (graphviz-dot-preview)))
-
-graphviz-dot-mode-map
+					      ;; (graphviz-dot-preview)
+					      ;; (graphviz-dot-preview)
+					      ))

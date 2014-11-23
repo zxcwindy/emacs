@@ -23,8 +23,10 @@
 
 
 (require 'zxc-db-ac)
-(defvar zxc-db-host "http://10.70.215.14:9000"
-  "平台地址")
+
+(make-variable-buffer-local
+ (defvar zxc-db-host "http://10.70.215.14:9000"
+   "平台地址"))
 
 (defvar zxc-db-query-param nil "查询语句默认参数")
 
@@ -90,6 +92,7 @@ and response headers, object is an text."
 	   :column-model (zxc-db-create-column)
 	   :data (getf zxc-db-result :data))))
 	(pre-10-tbl (get-buffer (format "*Table: %d*" (- ctbl:uid 10)))))
+    (delete-other-windows)		;fix windows bug
     (display-buffer (ctbl:cp-get-buffer cp))
     (when pre-10-tbl
       (kill-buffer pre-10-tbl))))
@@ -141,7 +144,7 @@ and response headers, object is an text."
   ;; (display-buffer "*zxc-db-log*")
   (let ((error-msg (getf zxc-db-result :errorMsg)))
     (if (null error-msg)
-	(message (concat "更新" (int-to-string (getf zxc-db-result :result)) "条记录"))
+	(message (concat "更新记录" (decode-coding-string (json-encode  (getf zxc-db-result :result)) 'utf-8)))
       (with-current-buffer (get-buffer-create "*zxc-db-log*")
 	(goto-char (point-max))
 	(insert (concat "\n" error-msg))
@@ -167,10 +170,19 @@ and response headers, object is an text."
   (interactive)
   (zxc-db-send "exec" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-exec-callback))
 
-;;temp-func
+(defun zxc-db-get-data (func)
+  "get方式获取后台数据"
+  (zxc-db-get (format "%s/service/rest/dbMeta/%s/%s/%s" zxc-db-host func zxc-db-ac-db-alias (zxc-db-get-table-name))  #'zxc-db-get-callback))
+
+
 (defun zxc-db-get-table-sql ()
   "获取建表语句"
   (interactive)
-  (zxc-db-get (format "%s/service/rest/dbMeta/getCreateSql/%s/%s" zxc-db-host zxc-db-ac-db-alias (zxc-db-get-table-name))  #'zxc-db-get-callback))
+  (zxc-db-get-data "getCreateSql"))
+
+(defun zxc-db-get-select-sql ()
+  "获取查询语句"
+  (interactive)
+  (zxc-db-get-data "getSelectSql"))
 
 (provide 'zxc-db)

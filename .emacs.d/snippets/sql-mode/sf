@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: select * from
+# key: sf
+# --
+select * from $0

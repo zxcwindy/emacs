@@ -1,4 +1,4 @@
 # name: mysql export
 # key: mysqlexp
 # --
-mysqldump -uroot -p ${1:md} ${2:} > $1`(format-time-string "%Y%m%d")`.sql$0
+mysqldump -u${1:root} -p${2:newpass} ${3:md} ${4:} > $3`(format-time-string "%Y%m%d")`.sql$0

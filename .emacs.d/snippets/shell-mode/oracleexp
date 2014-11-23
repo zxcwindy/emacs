@@ -1,4 +1,4 @@
 # name: oracle export
 # key: oracleexp
 # --
-exp $1/$2@$3 file=$4 owner=$5 $0
+exp ${1:md}/${2:md999}@${3:xe} file=$4`(format-time-string "%Y%m%d")` owner=$5 $0

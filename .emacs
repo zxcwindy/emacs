@@ -7,7 +7,7 @@
  '(case-fold-search t)
  '(coffee-tab-width 4)
  '(custom-enabled-themes (quote (sanityinc-solarized-light)))
- '(custom-safe-themes (quote ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "d55c0b7612a1c63e5e12f9778b8a59effb87044ab61f1617440e577257f0d851" default)))
+ '(custom-safe-themes (quote ("d55c0b7612a1c63e5e12f9778b8a59effb87044ab61f1617440e577257f0d851" "3d3515bcc0814b287185d678519172a3927b25ed33d1dc77454503ade606f3a2" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
  '(desktop-globals-to-save (quote (desktop-missing-file-warning)))
  '(desktop-path (quote ("~/.emacs.d/")))
  '(display-time-mode t)
@@ -21,7 +21,7 @@
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values (quote ((checkdoc-minor-mode . t) (Base . 10) (Syntax . ANSI-Common-Lisp) (require-final-newline . t))))
- ;; '(session-use-package t nil (session))
+;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
@@ -40,6 +40,8 @@
 (mapcar #'(lambda (path)
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
+	  "~/.emacs.d/el/base"
+	  "~/.emacs.d/el/dev"
 	  "/usr/share/emacs/site-lisp/mu4e"
 	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
@@ -111,14 +113,17 @@
 
 (require 'el-dired)
 
-(require 'multiple-cursors)
+(require 'el-mutiple-cursors)
 (global-set-key (kbd "C-c o") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-c O") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c c o") 'mc/mark-all-next-like-this)
+(global-set-key (kbd "C-c c O") 'mc/mark-all-prev-like-this)
 (global-set-key (kbd "C-x b") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
 (global-set-key (kbd "C-c c c") 'mc/edit-lines)
 (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
 (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
+
 
 (global-set-key (kbd "C-o") 'switch-to-buffer)
 
@@ -263,6 +268,8 @@
 
 ;; (require 'page-break-lines)
 (global-page-break-lines-mode)
+
+(require 'csv-mode)
 
 (require 'zxc-theme)
 (require 'zxc-httpd)

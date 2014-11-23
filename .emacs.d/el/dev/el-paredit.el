@@ -8,8 +8,8 @@
   (enable-paredit-mode)
   (global-set-key (kbd "C-; C-f") 'paredit-forward)
   (global-set-key (kbd "C-; C-b") 'paredit-backward))
-(mapcar #'(lambda (x)
+(mapc #'(lambda (x)
 	    (add-hook x 'my-paredit-mode))
-	'(comint-mode-hook lisp-mode-hook emacs-lisp-mode-hook lisp-interaction-mode-hook))
+	'(comint-mode-hook lisp-mode-hook emacs-lisp-mode-hook lisp-interaction-mode-hook js2-mode-hook js-mode-hook))
 
 (provide 'el-paredit)

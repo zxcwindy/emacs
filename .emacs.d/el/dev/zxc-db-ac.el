@@ -25,7 +25,8 @@
 
 (defvar zxc-db-ac-tablename-url "%s/service/rest/dbMeta/%s/%s" "host,alias,tablename service url")
 
-(defvar zxc-db-ac-db-alias "1" "数据库别名")
+(make-variable-buffer-local
+ (defvar zxc-db-ac-db-alias "1" "数据库别名"))
 
 (defvar zxc-db-ac-table-name-candidates nil "tablename candidates")
 

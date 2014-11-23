@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: insert into
+# key: ii
+# --
+insert into $0
