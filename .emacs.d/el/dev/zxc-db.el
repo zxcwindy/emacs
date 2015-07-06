@@ -25,7 +25,7 @@
 (require 'zxc-db-ac)
 
 (make-variable-buffer-local
- (defvar zxc-db-host "http://10.70.215.14:9000"
+ (defvar zxc-db-host "http://localhost:9990"
    "平台地址"))
 
 (defvar zxc-db-query-param nil "查询语句默认参数")
@@ -144,10 +144,10 @@ and response headers, object is an text."
   ;; (display-buffer "*zxc-db-log*")
   (let ((error-msg (getf zxc-db-result :errorMsg)))
     (if (null error-msg)
-	(message (concat "更新记录" (decode-coding-string (json-encode  (getf zxc-db-result :result)) 'utf-8)))
+	(message "更新记录%s" (getf zxc-db-result :result))
       (with-current-buffer (get-buffer-create "*zxc-db-log*")
 	(goto-char (point-max))
-	(insert (concat "\n" error-msg))
+	(insert (decode-coding-string (concat "\n" error-msg) 'utf-8))
 	(goto-char (point-max)))
       (display-buffer "*zxc-db-log*"))))
 

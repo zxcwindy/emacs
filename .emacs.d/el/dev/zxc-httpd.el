@@ -63,7 +63,8 @@
   (let ((root (cond ((buffer-file-name) (file-name-directory (buffer-file-name)))
 		    ((eq major-mode 'dired-mode) (dired-current-directory))
 		    (t "/home/david/tmp"))))
-    (eval `(httpd-def-file-servlet my ,root))))
+    (eval `(httpd-def-file-servlet my ,root))
+    (message (concatenate 'string "http://localhost:9991/my relocate to " root ))))
 
 (defun zxc-httpd-imp ()
   "为当前buffer提供2个视图"

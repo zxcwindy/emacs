@@ -290,9 +290,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq frame-title-format "emacs@%f")
 
 (setq calendar-time-zone 480)	       ;;GMT+8 (8*60)
-(setq calendar-latitude 30.3)          ;;纬度，正数北纬
-(setq calendar-longitude 120.2)        ;;经度，正数东经
-(setq calendar-location-name "杭州")    ;;地名
+(setq calendar-latitude 29.3)          ;;纬度，正数北纬
+(setq calendar-longitude 91.15)        ;;经度，正数东经
+(setq calendar-location-name "拉萨")    ;;地名
 
 (setq emmet-preview-default nil)
 (setq global-whitespace-mode t)
@@ -300,5 +300,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;; 水平分隔window
 ;; (setq split-height-threshold 0)
 ;; (setq split-width-threshold nil)
+
+;;diff水平分隔
+;; (setq ediff-split-window-function 'split-window-horizontally
+;;       ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (provide 'zxc-init)
