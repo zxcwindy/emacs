@@ -1,6 +1,7 @@
 (require 'js2-mode)
 (require 'js2-refactor)
 (require 'jquery-doc)
+(require 'js)
 
 ;;(autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -24,6 +25,9 @@
 ;;	    (define-key css-mode-map "\M-\C-x" 'slime-js-refresh-css)
 ;;	    (define-key css-mode-map "\C-c\C-r" 'slime-js-embed-css)))
 (modify-syntax-entry ?_ "w" js2-mode-syntax-table)
+;; (modify-syntax-entry ?. "w" js2-mode-syntax-table)
+(modify-syntax-entry ?_ "w" js-mode-syntax-table)
+;; (modify-syntax-entry ?. "w" js-mode-syntax-table)
 
 (defun json-format ()
   "格式化json"

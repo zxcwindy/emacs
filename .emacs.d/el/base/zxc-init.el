@@ -58,7 +58,8 @@
 
 ;;-------------------
 ;;修改字体
-(set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
+;; (set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
+(set-frame-font "-unknown-DejaVu Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------
@@ -290,9 +291,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq frame-title-format "emacs@%f")
 
 (setq calendar-time-zone 480)	       ;;GMT+8 (8*60)
-(setq calendar-latitude 29.3)          ;;纬度，正数北纬
-(setq calendar-longitude 91.15)        ;;经度，正数东经
-(setq calendar-location-name "拉萨")    ;;地名
+(setq calendar-longitude 120.2)        ;;经度，正数东经
+(setq calendar-latitude 30.3)          ;;纬度，正数北纬
+(setq calendar-location-name "杭州")    ;;地名
 
 (setq emmet-preview-default nil)
 (setq global-whitespace-mode t)

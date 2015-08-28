@@ -23,6 +23,9 @@
 (require 'zxc-http)
 (require 'zxc-comet)
 (require 'zxc-db)
+(require 'zxc-shell)
+
+(require 'zxc-kbd)
 
 ;;;; Minor Mode Definition
 
@@ -42,7 +45,7 @@
 (defvar db-name "db2" "database name")
 
 (define-key zxc-mode-map (kbd  "C-; cs") #'zxc-db-get-select-sql)
-(define-key zxc-mode-map (kbd  "C-; cf") #'code-)
+(define-key zxc-mode-map (kbd  "C-; cf") #'code-format)
 (define-key zxc-mode-map (kbd  "C-; ch") #'comet-set-url)
 (define-key zxc-mode-map (kbd  "C-; cu") #'comet-subscribe)
 (define-key zxc-mode-map (kbd  "C-; cc") #'comet-publish-paragraph)
