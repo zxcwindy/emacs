@@ -99,4 +99,42 @@ return the positions list "
 	     (setf result (sexpr-xml o result)))))
     (setf result (concat result (format "</%s>" tag)))))
 
+(defun zxc-util-convert-table-to-sql (str)
+  "|  KEY   |                 VALUE                  |  PARENT  |ROW_NUM|
++--------+----------------------------------------+----------+-------+
+| 21103  |            舟山岱山移动公司            |   部门   |   1   |
+|10035578|          新鸿迅普陀特约代理点          |非授权网点|   2   |
+|10209732|            314吴兴凤凰铁通             |非授权网点|   3   |
+|10230037|    城区分局-三江街道-三星-学英通讯     |非授权网点|   4   |"
+  (interactive "s输入分隔符：")
+  (let ((begin-point (if (region-active-p)
+			  (region-beginning)
+			(point-min)))
+	 (end-point (if (region-active-p)
+			(region-end)
+		      (point-max)))
+	 (split-char (if (eq nil str)
+			 "\|"
+		       str)))
+    (goto-char begin-point)
+    (let* ((head-str (buffer-substring-no-properties begin-point (line-end-position)))
+	   (head (cdr (split-string head-str split-char)))
+	   (insert-str (s-concat "insert into PressCtrlH ("
+				 (mapconcat (lambda (x)
+					      (s-trim x)) (subseq head 0 (- (length head) 1)) ",")
+				 ") values")))
+      (line-move 2)
+      (back-to-indentation)
+      (let* ((data-str (buffer-substring-no-properties (line-beginning-position) end-point))
+	     (data-str-list (split-string data-str "\n" t)))
+	(kill-region begin-point end-point)
+	(dolist (str data-str-list)
+	  (insert (s-concat "
+" insert-str "(" (mapconcat #'zxc-util-deal-sql-data
+			    (subseq (cdr (split-string str split-char)) 0 (- (length head) 1)) ",") ");")))))))
+
+(defun zxc-util-deal-sql-data (x)
+  "处理拼接SQL数据字段的方式"
+  (s-concat "'" (s-trim x) "'"))
+
 (provide 'zxc-util)

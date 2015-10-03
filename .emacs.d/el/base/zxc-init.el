@@ -32,18 +32,24 @@
 ;;w3m
 ;;(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 
-(defun get-browse (url  &rest args)
-  (if (let ((list '(lisp-interaction-mode lisp-mode)))
-	(do* ((lt list (cdr lt))
-	      (mode-1 (car lt) (car lt))
-	      (mode major-mode))
-	    ((or (equal lt nil)
-		 (equal mode mode-1))
-	     (equal mode mode-1))))
-      (w3m-browse-url url args)
-    (browse-url-firefox url args)))
+;; 使用chrome
+;; (defun get-browse (url  &rest args)
+;;   (if (let ((list '(lisp-interaction-mode lisp-mode)))
+;; 	(do* ((lt list (cdr lt))
+;; 	      (mode-1 (car lt) (car lt))
+;; 	      (mode major-mode))
+;; 	    ((or (equal lt nil)
+;; 		 (equal mode mode-1))
+;; 	     (equal mode mode-1))))
+;;       (w3m-browse-url url args)
+;;     (browse-url-firefox url args)))
 
-(setq browse-url-browser-function #'get-browse)
+;; (setq browse-url-browser-function #'get-browse)
+
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "/opt/google/chrome/google-chrome")
+
+
 
 (setq w3m-use-cookies t)
 (setq w3m-coding-system 'utf-8
@@ -291,9 +297,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq frame-title-format "emacs@%f")
 
 (setq calendar-time-zone 480)	       ;;GMT+8 (8*60)
-(setq calendar-longitude 120.2)        ;;经度，正数东经
-(setq calendar-latitude 30.3)          ;;纬度，正数北纬
-(setq calendar-location-name "杭州")    ;;地名
+(setq calendar-longitude 104.06)        ;;经度，正数东经
+(setq calendar-latitude 30.67)          ;;纬度，正数北纬
+(setq calendar-location-name "成都")    ;;地名
 
 (setq emmet-preview-default nil)
 (setq global-whitespace-mode t)
@@ -305,5 +311,22 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;;diff水平分隔
 ;; (setq ediff-split-window-function 'split-window-horizontally
 ;;       ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;;; org开启dot编译,如下例子
+;; #+BEGIN_SRC dot :file test-dot.png :exports results
+;; digraph a{
+;; 	开始->登录系统->登录校验;
+;; 	登录校验->登录系统:se [label="校验失败"];
+;; 	登录校验->进入平台;
+;; }
+;; #+END_SRC
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((dot . t)))
+
+;;org src 颜色设置
+(setq org-src-fontify-natively t)
+;;设置执行代码不进行提示
+(setq org-confirm-babel-evaluate nil)
 
 (provide 'zxc-init)

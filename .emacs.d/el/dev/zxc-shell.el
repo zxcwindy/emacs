@@ -29,4 +29,9 @@
 	  (comint-simple-send (get-buffer-process (get-buffer buffer-name)) command))
       (shell buffer-name))))
 
+(add-hook 'shell-mode-hook (lambda ()
+			     (setq outline-regexp "(bash-4.2\$")
+			     (outline-minor-mode t)))
+
+
 (provide 'zxc-shell)
