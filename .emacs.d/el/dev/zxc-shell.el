@@ -29,9 +29,12 @@
 	  (comint-simple-send (get-buffer-process (get-buffer buffer-name)) command))
       (shell buffer-name))))
 
-(add-hook 'shell-mode-hook (lambda ()
-			     (setq outline-regexp "(bash-4.2\$")
-			     (outline-minor-mode t)))
+(add-hook 'shell-mode-hook #'(lambda ()
+			       (modify-syntax-entry ?. "w" shell-mode-syntax-table)
+			       (modify-syntax-entry ?_ "w" shell-mode-syntax-table)
+			       (setf ac-sources '(ac-source-dictionary))
+			       (setq outline-regexp "bash-4.2\$ ")
+			       (outline-minor-mode t)))
 
 
 (provide 'zxc-shell)

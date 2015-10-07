@@ -99,6 +99,7 @@
 (global-set-key [M-f10] #'(lambda ()
 			    (interactive)
 			    (zxc-httpd-start)
-			    (zxc-httpd-set-root)))
+			    (zxc-httpd-set-root)
+			    (browse-url-generic "http://localhost:9991/my")))
 
 (provide 'zxc-httpd)

@@ -229,11 +229,6 @@ that was stored with ska-point-to-register."
 			     (modify-syntax-entry ?. "w" sql-mode-syntax-table)
 			     (sql-highlight-oracle-keywords)))
 
-(add-hook 'shell-mode-hook #'(lambda ()
-			       (modify-syntax-entry ?. "w" shell-mode-syntax-table)
-			       (modify-syntax-entry ?_ "w" shell-mode-syntax-table)
-			       (setf ac-sources '(ac-source-dictionary))))
-
 (add-hook 'org-mode-hook #'(lambda ()
 			     (modify-syntax-entry ?. "w" org-mode-syntax-table)
 			     (modify-syntax-entry ?_ "w" org-mode-syntax-table)))
