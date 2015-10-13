@@ -1,0 +1,4 @@
+# name: nginx stop
+# key: sngs
+# --
+sudo nginx -s stop

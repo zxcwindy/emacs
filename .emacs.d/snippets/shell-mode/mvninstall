@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: mvn install
+# key: mvninstall
+# --
+mvn install:install-file -Dfile=${1:jar} -DgroupId=$2 -DartifactId=$3 -Dversion=$4 -Dpackaging=jar$0

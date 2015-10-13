@@ -1,0 +1,4 @@
+# name: nginx reload
+# key: sngr
+# --
+sudo nginx -s reload

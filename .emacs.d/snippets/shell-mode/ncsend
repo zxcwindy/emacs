@@ -1,0 +1,4 @@
+# name: send file
+# key: ncsend
+# --
+nc ${1:localhost} 17000 < $2 $0

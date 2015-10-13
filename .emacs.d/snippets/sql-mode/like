@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: like
+# key: like
+# --
+like '%$0%'

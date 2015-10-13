@@ -1,5 +1,5 @@
 # contributor: zhengxc <david.c.aq@gmail.com>
 # name: op_time='yyyymmdd'
-# key: op
+# key: optime
 # --
 op_time = '`(format-time-string "%Y%m%d" (seconds-to-time (- (time-to-seconds (current-time)) (* 24 60 60))))`'

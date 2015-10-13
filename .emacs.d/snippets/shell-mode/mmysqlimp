@@ -1,0 +1,4 @@
+# name: mutil mysql import
+# key: mmysqlimp
+# --
+mysql -u${1:root} -p${2:newpass} ${3:} -S /var/run/mysql/mysql_$4.sock < $5 $0

@@ -1,0 +1,4 @@
+# name: sudo nginx
+# key: sng
+# --
+sudo nginx -c /home/david/.nginx/nginx.conf $0

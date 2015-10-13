@@ -1,0 +1,4 @@
+# name: recive file
+# key: ncrecv
+# --
+nc -l -p 17000 > $1 $0

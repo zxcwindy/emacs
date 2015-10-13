@@ -1,0 +1,4 @@
+# name: sudo mysqld_multi
+# key: mmysql
+# --
+sudo mysqld_multi --defaults-extra-file=/home/david/.my_multi_${1:$$ (gethash yas-text my-yas-mysql-alias-interface)}.cnf start $1$0

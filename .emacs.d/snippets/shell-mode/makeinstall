@@ -1,0 +1,4 @@
+# name: makeinstall
+# key: makeinstall
+# --
+make install DESTDIR=$0

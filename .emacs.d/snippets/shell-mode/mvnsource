@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: mvn download source
+# key: mvnsource
+# --
+mvn dependency:sources
