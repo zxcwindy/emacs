@@ -30,7 +30,7 @@
      (Base . 10)
      (Syntax . ANSI-Common-Lisp)
      (require-final-newline . t))))
- '(session-use-package t nil (session))
+ ;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
@@ -93,10 +93,6 @@
 	     (local-set-key "\C-cl" 'node-load-file)))
 
 (require 'el-js-comint)
-
-(require 'session)
-(setq session-save-file "~/.emacs.d/.session")
-(add-hook 'after-init-hook 'session-initialize)
 
 (require 'zxc)
 (add-hook 'zxc-mode-hook #'comet-disconnect)
@@ -287,4 +283,13 @@
 (require 'zxc-theme)
 (require 'zxc-httpd)
 (require 'zxc-cedet-ecb)
+(require 'vlf-setup)
+(require 'session)
+(setq session-save-file "~/.emacs.d/.session")
+(add-hook 'after-init-hook #'(lambda ()
+			       (session-initialize)
+			       (change-theme #'color-theme-sanityinc-solarized-light
+					     #'(lambda ()
+						 (switch-theme 'sanityinc-solarized-light 'misterioso)))))
+
 (put 'erase-buffer 'disabled nil)

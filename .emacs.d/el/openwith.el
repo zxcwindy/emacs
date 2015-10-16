@@ -49,10 +49,13 @@
     ("\\.class\\'" "jad" ("-p" file))
     ("\\.mp3\\'" "xmms" (file))
     ("\\.chm\\'" "kchmviewer" (file))
-    ;;("\\.\\(?:xls\\|doc\\|ods\\)\\'" "soffice" (file))
-    ("\\.\\(?:mpe?g\\|avi\\|wmv\\)\\'" "mplayer" ("-idx" file))
+    ("\\.\\(?:xls\\|doc\\|ods\\)\\'" "soffice" (file))
+    ("\\.\\(?:mpe?g\\|avi\\|wmv\\|mp4\\)\\'" "mplayer" ("-idx" file))
     ;; ("\\.\\(?:jp?g\\|png\\)\\'" "display" (file))
-    ;; ("\\.\\(?:xls?x\\|doc?x\\|ods\\)\\'" "soffice" (file))
+    ;; ("\\.\\(?:xlsx?\\|docx?\\|ods\\|odt\\|doc\\)\\'" "soffice" (file))
+    ("\\.xlsx?\\'" "et" (file))
+    ("\\.docx?\\'" "wps" (file))
+    ("\\.pptx?\\'" "wpp" (file))
     )
   "Associations of file patterns to external programs.
 File pattern is a regular expression describing the files to

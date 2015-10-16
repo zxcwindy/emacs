@@ -7,14 +7,14 @@
   "重定义方法"
   (let*
       ((now (current-time))
-       
+
        (today-times    (sunrise-sunset-times (today)))
        (tomorrow-times (sunrise-sunset-times (tomorrow)))
-       
+
        (sunrise-today (first today-times))
        (sunset-today (second today-times))
        (sunrise-tomorrow (first tomorrow-times)))
-    
+
     (if (daytime-p sunrise-today sunset-today)
 	(progn
 	  (funcall day-theme)
@@ -31,10 +31,6 @@
 ;; (if (string< (format-time-string "%H%M") "1800")
 ;;     (color-theme-sanityinc-solarized-light)
 ;;   (load-theme 'misterioso))
-
-(change-theme #'color-theme-sanityinc-solarized-light
-	      #'(lambda ()
-		  (switch-theme 'sanityinc-solarized-light 'misterioso)))
 
 ;; (setq theme-changer-mode "color-theme")
 ;;(change-theme 'sanityinc-solarized-light 'misterioso)
