@@ -7,7 +7,6 @@
    ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
  '(case-fold-search t)
  '(coffee-tab-width 4)
- '(custom-enabled-themes (quote (sanityinc-solarized-light)))
  '(custom-safe-themes
    (quote
     ("d55c0b7612a1c63e5e12f9778b8a59effb87044ab61f1617440e577257f0d851" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
@@ -50,6 +49,7 @@
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/el/base"
 	  "~/.emacs.d/el/dev"
+	  "~/.emacs.d/el/themes"
 	  "/usr/share/emacs/site-lisp/mu4e"
 	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
@@ -287,9 +287,6 @@
 (require 'session)
 (setq session-save-file "~/.emacs.d/.session")
 (add-hook 'after-init-hook #'(lambda ()
-			       (session-initialize)
-			       (change-theme #'color-theme-sanityinc-solarized-light
-					     #'(lambda ()
-						 (switch-theme 'sanityinc-solarized-light 'misterioso)))))
+			       (session-initialize)))
 
 (put 'erase-buffer 'disabled nil)
