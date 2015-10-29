@@ -34,6 +34,8 @@
 ;;   (load-theme 'misterioso))
 
 ;; (setq theme-changer-mode "color-theme")
-(change-theme 'sanityinc-solarized-light 'misterioso)
+(defun zxc-theme-change ()
+  (interactive)
+  (change-theme 'sanityinc-solarized-light 'misterioso))
 
 (provide 'zxc-theme)

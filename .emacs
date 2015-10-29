@@ -106,6 +106,9 @@
 (desktop-save-mode 1)
 ;;(desktop-read)
 
+(require 'session)
+(setq session-save-file "~/.emacs.d/.session")
+
 ;; (require 'tabbar)
 ;; (tabbar-mode 1)
 
@@ -284,9 +287,8 @@
 (require 'zxc-httpd)
 (require 'zxc-cedet-ecb)
 (require 'vlf-setup)
-(require 'session)
-(setq session-save-file "~/.emacs.d/.session")
-(add-hook 'after-init-hook #'(lambda ()
-			       (session-initialize)))
-
 (put 'erase-buffer 'disabled nil)
+(add-hook 'after-init-hook #'(lambda ()
+			       (session-initialize)
+			       (zxc-theme-change)))
+(global-set-key (kbd "<f8>") 'zxc-theme-change)
