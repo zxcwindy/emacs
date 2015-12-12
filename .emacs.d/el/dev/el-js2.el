@@ -1,6 +1,7 @@
 (require 'js2-mode)
 (require 'js2-refactor)
 (require 'jquery-doc)
+(require 'js-doc)
 (require 'js)
 
 ;;(autoload 'js2-mode "js2" nil t)
@@ -17,8 +18,13 @@
 	    (global-set-key (kbd "C-; C-q") 'js2-mode-toggle-hide-functions)))
 
 (add-hook 'js2-mode-hook 'ac-js2-mode)
+(add-hook 'js2-mode-hook 'js2-refactor-mode)
 (add-hook 'js2-mode-hook 'jquery-doc-setup)
-(add-hook 'js2-mode-hook 'zxc-paredit-nonlisp-mode)
+(add-hook 'js2-mode-hook
+          #'(lambda ()
+              (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
+              (define-key js2-mode-map "@" 'js-doc-insert-tag)))
+;; (add-hook 'js2-mode-hook 'zxc-paredit-nonlisp-mode)
 
 ;; (add-hook 'css-mode-hook
 ;;	  (lambda ()

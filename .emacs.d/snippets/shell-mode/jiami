@@ -1,0 +1,4 @@
+# name: pgp jiami
+# key: jiami
+# --
+gpg -ea -r 43D97BE0 $1 $0

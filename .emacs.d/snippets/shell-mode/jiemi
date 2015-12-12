@@ -1,0 +1,4 @@
+# name: pgp jiemi
+# key: jiemi
+# --
+gpg -o ${1:filename} -d ${2:filename.asc} $0

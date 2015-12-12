@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: fetch first
+# key: ff
+# --
+fetch first ${1:5} rows only$0

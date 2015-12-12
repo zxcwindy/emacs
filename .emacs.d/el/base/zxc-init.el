@@ -292,9 +292,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq frame-title-format "emacs@%f")
 
 (setq calendar-time-zone 480)	       ;;GMT+8 (8*60)
-(setq calendar-longitude 104.06)        ;;经度，正数东经
-(setq calendar-latitude 30.67)          ;;纬度，正数北纬
-(setq calendar-location-name "成都")    ;;地名
+(setq calendar-longitude 114.30)        ;;经度，正数东经
+(setq calendar-latitude 30.60)          ;;纬度，正数北纬
+(setq calendar-location-name "武汉")    ;;地名
 
 (setq emmet-preview-default nil)
 (setq global-whitespace-mode t)
@@ -323,5 +323,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq org-src-fontify-natively t)
 ;;设置执行代码不进行提示
 (setq org-confirm-babel-evaluate nil)
+
+(eval-after-load "org"
+  '(progn (require 'ox-md)
+	  (require 'ox-odt)))
 
 (provide 'zxc-init)

@@ -1,0 +1,4 @@
+# name: mysql socket
+# key: -S
+# --
+-S /var/run/mysql/mysql_$1.sock$0
