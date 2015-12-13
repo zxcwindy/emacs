@@ -12,18 +12,25 @@
 (add-hook 'js2-mode-hook
 	  (lambda ()
 	    ;; (slime-js-minor-mode 1)
+	    (ac-js2-mode)
+	    (js2-refactor-mode)
+	    (jquery-doc-setup)
 	    (global-set-key (kbd "C-; C-a") 'js2-mode-show-all)
 	    (global-set-key (kbd "C-; C-d") 'js2-mode-hide-element)
 	    (global-set-key (kbd "C-; C-s") 'js2-mode-show-element)
-	    (global-set-key (kbd "C-; C-q") 'js2-mode-toggle-hide-functions)))
+	    (global-set-key (kbd "C-; C-q") 'js2-mode-toggle-hide-functions)
+	    (local-set-key "\C-c\C-c" 'js-send-last-sexp)
+	    (local-set-key "\C-c\C-r" 'js-send-region)
+	    (local-set-key "\C-cb" 'js-send-buffer)
+	    (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
+	    (local-set-key "\C-cl" 'node-load-file)
+	    (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
+	    (define-key js2-mode-map "@" 'js-doc-insert-tag)))
 
-(add-hook 'js2-mode-hook 'ac-js2-mode)
-(add-hook 'js2-mode-hook 'js2-refactor-mode)
-(add-hook 'js2-mode-hook 'jquery-doc-setup)
-(add-hook 'js2-mode-hook
-          #'(lambda ()
-              (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
-              (define-key js2-mode-map "@" 'js-doc-insert-tag)))
+;; (add-hook 'js2-mode-hook 'ac-js2-mode)
+;; (add-hook 'js2-mode-hook 'js2-refactor-mode)
+;; (add-hook 'js2-mode-hook 'jquery-doc-setup)
+
 ;; (add-hook 'js2-mode-hook 'zxc-paredit-nonlisp-mode)
 
 ;; (add-hook 'css-mode-hook

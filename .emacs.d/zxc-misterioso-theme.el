@@ -18,15 +18,15 @@
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
 
-(deftheme misterioso
+(deftheme zxc-misterioso
   "Created 2013-12-01.")
 
 (custom-theme-set-variables
- 'misterioso
+ 'zxc-misterioso
  '(ansi-color-names-vector ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"]))
 
 (custom-theme-set-faces
- 'misterioso
+ 'zxc-misterioso
  '(cursor ((t (:background "white"))))
  '(fringe ((((class color) (min-colors 89)) (:background "#2e3748"))))
  '(highlight ((t (:background "blue" :foreground "#e1e1e0"))))
@@ -82,4 +82,4 @@
  '(message-separator ((((class color) (min-colors 89)) (:foreground "#23d7d7"))))
  '(default ((((class color) (min-colors 4096)) (:background "#2d3743" :foreground "#e1e1e0")) (((class color) (min-colors 89)) (:background "#3a3a3a" :foreground "#e1e1e0")))))
 
-(provide-theme 'misterioso)
+(provide-theme 'zxc-misterioso)

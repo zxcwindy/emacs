@@ -9,7 +9,7 @@
  '(coffee-tab-width 4)
  '(custom-safe-themes
    (quote
-    ("d55c0b7612a1c63e5e12f9778b8a59effb87044ab61f1617440e577257f0d851" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
+    ("4b137a22ad4b2796afbeee80afb9ef0fab18c2440689249ebfcf7621914eb90a" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
  '(delete-by-moving-to-trash t)
  '(desktop-globals-to-save (quote (desktop-missing-file-warning)))
  '(desktop-path (quote ("~/.emacs.d/")))
@@ -29,7 +29,6 @@
      (Base . 10)
      (Syntax . ANSI-Common-Lisp)
      (require-final-newline . t))))
- ;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
@@ -49,7 +48,6 @@
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/el/base"
 	  "~/.emacs.d/el/dev"
-	  "~/.emacs.d/el/themes"
 	  "/usr/share/emacs/site-lisp/mu4e"
 	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
@@ -84,13 +82,6 @@
 (ac-config-default)
 
 (require 'el-js2)
-(add-hook 'js2-mode-hook
-	  '(lambda ()
-	     (local-set-key "\C-c\C-c" 'js-send-last-sexp)
-	     (local-set-key "\C-c\C-r" 'js-send-region)
-	     (local-set-key "\C-cb" 'js-send-buffer)
-	     (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-	     (local-set-key "\C-cl" 'node-load-file)))
 
 (require 'el-js-comint)
 
@@ -102,12 +93,14 @@
 
 (require 'el-paredit)
 
-;;desktop
-(desktop-save-mode 1)
-;;(desktop-read)
-
 (require 'session)
 (setq session-save-file "~/.emacs.d/.session")
+(add-hook 'after-init-hook '(lambda ()
+			      (session-initialize)
+			      (disable-theme 'sanityinc-solarized-light)
+			      (disable-theme 'zxc-misterioso)
+			      (disable-theme 'misterioso)
+			      (change-theme 'sanityinc-solarized-light 'zxc-misterioso)))
 
 ;; (require 'tabbar)
 ;; (tabbar-mode 1)
@@ -282,13 +275,12 @@
 (global-page-break-lines-mode)
 
 (require 'csv-mode)
-
+;;desktop
+;;(desktop-read)
 (require 'zxc-theme)
+(desktop-save-mode 1)
+
 (require 'zxc-httpd)
-(require 'zxc-cedet-ecb)
+;; (require 'zxc-cedet-ecb)
 (require 'vlf-setup)
 (put 'erase-buffer 'disabled nil)
-(add-hook 'after-init-hook #'(lambda ()
-			       (session-initialize)
-			       (zxc-theme-change)))
-(global-set-key (kbd "<f8>") 'zxc-theme-change)
