@@ -1,5 +1,5 @@
 (require 'multiple-cursors)
-;;;###autoload
+
 ;; (defun mc/mark-all-prev-like-this ()
 ;;   "找到前面所有的相同区域"
 ;;   (interactive)
@@ -23,7 +23,7 @@
 ;;       (if (> (mc/num-cursors) 1)
 ;; 	  (multiple-cursors-mode 1)
 ;; 	(multiple-cursors-mode 0)))))
-
+;;;###autoload
 (defun mc/mark-all-prev-like-this ()
   "找到前面所有的相同区域"
   (interactive)

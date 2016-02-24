@@ -3,6 +3,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
  '(case-fold-search t)
@@ -15,11 +17,13 @@
  '(desktop-path (quote ("~/.emacs.d/")))
  '(display-time-mode t)
  '(ecb-options-version "2.40")
+ '(fci-rule-color "#eee8d5")
  '(js2-idle-timer-delay 2.5)
  '(linum-format (quote dynamic))
  '(make-backup-files nil)
  '(minimap-dedicated-window t)
  '(minimap-window-location (quote right))
+ '(org-agenda-files nil)
  '(org-todo-keywords (quote ((sequence "TODO" "DOING" "DONE"))))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(recentf-max-saved-items 400)
@@ -29,10 +33,35 @@
      (Base . 10)
      (Syntax . ANSI-Common-Lisp)
      (require-final-newline . t))))
+;; '(session-use-package t nil (session))
  '(size-indication-mode t)
+ '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
+ '(undo-outer-limit 52428800)
  '(url-show-status nil)
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#dc322f")
+     (40 . "#cb4b16")
+     (60 . "#b58900")
+     (80 . "#859900")
+     (100 . "#2aa198")
+     (120 . "#268bd2")
+     (140 . "#d33682")
+     (160 . "#6c71c4")
+     (180 . "#dc322f")
+     (200 . "#cb4b16")
+     (220 . "#b58900")
+     (240 . "#859900")
+     (260 . "#2aa198")
+     (280 . "#268bd2")
+     (300 . "#d33682")
+     (320 . "#6c71c4")
+     (340 . "#dc322f")
+     (360 . "#cb4b16"))))
+ '(vc-annotate-very-old-color nil)
  '(w3m-home-page "http://10.95.239.158:8080/log.html"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -99,7 +128,6 @@
 			      (session-initialize)
 			      (disable-theme 'sanityinc-solarized-light)
 			      (disable-theme 'zxc-misterioso)
-			      (disable-theme 'misterioso)
 			      (change-theme 'sanityinc-solarized-light 'zxc-misterioso)))
 
 ;; (require 'tabbar)
@@ -152,7 +180,7 @@
 (global-set-key (kbd "C-c .") 'ska-jump-to-register)
 (global-set-key (kbd "<left>") 'scroll-right)
 (global-set-key (kbd "<right>") 'scroll-left)
-(global-set-key (kbd "C-h d") 'kill-whole-line)
+(global-set-key (kbd "C-h") 'kill-whole-line)
 (global-set-key (kbd "C-M-i") 'scroll-other-window-down)
 (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
@@ -240,8 +268,8 @@
 ;;; auto-rever-tail-mode
 ;;; follow-mode
 
-;; (require 'sr-speedbar)
-;; (global-set-key [f7] 'sr-speedbar-toggle)
+(require 'sr-speedbar)
+(global-set-key [f7] 'sr-speedbar-toggle)
 
 (require 'edbi)
 
@@ -258,9 +286,10 @@
 
 (require 'move-text)
 
-(require 'shell-session-keep)
-(shell-session-keep)
-(setf shell-session-keep-filter-names (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0"))
+;;; 用ssh config替代
+;; (require 'shell-session-keep)
+;; (shell-session-keep)
+;; (setf shell-session-keep-filter-names (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0"))
 
 (require 'el-kbd)
 
@@ -281,6 +310,12 @@
 (desktop-save-mode 1)
 
 (require 'zxc-httpd)
-;; (require 'zxc-cedet-ecb)
+(require 'zxc-cedet-ecb)
 (require 'vlf-setup)
 (put 'erase-buffer 'disabled nil)
+
+(projectile-global-mode)
+
+(require 'zxc-indent)
+
+(session-initialize)

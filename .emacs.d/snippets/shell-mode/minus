@@ -1,0 +1,4 @@
+# name: minus file
+# key: minus
+# --
+comm -2 -3 $1 $2$0

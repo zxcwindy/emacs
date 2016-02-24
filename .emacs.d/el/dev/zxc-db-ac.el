@@ -59,7 +59,9 @@ return json format [{tableSchema:\"schema\",tableName:\"tablename\"},...]
 	      (json-array-type 'list)
 	      (json-false nil))
 	  (kill-buffer buf)
-	  (json-read-from-string data))))
+	  (condition-case error
+	      (json-read-from-string data)
+	    (error "error data : %s" error)))))
     (deferred:nextc it
       (lambda (result)
 	(when (> (length result) 0)

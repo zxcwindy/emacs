@@ -2,4 +2,4 @@
 # name: insert into
 # key: ii
 # --
-insert into $0
+insert into $1 $2 values ($3);$0

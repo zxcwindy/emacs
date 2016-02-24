@@ -1,0 +1,4 @@
+# name: sed replace
+# key: sedm
+# --
+sed -i "s/\($1\)/\1$2/g" $3$0

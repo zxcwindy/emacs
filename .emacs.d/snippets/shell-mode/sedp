@@ -1,0 +1,4 @@
+# name: sed print
+# key: sedp
+# --
+sed -n "/$1/ p" $0

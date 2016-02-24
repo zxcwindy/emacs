@@ -1,0 +1,4 @@
+# name: sed add
+# key: seda
+# --
+sed -i "$1 a $2" $3$0

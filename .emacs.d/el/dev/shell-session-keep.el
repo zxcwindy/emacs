@@ -36,7 +36,7 @@
   "comint new line to process in buffer"
   (mapcar #'(lambda (buffer)
 	      (unless (eq (current-buffer) buffer)
-		(comint-simple-send (get-buffer-process buffer) "")))
+		(comint-simple-send (get-buffer-process buffer) "date")))
 	  (shell-session-keep-filter shell-session-keep-filter-names)))
 
 (defun shell-session-keep-filter (names)
