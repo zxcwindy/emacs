@@ -314,8 +314,14 @@
 (require 'vlf-setup)
 (put 'erase-buffer 'disabled nil)
 
-(projectile-global-mode)
+;; (projectile-global-mode)
 
-(require 'zxc-indent)
+(mapcar (lambda (mode-hook)
+	  (add-hook mode-hook 'projectile-mode))
+	(list 'java-mode-hook 'js-mode-hook 'javascript-mode-hook))
+
+;; (require 'zxc-indent)
 
 (session-initialize)
+
+(require 'zxc-dev-init)

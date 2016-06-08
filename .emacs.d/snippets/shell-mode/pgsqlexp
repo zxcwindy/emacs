@@ -1,0 +1,4 @@
+# name: pgsql export
+# key: pgsqlexp
+# --
+pg_dump ${1:dqmetl} -U ${2:postgres} > $1`(format-time-string "%Y%m%d")`.sql$0

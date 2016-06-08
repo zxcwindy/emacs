@@ -1,0 +1,4 @@
+# name: postgresql start
+# key: pgstart
+# --
+pg_ctl -D /sda11/pgsql/data -l /var/log/pgsql/pgsql.log start

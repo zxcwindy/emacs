@@ -1,0 +1,4 @@
+# name: pgsql import
+# key: pgsqlimp
+# --
+psql ${1:databasename} < $2 $0

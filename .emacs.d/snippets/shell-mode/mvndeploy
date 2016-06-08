@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: mvn deploy
+# key: mvndeploy
+# --
+mvn deploy:deploy-file -Dfile=${1:jar} -DgroupId=$2 -DartifactId=$3 -Dversion=$4 -Durl=http://nexuserver/nexus/content/groups/public/ -DrepositoryId=thirdparty

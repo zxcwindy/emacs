@@ -330,5 +330,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
   '(progn (require 'ox-md)
 	  (require 'ox-odt)))
 
+(setq markdown-command "markdown_py")
+
 (setf password-cache-expiry 2592000)
 (provide 'zxc-init)
