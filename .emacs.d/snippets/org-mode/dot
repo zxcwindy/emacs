@@ -2,8 +2,8 @@
 # name: dot src
 # key: dot
 # --
-#+BEGIN_SRC dot :file test-dot.png :exports results
-digraph $1$0{
-
+#+BEGIN_SRC dot :file $1.png :exports results
+digraph $1{
+    $0
 }
 #+END_SRC

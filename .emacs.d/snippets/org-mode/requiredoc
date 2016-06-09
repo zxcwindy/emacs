@@ -1,0 +1,27 @@
+# contributor: zhengxc
+# name: requiredoc
+# key: requiredoc
+# --
+#+OPTIONS: ^:{} \n:t num:nil
+#+HTML_HEAD: <link rel="stylesheet" href="file:///home/david/git/org-export/css/bootstrap.min.css" type="text/css" media="screen" />
+#+HTML_HEAD: <link rel="stylesheet" href="file:///home/david/git/org-export/css/docs.css" type="text/css" media="screen" />
+#+HTML_HEAD: <script type="text/javascript" src="file:///home/david/git/org-export/js/jquery.1.8.2-min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="file:///home/david/git/org-export/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="file:///home/david/git/org-export/js/application.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="file:///home/david/git/org-export/js/base.js"></script>
+
+* 引言
+** 编写目的
+** 约定与假设
+** 参考文献
+** 术语定义
+* 概述
+** 背景与目标
+** 使用角色列表
+** 系统环境
+** 需求功能点简述
+** 功能组织架构
+* 系统需求详述
+* 非功能性需求
+** 运行环境
+** 性能需求

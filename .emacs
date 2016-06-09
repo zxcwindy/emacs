@@ -307,10 +307,11 @@
 ;;desktop
 ;;(desktop-read)
 (require 'zxc-theme)
-(desktop-save-mode 1)
+;;; 暂时关闭会话保持
+;; (desktop-save-mode 1)
 
 (require 'zxc-httpd)
-(require 'zxc-cedet-ecb)
+;; (require 'zxc-cedet-ecb)
 (require 'vlf-setup)
 (put 'erase-buffer 'disabled nil)
 
