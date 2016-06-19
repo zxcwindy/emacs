@@ -26,13 +26,7 @@
 (require 'json)
 
 (make-variable-buffer-local
- (defvar wstest-ws nil "创建会话的通道"))
-
-(make-variable-buffer-local
- (defvar wstest-ws1 nil "发送消息的通道"))
-
-(make-variable-buffer-local
- (defvar wstest-exit nil "关闭会话的通道"))
+ (defvar zxc-service-remote-shell-ws nil "创建会话的通道"))
 
 (make-variable-buffer-local
  (defvar zxc-service-remote-shell-session-id nil "shell session id"))
@@ -40,33 +34,13 @@
 (make-variable-buffer-local
  (defvar shell-encoding 'utf-8 "字符集编码"))
 
-(defun conn-create ()
+(defun zxc-service-remote-shell-conn-init ()
   "创建socket链接"
-  (when (websocket-openp wstest-ws)
-    (websocket-close wstest-ws))
-  (setf wstest-ws
+  (when (websocket-openp zxc-service-remote-shell-ws)
+    (websocket-close zxc-service-remote-shell-ws))
+  (setf zxc-service-remote-shell-ws
 	(websocket-open
-	 "ws://localhost:18080/service/rest/shell/create"
-	 :on-message #'zxc-service-remote-shell-message
-	 :on-close #'zxc-service-remote-shell-close-message)))
-
-(defun conn-send ()
-  "链接socket发送消息的频道"
-  (when (websocket-openp wstest-ws1)
-    (websocket-close wstest-ws1))
-  (setf wstest-ws1
-	(websocket-open
-	 "ws://localhost:18080/service/rest/shell/send"
-	 :on-message #'zxc-service-remote-shell-message
-	 :on-close #'zxc-service-remote-shell-close-message)))
-
-(defun conn-exit ()
-  "关闭socket的频道"
-  (when (websocket-openp wstest-exit)
-    (websocket-close wstest-exit))
-  (setf wstest-exit
-	(websocket-open
-	 "ws://localhost:18080/service/rest/shell/exit"
+	 "ws://localhost:9990/service/rest/shell/remoteshell"
 	 :on-message #'zxc-service-remote-shell-message
 	 :on-close #'zxc-service-remote-shell-close-message)))
 
@@ -84,16 +58,14 @@
     (goto-char (point-max))
     (set (make-local-variable 'comint-inhibit-carriage-motion) t)
     (setf zxc-service-remote-shell-session-id (number-to-string (random)))
-    (conn-create)
-    (conn-send)
-    (conn-exit)
-    (websocket-send-text wstest-ws (json-encode-list (list :userName "david" :sessionId zxc-service-remote-shell-session-id :password "*******" :host "localhost")))))
+    (zxc-service-remote-shell-conn-init)
+    (websocket-send-text zxc-service-remote-shell-ws (json-encode-list (list :type "create" :content (json-encode-list (append host (list :sessionId zxc-service-remote-shell-session-id))))))))
 
 
 (defun shell-input-sender (_ input)
   "发送命令到服务端，由于服务端会返回当前行的字符串，未避免
 重复显示，命令发送后会删除当前行"
-  (websocket-send-text wstest-ws1 (json-encode-list (list :channelName zxc-service-remote-shell-session-id :content input)))
+  (websocket-send-text zxc-service-remote-shell-ws (json-encode-list (list :type "send" :content (json-encode-list (list :channelName zxc-service-remote-shell-session-id :content input)))))
   (forward-line -1)
   (kill-whole-line))
 
@@ -119,7 +91,7 @@
 (defun zxc-service-remote-shell-interrupt ()
   "终止当前任务"
   (interactive)
-  (websocket-send-text wstest-ws1 (json-encode-list (list :channelName zxc-service-remote-shell-session-id :content ""))))
+  (websocket-send-text zxc-service-remote-shell-ws (json-encode-list (list :type "send" :content (json-encode-list (list :channelName zxc-service-remote-shell-session-id :content ""))))))
 
 ;; (defun zxc-service-remote-shell-exit-query ()
 ;;   "kill buffer时提示"
@@ -133,7 +105,7 @@
   "关闭远程session会话"
   (when zxc-service-remote-shell-session-id
     (condition-case err
-	(websocket-send-text wstest-exit (json-encode-list (list :channelName zxc-service-remote-shell-session-id :content "exit")))
+	(websocket-send-text zxc-service-remote-shell-ws (json-encode-list (list :type "exit" :content (json-encode-list (list :channelName zxc-service-remote-shell-session-id :content "exit")))))
       (error err))))
 
 (add-hook 'kill-buffer-hook 'zxc-service-remote-shell-exit)
@@ -141,5 +113,16 @@
 (add-hook 'remote-shell-repl-mode-hook
 	  (lambda ()
 	    (local-set-key "\C-c\C-c" 'zxc-service-remote-shell-interrupt)))
+
+(defun start-remote-shell (alias)
+  "start remote shell"
+  (interactive "sInput host alias: ")
+  (let ((host (gethash alias shell-host-alias-interface)))
+    (when host
+      (switch-to-buffer (get-buffer-create "*remote-shell*"))
+      (rename-buffer (concatenate 'string "*" alias "*") t)
+      (remote-shell-repl-mode))))
+
+(global-set-key [f9] 'start-remote-shell)
 
 (provide 'zxc-service-remote-shell)
