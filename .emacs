@@ -287,9 +287,9 @@
 (require 'move-text)
 
 ;;; 用ssh config替代
-;; (require 'shell-session-keep)
-;; (shell-session-keep)
-;; (setf shell-session-keep-filter-names (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0"))
+(require 'shell-session-keep)
+(shell-session-keep)
+(setf shell-session-keep-filter-names (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0"))
 
 (require 'el-kbd)
 
@@ -307,8 +307,7 @@
 ;;desktop
 ;;(desktop-read)
 (require 'zxc-theme)
-;;; 暂时关闭会话保持
-;; (desktop-save-mode 1)
+(desktop-save-mode 1)
 
 (require 'zxc-httpd)
 ;; (require 'zxc-cedet-ecb)
@@ -326,3 +325,6 @@
 (session-initialize)
 
 (require 'zxc-dev-init)
+(require 'el-smerge)
+(put 'dired-find-alternate-file 'disabled nil)
+(require 'vue-mode)

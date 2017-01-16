@@ -66,8 +66,9 @@
   "发送命令到服务端，由于服务端会返回当前行的字符串，未避免
 重复显示，命令发送后会删除当前行"
   (websocket-send-text zxc-service-remote-shell-ws (json-encode-list (list :type "send" :content (json-encode-list (list :channelName zxc-service-remote-shell-session-id :content input)))))
-  (forward-line -1)
-  (kill-whole-line))
+  ;; (forward-line -1)
+  ;; (kill-whole-line)
+  )
 
 
 (defun zxc-service-remote-shell-message (websocket frame)

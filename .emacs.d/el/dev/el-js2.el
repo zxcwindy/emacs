@@ -3,6 +3,8 @@
 (require 'jquery-doc)
 (require 'js-doc)
 (require 'js)
+;; (require 'flymake-jslint)
+    
 
 ;;(autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -27,6 +29,7 @@
 	    (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
 	    (define-key js2-mode-map "@" 'js-doc-insert-tag)))
 
+;; (add-hook 'js-mode-hook 'flymake-jslint-load)
 ;; (add-hook 'js2-mode-hook 'ac-js2-mode)
 ;; (add-hook 'js2-mode-hook 'js2-refactor-mode)
 ;; (add-hook 'js2-mode-hook 'jquery-doc-setup)

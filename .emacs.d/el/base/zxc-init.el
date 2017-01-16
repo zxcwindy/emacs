@@ -227,7 +227,8 @@ that was stored with ska-point-to-register."
 (add-hook 'sql-mode-hook #'(lambda ()
 			     (modify-syntax-entry ?_ "w" sql-mode-syntax-table)
 			     (modify-syntax-entry ?. "w" sql-mode-syntax-table)
-			     (sql-highlight-oracle-keywords)))
+			     (sql-highlight-mysql-keywords)
+			     (zxc-db-ac-set-db-alias "dataos")))
 
 (add-hook 'org-mode-hook #'(lambda ()
 			     (modify-syntax-entry ?. "w" org-mode-syntax-table)
@@ -293,6 +294,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 
 ;;; 成都经纬度：东经104.06，北纬30.67
 ;;; 武汉经纬度：东经114.30，北纬30.60
+;;; 济南经纬度：东经117.00，北纬36.40
 (setq calendar-time-zone 480)	       ;;GMT+8 (8*60)
 (setq calendar-longitude 104.06)        ;;经度，正数东经
 (setq calendar-latitude 30.67)          ;;纬度，正数北纬
