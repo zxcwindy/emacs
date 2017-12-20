@@ -22,4 +22,39 @@
 
 (setf magit-blame-heading-format "%H %-20a %C %s")
 
+(defun magit-blame-format-heading (chunk)
+  "重写了magit-blame-format-heading方法，将hash
+展现缩短为7个字符"
+  (with-temp-buffer
+    (insert (format-spec
+             (concat magit-blame-heading-format "\n")
+             `((?H . ,(propertize (or (when (plist-get chunk :hash)
+					(substring (plist-get chunk :hash) 0 7)) "")
+                                  'face 'magit-blame-hash))
+               (?s . ,(propertize (or (plist-get chunk :summary) "")
+                                  'face 'magit-blame-summary))
+               (?a . ,(propertize (or (plist-get chunk :author) "")
+                                  'face 'magit-blame-name))
+               (?A . ,(propertize (magit-blame-format-time-string
+                                   magit-blame-time-format
+                                   (plist-get chunk :author-time)
+                                   (plist-get chunk :author-tz))
+                                  'face 'magit-blame-date))
+               (?c . ,(propertize (or (plist-get chunk :committer) "")
+                                  'face 'magit-blame-name))
+               (?C . ,(propertize (magit-blame-format-time-string
+                                   magit-blame-time-format
+                                   (plist-get chunk :committer-time)
+                                   (plist-get chunk :committer-tz))
+                                  'face 'magit-blame-date)))))
+    (goto-char (point-min))
+    (while (not (eobp))
+      (let ((face (get-text-property (point) 'face))
+            (next (or (next-single-property-change (point) 'face)
+                      (point-max))))
+        (unless face
+          (put-text-property (point) next 'face 'magit-blame-heading))
+        (goto-char next)))
+    (buffer-string)))
+
 (provide 'zxc-magit)

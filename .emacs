@@ -101,7 +101,7 @@
 
 
 (require 'auto-complete)
-(require 'expand-region)
+
 ;;(require 'undo-tree)
 
 (require 'expand-region)
@@ -124,11 +124,13 @@
 
 (require 'session)
 (setq session-save-file "~/.emacs.d/.session")
+
+(require 'zxc-theme)
 (add-hook 'after-init-hook '(lambda ()
 			      (session-initialize)
 			      (disable-theme 'sanityinc-solarized-light)
 			      (disable-theme 'zxc-misterioso)
-			      (change-theme 'sanityinc-solarized-light 'zxc-misterioso)))
+			      (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)))
 
 ;; (require 'tabbar)
 ;; (tabbar-mode 1)
@@ -227,6 +229,8 @@
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'nxml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'emmet-mode)
 (setq auto-mode-alist (cons '(".jsp$" . html-mode) auto-mode-alist))
 
 (autoload 'ace-jump-mode "ace-jump-mode" "Emacs quick move minor mode" t)
@@ -282,14 +286,17 @@
 (global-set-key (kbd "M-<backspace>") 'mu4e)
 
 (require 'shell-here)
-(global-set-key (kbd "C-c C-z") 'shell-here)
+(global-set-key (kbd "C-c C-z") #'(lambda ()
+				    (interactive)
+				    (let ((projectile-require-project-root nil))
+				      (shell-here))))
 
 (require 'move-text)
 
 ;;; 用ssh config替代
-(require 'shell-session-keep)
-(shell-session-keep)
-(setf shell-session-keep-filter-names (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0"))
+;; (require 'shell-session-keep)
+;; (shell-session-keep)
+;; (setf shell-session-keep-filter-names (list "1" "2" "3" "4" "5" "6" "7" "8" "9" "0"))
 
 (require 'el-kbd)
 
@@ -306,7 +313,6 @@
 (require 'csv-mode)
 ;;desktop
 ;;(desktop-read)
-(require 'zxc-theme)
 (desktop-save-mode 1)
 
 (require 'zxc-httpd)
@@ -327,4 +333,15 @@
 (require 'zxc-dev-init)
 (require 'el-smerge)
 (put 'dired-find-alternate-file 'disabled nil)
-(require 'vue-mode)
+(require 'zxc-html)
+(require 'zxc-elasticsearch)
+
+(require 'n4js)
+(setq n4js-cli-program "~/opt/neo4j-community-3.2.2/bin/cypher-shell")
+(setq n4js-cli-arguments '("-u" "neo4j" "-p" "md999"))
+
+;; (define-key yas-minor-mode-map (kbd "<tab>") nil)
+;; (define-key yas-minor-mode-map (kbd "TAB") nil)
+;; (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-expand)
+(require 'zxc-python)
+;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
