@@ -1,0 +1,4 @@
+# name: curl ajax
+# key: ajax
+# --
+-H "Content-Type:application/json; charset=UTF-8"

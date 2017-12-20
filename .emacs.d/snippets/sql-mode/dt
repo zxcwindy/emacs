@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: drop table
+# key: dt
+# --
+drop table $0

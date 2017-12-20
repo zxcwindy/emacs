@@ -1,0 +1,5 @@
+# contributor: zhengxc <david.c.aq@gmail.com>
+# name: mvn download pom
+# key: mvnpom
+# --
+wget https://repo1.maven.org/maven2/${1:javax/mail/mail/1.4.7}/${2:mail-1.4.7.pom} $0

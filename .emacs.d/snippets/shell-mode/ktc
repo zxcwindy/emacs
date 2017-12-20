@@ -1,0 +1,4 @@
+# name: kafka topic create
+# key: ktc
+# --
+/home/david/opt/kafka_2.11-0.10.1.0/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions ${1:1} --topic ${2:topicName} $0

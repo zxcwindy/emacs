@@ -1,0 +1,4 @@
+# name: kafka topic consumer
+# key: kfc
+# --
+/home/dps/kafka/kafka_2.10-0.9.0.1/bin/kafka-console-consumer.sh --zookeeper 10.5.1.44:2181,10.5.1.45:2181,10.5.1.46:2181/kafka --bootstrap-server localhost:9092 --topic ${1:topicName} $0
