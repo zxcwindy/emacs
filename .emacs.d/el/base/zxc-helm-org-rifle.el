@@ -58,7 +58,45 @@ peace!"
 		(buffer-substring-no-properties (region-beginning) (region-end))
 	      (word-at-point)))))
 
-(global-set-key (kbd "C-.") 'helm-org-rifle)
+(add-to-list 'helm-org-rifle-actions '("select row" . zxc-helm-org-rifle-select-entry-in-buffer))
 
+
+(defun zxc-helm-org-rifle-select-entry-in-buffer-action ()
+  "替换当前光标点单词"
+  (interactive)
+  (with-helm-alive-p
+    (helm-exit-and-execute-action 'zxc-helm-org-rifle-select-entry-in-buffer)))
+
+(defun zxc-helm-org-rifle-select-entry-in-buffer (candidate)
+  (-let (((buffer . pos) candidate)
+         (original-buffer (current-buffer)))
+    (with-current-buffer buffer
+      (save-excursion
+	(goto-char pos)
+	(let* ((end-pos (org-entry-end-position))
+	       (temp-str (buffer-substring-no-properties pos end-pos))
+	       (search-pos (re-search-forward helm-pattern end-pos)))
+	  (goto-char search-pos)
+	  (message "%s" (current-line-contents)))))))
+
+;;; 66185329
+;; (defun zxc-helm-org-rifle-select-entry-in-buffer (candidate)
+;;   "选中当前候选组内容第一行."
+;;   (-let (((buffer . pos) candidate)
+;;          (original-buffer (current-buffer)))
+    ;; (helm-attrset 'new-buffer nil)  ; Prevent the buffer from being cleaned up
+    ;; (message "%s" candidate)
+    ;; (with-current-buffer buffer
+    ;;   (save-excursion
+    ;;     (goto-char pos)
+    ;;     (org-tree-to-indirect-buffer)
+    ;;     (unless (equal original-buffer (car (window-prev-buffers)))
+    ;;       (set-window-prev-buffers nil (append (cdr (window-prev-buffers))
+    ;;                                            (car (window-prev-buffers)))))))
+    ;; ))
+
+
+(global-set-key (kbd "C-.") 'helm-org-rifle)
+(define-key helm-org-rifle-map (kbd "<C-return>") 'zxc-helm-org-rifle-select-entry-in-buffer-action)
 
 (provide 'zxc-helm-org-rifle)
