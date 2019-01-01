@@ -77,24 +77,13 @@ peace!"
 	       (temp-str (buffer-substring-no-properties pos end-pos))
 	       (search-pos (re-search-forward helm-pattern end-pos)))
 	  (goto-char search-pos)
-	  (message "%s" (current-line-contents)))))))
-
-;;; 66185329
-;; (defun zxc-helm-org-rifle-select-entry-in-buffer (candidate)
-;;   "选中当前候选组内容第一行."
-;;   (-let (((buffer . pos) candidate)
-;;          (original-buffer (current-buffer)))
-    ;; (helm-attrset 'new-buffer nil)  ; Prevent the buffer from being cleaned up
-    ;; (message "%s" candidate)
-    ;; (with-current-buffer buffer
-    ;;   (save-excursion
-    ;;     (goto-char pos)
-    ;;     (org-tree-to-indirect-buffer)
-    ;;     (unless (equal original-buffer (car (window-prev-buffers)))
-    ;;       (set-window-prev-buffers nil (append (cdr (window-prev-buffers))
-    ;;                                            (car (window-prev-buffers)))))))
-    ;; ))
-
+	  (let ((match-content (current-line-contents)))
+	    (with-current-buffer original-buffer
+	      (let* ((word-pos (bounds-of-thing-at-point 'word))
+		    (word-start (car word-pos))
+		    (word-end (cdr word-pos)))
+		(delete-region word-start word-end)
+		(insert (s-trim match-content))))))))))
 
 (global-set-key (kbd "C-.") 'helm-org-rifle)
 (define-key helm-org-rifle-map (kbd "<C-return>") 'zxc-helm-org-rifle-select-entry-in-buffer-action)

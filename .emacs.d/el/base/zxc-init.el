@@ -65,7 +65,7 @@
 ;;-------------------
 ;;修改字体
 ;; (set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
-(set-frame-font "-unknown-DejaVu Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
+(set-frame-font "-unknown-DejaVu Sans Mono-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------
@@ -274,7 +274,8 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 
 ;;切换窗口
 (global-set-key (kbd "C-x o") 'switch-window)
-;;(setq tab-width 4)
+(setq tab-width 4)
+(setq tab-stop-list (number-sequence 4 200 4))
 
 ;;; scratch
 (autoload 'scratch "scratch" nil t)
@@ -304,8 +305,8 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq global-whitespace-mode t)
 (setq ediff-diff-options "-w")
 ;; 水平分隔window
-;; (setq split-height-threshold 0)
-;; (setq split-width-threshold nil)
+(setq split-height-threshold 0)
+(setq split-width-threshold nil)
 
 ;;diff水平分隔
 ;; (setq ediff-split-window-function 'split-window-horizontally
@@ -358,4 +359,6 @@ even beep.)"
     (flush-lines regexp rstart rend interactive)))
 
 (setf password-cache-expiry 2592000)
+
+(add-auto-mode 'conf-mode ".cnf$")
 (provide 'zxc-init)

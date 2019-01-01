@@ -21,4 +21,94 @@
 (puthash "sd" "3311" my-yas-mysql-alias-interface)
 (puthash "hb" "3312" my-yas-mysql-alias-interface)
 
+(setf shell-host-alias-interface (make-hash-table :test 'equal))
+(puthash "137" (list :userName "root" :host "10.1.234.137" :password "10137!)!#&") shell-host-alias-interface)
+(puthash "66" (list :userName "david" :host "115.29.53.66" :password "gouhh!@#") shell-host-alias-interface)
+(puthash "138" (list :userName "root" :host "10.1.234.138" :password "10138!)!#*") shell-host-alias-interface)
+(puthash "33" (list :userName "gbase" :host "10.1.235.33" :password "gbase") shell-host-alias-interface)
+(puthash "135" (list :userName "oracle" :host "10.1.234.135" :password "oracle") shell-host-alias-interface)
+(puthash "38" (list :userName "shandong" :host "10.1.235.38" :password "shandong") shell-host-alias-interface)
+
+(defvar zxc-db-data-result nil
+  "返回结果集")
+
+(defvar jj-global-string nil)
+
+(defun zxc-db-data-send (uri object zxc-db-callback)
+  "Send object to URL as an HTTP POST request, returning the response
+and response headers.
+object is an json, eg {key:value} they are encoded using CHARSET,
+which defaults to 'utf-8"
+  (lexical-let ((zxc-db-callback zxc-db-callback))
+    (deferred:$
+      (deferred:url-post (format "%s/service/rest/data/%s/%s" zxc-db-host uri "pyspider") object)
+      (deferred:nextc it
+	(lambda (buf)
+	  (let ((data (with-current-buffer buf (buffer-string)))
+		(json-object-type 'plist)
+		(json-array-type 'list)
+		(json-false nil))
+	    (kill-buffer buf)
+	    (setf zxc-db-data-result (json-read-from-string (decode-coding-string data 'utf-8))))))
+      (deferred:nextc it
+	(lambda (response)
+	  (funcall zxc-db-callback))))))
+
+
+(defun zxc-db-jj-query ()
+  (zxc-db-data-send "query" (list (cons "sql" "select b.jzgs_per jzgs_per, b.ji_jin_code from ji_jin_value b ,(select ji_jin_code,max(id) id from ji_jin_value where ji_jin_code in ('690007','370024') group by ji_jin_code) a where b.id = a.id order by ji_jin_code "))
+		    #'(lambda ()
+			(let ((error-msg (getf zxc-db-data-result :errorMsg)))
+			  (if (null error-msg)
+			      (setf jj-global-string (mapconcat (lambda (x)
+								  (int-to-string (car x))) (getf zxc-db-data-result :data) "|"))
+			    (setf jj-global-string ""))))))
+;; s_sh000001,sh600036,sh600887,sh601939,sh601398,sh600111,sh601336,sh600958,sh600000,sz000651,sh600459
+(defun zxc-db-gp-query ()
+  (deferred:$
+    (deferred:url-get "http://hq.sinajs.cn/list=sh600438,sh600585,sz000725,sh601318")
+    (deferred:nextc it
+      (lambda (buf)
+	(let ((data (with-current-buffer buf (buffer-string))))
+	  (kill-buffer buf)
+	  (setf gp-result (decode-coding-string data 'utf-8)))))
+    (deferred:nextc it
+      (lambda (response)
+	(let* ((response-list (split-string response "\n"))
+	       (value-result (mapcar #'(lambda (g)
+					 (let* ((row (split-string g "="))
+						(gp-name (nth 0 row))
+						(gp-value (nth 1 row)))
+					   (concatenate 'list (list (replace-regexp-in-string "var hq_str_" "" gp-name)) (subseq (split-string (nth 1 (split-string g "=")) ",") 1 6))))
+				     (subseq response-list 0 (- (length response-list) 1)))))
+	  (setq m123 (mapcar #'(lambda (v)
+				 (let ((2v (string-to-number (nth 2 v)))
+				       (3v (string-to-number (nth 3 v))))
+				   (cond ((s-contains? (car v) "sh600438,sh600585,sz000725,sh601318")
+					  (concat (format "%0.2f" (* (/ (- 3v 2v) 2v ) 100))
+						  "|"
+						  (number-to-string 3v) " "))
+					 ;; ((<  (* (/ (- 3v 2v) 2v ) 100) -3)
+					 ;;  (concat (format "%0.2f" (* (/ (- 3v 2v) 2v ) 100))
+					 ;; 	  "|"
+					 ;; 	  (number-to-string 3v) " "))
+					 (t ""))))
+			     value-result))
+	  ;; (ctbl:create-table-component-buffer
+	  ;;  :buffer (get-buffer-create "*12345*")
+	  ;;  :width nil :height nil
+	  ;;  :model
+	  ;;  (ctbl:make-model-from-list value-result nil))
+	  (with-current-buffer (get-buffer-create "12345")
+	    (erase-buffer)
+	    (loop
+	     for fy in value-result
+	     do (insert-string (format "%s当前%s,最高%s,最低%s\n" (nth 0 fy) (nth 3 fy) (nth 4 fy) (nth 5 fy))))))))))
+
+
+;; (setq global-mode-string '("" display-time-string " " jj-global-string))
+(setq global-mode-string '("" display-time-string " " m123))
+;; (setq zxc-db-jj-query-timer (run-with-timer 0 60 'zxc-db-jj-query))
+(setq zxc-db-gp-query-timer (run-with-timer 0 2 'zxc-db-gp-query))
+
 (provide 'my-yas-var)

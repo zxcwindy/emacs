@@ -29,7 +29,8 @@
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    (quote
-    ((checkdoc-minor-mode . t)
+    ((encoding . utf-8)
+     (checkdoc-minor-mode . t)
      (Base . 10)
      (Syntax . ANSI-Common-Lisp)
      (require-final-newline . t))))
@@ -345,4 +346,9 @@
 ;; (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-expand)
 (require 'zxc-python)
 ;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
+(zxc-shell-command "jetty")
+
+(setf es-always-pretty-print t)
+;; (cancel-timer zxc-db-gp-query-timer)
+
 (require 'zxc-helm-org-rifle)
