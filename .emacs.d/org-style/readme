@@ -1,0 +1,7 @@
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:/home/david/.emacs.d/org-style/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" href="file:///home/david/.emacs.d/org-style/solarized-light.min.css" type="text/css" />
+
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:/home/david/.emacs.d/org-style/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" href="file:///home/david/.emacs.d/org-style/solarized-dark.min.css" type="text/css" />
+
+#+HTML_HEAD: <link rel="stylesheet" href="file:///home/david/.emacs.d/org-style/org.css" type="text/css" />
