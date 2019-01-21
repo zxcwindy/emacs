@@ -1,4 +1,5 @@
 (require 'projectile)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 (require 'zxc-magit)
 

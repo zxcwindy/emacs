@@ -13,7 +13,8 @@
 (tool-bar-mode -1)
 ;;(scroll-bar-mode -1)
 (menu-bar-mode -1)
-(global-linum-mode t)
+;; (global-linum-mode nil)
+(global-display-line-numbers-mode t)
 (auto-image-file-mode t)
 ;;--------------
 
@@ -35,12 +36,12 @@
 ;; 使用chrome
 ;; (defun get-browse (url  &rest args)
 ;;   (if (let ((list '(lisp-interaction-mode lisp-mode)))
-;; 	(do* ((lt list (cdr lt))
-;; 	      (mode-1 (car lt) (car lt))
-;; 	      (mode major-mode))
-;; 	    ((or (equal lt nil)
-;; 		 (equal mode mode-1))
-;; 	     (equal mode mode-1))))
+;;	(do* ((lt list (cdr lt))
+;;	      (mode-1 (car lt) (car lt))
+;;	      (mode major-mode))
+;;	    ((or (equal lt nil)
+;;		 (equal mode mode-1))
+;;	     (equal mode mode-1))))
 ;;       (w3m-browse-url url args)
 ;;     (browse-url-firefox url args)))
 
@@ -315,9 +316,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;;; org开启dot编译,如下例子
 ;; #+BEGIN_SRC dot :file test-dot.png :exports results
 ;; digraph a{
-;; 	开始->登录系统->登录校验;
-;; 	登录校验->登录系统:se [label="校验失败"];
-;; 	登录校验->进入平台;
+;;	开始->登录系统->登录校验;
+;;	登录校验->登录系统:se [label="校验失败"];
+;;	登录校验->进入平台;
 ;; }
 ;; #+END_SRC
 (org-babel-do-load-languages
@@ -350,9 +351,9 @@ even beep.)"
   (let ((buffer-file-name nil)) ;; HACK for `clone-buffer'
     (with-current-buffer (clone-buffer nil nil)
       (let ((inhibit-read-only t))
-        (keep-lines regexp rstart rend interactive)
-        (kill-region (or rstart (line-beginning-position))
-                     (or rend (point-max))))
+	(keep-lines regexp rstart rend interactive)
+	(kill-region (or rstart (line-beginning-position))
+		     (or rend (point-max))))
       (kill-buffer)))
   (unless (and buffer-read-only kill-read-only-ok)
     ;; Delete lines or make the "Buffer is read-only" error.
@@ -361,4 +362,7 @@ even beep.)"
 (setf password-cache-expiry 2592000)
 
 (add-auto-mode 'conf-mode ".cnf$")
+(global-auto-revert-mode nil)
+
+
 (provide 'zxc-init)

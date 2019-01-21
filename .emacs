@@ -26,6 +26,9 @@
  '(org-agenda-files nil)
  '(org-todo-keywords (quote ((sequence "TODO" "DOING" "DONE"))))
  '(outline-minor-mode-prefix (kbd "C-;"))
+ '(package-selected-packages
+   (quote
+    (treemacs-projectile treemacs lsp-javascript-typescript lsp-java company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap markdown-mode magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive helm-org-rifle groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn dom docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet)))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    (quote
@@ -34,7 +37,6 @@
      (Base . 10)
      (Syntax . ANSI-Common-Lisp)
      (require-final-newline . t))))
-;; '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
@@ -69,7 +71,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(web-mode-html-attr-equal-face ((t (:foreground "#657B83"))))
+ '(web-mode-html-attr-name-face ((t (:foreground "#6c71c4"))))
+ '(web-mode-html-attr-value-face ((t (:foreground "#2aa198"))))
+ '(web-mode-html-tag-bracket-face ((t (:foreground "#657B83"))))
+ '(web-mode-html-tag-face ((t (:foreground "#b58900")))))
 
 ;;------------
 ;;加载插件位置
@@ -185,7 +191,7 @@
 (global-set-key (kbd "<right>") 'scroll-left)
 (global-set-key (kbd "C-h") 'kill-whole-line)
 (global-set-key (kbd "C-M-i") 'scroll-other-window-down)
-(global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
+;; (global-set-key (kbd "C-x C-; m") 'browse-url-at-point)
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 (global-set-key (kbd "C-w") 'my-delete-or-kill)
 (global-set-key (kbd "M-h") 'my-mark-paragraph)
@@ -273,8 +279,9 @@
 ;;; auto-rever-tail-mode
 ;;; follow-mode
 
-(require 'sr-speedbar)
-(global-set-key [f7] 'sr-speedbar-toggle)
+(require 'treemacs-projectile)
+(require 'zxc-projectile)
+(global-set-key [f7] 'treemacs)
 
 (require 'edbi)
 
@@ -344,11 +351,11 @@
 ;; (define-key yas-minor-mode-map (kbd "<tab>") nil)
 ;; (define-key yas-minor-mode-map (kbd "TAB") nil)
 ;; (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-expand)
-(require 'zxc-python)
+;; (require 'zxc-python)
 ;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 (zxc-shell-command "jetty")
 
 (setf es-always-pretty-print t)
-;; (cancel-timer zxc-db-gp-query-timer)
 
 (require 'zxc-helm-org-rifle)
+(require 'zxc-ibuffer)

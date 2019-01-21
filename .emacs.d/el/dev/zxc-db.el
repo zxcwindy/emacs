@@ -79,7 +79,7 @@ and response headers, object is an text."
 (defun zxc-db-create-column ()
   "创建表头"
   (mapcar #'(lambda (meta-info)
-	      (make-ctbl:cmodel :title meta-info :align 'center))
+	      (make-ctbl:cmodel :title meta-info :align 'center :sorter nil))
 	  (getf zxc-db-result :metadata)))
 
 (defun zxc-db-create-table-buffer ()

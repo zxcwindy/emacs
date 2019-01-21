@@ -19,6 +19,9 @@
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
 
+(eval-after-load "shell"
+  '(define-key shell-mode-map "\C-a" 'comint-bol-or-process-mark))
+
 (defun zxc-shell-command (command)
   "start shell command"
   (interactive "s输入命令：")

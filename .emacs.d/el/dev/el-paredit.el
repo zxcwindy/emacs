@@ -10,6 +10,6 @@
   (global-set-key (kbd "C-; C-b") 'paredit-backward))
 (mapc #'(lambda (x)
 	    (add-hook x 'my-paredit-mode))
-	'(comint-mode-hook lisp-mode-hook emacs-lisp-mode-hook lisp-interaction-mode-hook js2-mode-hook js-mode-hook))
+	'(comint-mode-hook lisp-mode-hook emacs-lisp-mode-hook lisp-interaction-mode-hook ))
 
 (provide 'el-paredit)
