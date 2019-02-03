@@ -45,7 +45,7 @@
        (< (get-byte index str) (get-byte 0 "a"))))
 
 (defun search-upper-position (str)
-  "search all position of uppcase characters 
+  "search all position of uppcase characters
 return the positions list "
   (let ((result '(0))
 	(count (length str)))
@@ -136,5 +136,18 @@ return the positions list "
 (defun zxc-util-deal-sql-data (x)
   "处理拼接SQL数据字段的方式"
   (s-concat "'" (s-trim x) "'"))
+
+(defun zxc-util-get-region-or-paragraph-string ()
+  "获取当前选中区域或者当前段落的文字内容"
+  (if (region-active-p)
+      (buffer-substring-no-properties (region-beginning) (region-end))
+    (let ((start (save-excursion
+		   (backward-paragraph)
+		   (point)))
+	  (end (save-excursion
+		 (forward-paragraph)
+		 (point))))
+      (buffer-substring-no-properties start end))))
+
 
 (provide 'zxc-util)

@@ -24,7 +24,7 @@
 (require 'zxc-comet)
 (require 'zxc-db)
 (require 'zxc-shell)
-
+(require 'zxc-elasticsearch)
 (require 'zxc-kbd)
 
 ;;;; Minor Mode Definition
@@ -58,6 +58,10 @@
 (define-key zxc-mode-map (kbd  "C-; dt") #'zxc-db-get-table-sql)
 (define-key zxc-mode-map (kbd  "C-; aa") #'zxc-db-ac-set-db-alias)
 (define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)
+(define-key zxc-mode-map (kbd  "C-; eli") #'zxc-es--list-indexes)
+(define-key zxc-mode-map (kbd  "C-; eln") #'zxc-es--list-nodes)
+(define-key zxc-mode-map (kbd  "C-; es") #'zxc-es--query-sql)
+
 
 (defun code-format ()
   (interactive)

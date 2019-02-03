@@ -23,6 +23,7 @@
 
 
 (require 'zxc-db-ac)
+(require 'zxc-util)
 
 (make-variable-buffer-local
  (defvar zxc-db-host "http://localhost:9990"
@@ -97,18 +98,6 @@ and response headers, object is an text."
     (when pre-10-tbl
       (kill-buffer pre-10-tbl))))
 
-(defun zxc-db-get-buffer-sql ()
-  "取得当前SQL语句"
-  (if (region-active-p)
-      (buffer-substring-no-properties (region-beginning) (region-end))
-    (let ((start (save-excursion
-		   (backward-paragraph)
-		   (point)))
-	  (end (save-excursion
-		 (forward-paragraph)
-		 (point))))
-      (buffer-substring-no-properties start end))))
-
 (defun zxc-db-get-table-name ()
   "取得表名"
   (if (region-active-p)
@@ -163,12 +152,12 @@ and response headers, object is an text."
 (defun zxc-db-send-region-query ()
   "查询当前区域SQL"
   (interactive)
-  (zxc-db-send "query" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-query-callback))
+  (zxc-db-send "query" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))) #'zxc-db-query-callback))
 
 (defun zxc-db-send-region-exec ()
   "执行当前区域SQL"
   (interactive)
-  (zxc-db-send "exec" (list (cons "sql" (zxc-db-get-buffer-sql))) #'zxc-db-exec-callback))
+  (zxc-db-send "exec" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))) #'zxc-db-exec-callback))
 
 (defun zxc-db-get-data (func)
   "get方式获取后台数据"

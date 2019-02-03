@@ -165,19 +165,19 @@ If NEW is set to nil, shall switch to default Emacs theme."
     (if (daytime-p sunrise-today sunset-today)
 	(progn
 	  (switch-theme night-theme day-theme)
-	  (web-mode-html-day-theme)
+	  (zxc-theme-custom-day-theme)
 	  (run-at-time (+second sunset-today) nil
 		       'zxc-change-theme day-theme night-theme))
 
       (switch-theme day-theme night-theme)
-      (web-mode-html-night-theme)
+      (zxc-theme-custom-night-theme)
       (if (time-less-p now sunrise-today)
 	  (run-at-time (+second sunrise-today) nil
 		       'zxc-change-theme day-theme night-theme)
 	(run-at-time (+second sunrise-tomorrow) nil
 		     'zxc-change-theme day-theme night-theme)))))
 
-(defun web-mode-html-night-theme ()
+(defun zxc-theme-custom-night-theme ()
   "晚上的web-mode-html标签颜色设置"
   (custom-set-faces
    '(web-mode-html-tag-face ((t (:foreground "#00EDE1"))))
@@ -186,9 +186,10 @@ If NEW is set to nil, shall switch to default Emacs theme."
    '(web-mode-html-attr-name-face ((t (:foreground "#DADA95"))))
    '(web-mode-html-attr-value-face ((t (:foreground "#09D773"))))
    '(ctbl:face-cell-select ((t (:background "#3a5fcd"))))
-   '(ctbl:face-row-select ((t (:background "#8b3a62"))))))
+   '(ctbl:face-row-select ((t (:background "#8b3a62"))))
+   '(region ((t (:background "blue" :foreground "#e1e1e0"))))))
 
-(defun web-mode-html-day-theme ()
+(defun zxc-theme-custom-day-theme ()
   "白天的web-mode-html标签颜色设置"
   (custom-set-faces
    '(web-mode-html-tag-face ((t (:foreground "#b58900"))))
@@ -198,36 +199,7 @@ If NEW is set to nil, shall switch to default Emacs theme."
    '(web-mode-html-attr-value-face ((t (:foreground "#2aa198"))))
    '(magit-blame-highlight ((t (:foreground "white" :background "grey60"))))
    '(ctbl:face-cell-select ((t (:background "cyan"))))
-   '(ctbl:face-row-select ((t (:background "light gray"))))))
-
-
-
-;; (defun change-theme (day-theme night-theme)
-;;   "重定义方法"
-;;   (let*
-;;       ((now (current-time))
-
-;;        (today-times    (sunrise-sunset-times (today)))
-;;        (tomorrow-times (sunrise-sunset-times (tomorrow)))
-
-;;        (sunrise-today (first today-times))
-;;        (sunset-today (second today-times))
-;;        (sunrise-tomorrow (first tomorrow-times)))
-;;     (if (daytime-p sunrise-today sunset-today)
-;;	(progn
-;;	  (load-theme day-theme t)
-;;	  (run-at-time (+second sunset-today) nil
-;;		       'change-theme day-theme night-theme))
-
-;;       (load-theme night-theme t)
-;;       (if (time-less-p now sunrise-today)
-;;	  (run-at-time (+second sunrise-today) nil
-;;		       'change-theme day-theme night-theme)
-;;	(run-at-time (+second sunrise-tomorrow) nil
-;;		     'change-theme day-theme night-theme)))))
-
-;; (disable-theme 'sanityinc-solarized-light)
-;; (disable-theme 'zxc-misterioso)
-;; (change-theme 'sanityinc-solarized-light 'zxc-misterioso)
+   '(ctbl:face-row-select ((t (:background "light gray"))))
+   '(region ((t (:foreground "#AA8E16" :inverse-video t))))))
 
 (provide 'zxc-theme)

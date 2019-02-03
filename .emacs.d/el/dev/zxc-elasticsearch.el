@@ -20,38 +20,114 @@
 
 (require 'es-mode)
 
-(defun es--execute-region ()
+(make-variable-buffer-local
+ (defvar zxc-es-endpoint-url "http://localhost:9200/"
+   "es默认地址"))
+
+(make-variable-buffer-local
+ (defvar zxc-es-request-method "GET"
+   "默认请求方式"))
+
+
+
+(defun zxc-es--execute-string (request-url request-data)
   "Submits the active region as a query to the specified
 endpoint. If the region is not active, the whole buffer is
 used. Uses the params if it can find them or alternativly the
 vars."
-  (let* ((beg (if (region-active-p) (region-beginning) (point-min)))
-         (end (if (region-active-p) (region-end) (point-max)))
-         (url-request-extra-headers
-          '(("Content-Type" . "application/json; charset=UTF-8")))
-         (params (or (es--find-params)
-                     `(,(es-get-request-method) . ,(es-get-url))))
-         (url (es--munge-url (cdr params)))
-         (url-request-method (car params))
-         (url-request-data (encode-coding-string
-                            (buffer-substring-no-properties beg end) 'utf-8))
-         (result-buffer-name (if (zerop es--query-number)
-                                 (format "*ES: %s*" (buffer-name))
-                               (format "*ES: %s [%d]*"
-                                       (buffer-name)
-                                       es--query-number))))
-    (when (es--warn-on-delete-yes-or-no-p)
-      (message "Issuing %s against %s" url-request-method url)
-      (url-retrieve url 'es-result--handle-response (list result-buffer-name))
-      (setq es-results-buffer (get-buffer-create result-buffer-name))
-      (save-selected-window
-        ;; We want 2 buffers next to each other if it's not already visible, so
-        ;; delete other buffers
-        (when (not (get-buffer-window es-results-buffer))
-          (delete-other-windows)
-	  (let ((split-height-threshold nil)
-		(split-width-threshold 0))
-	    (view-buffer-other-window es-results-buffer)))))))
+  (let* ((url request-url)
+	 (url-request-method zxc-es-request-method))
+    (let* ((result-buffer-name (if (zerop es--query-number)
+				  (format "*ES: %s*" (buffer-name))
+				(format "*ES: %s [%d]*"
+					(buffer-name)
+					es--query-number))))
+      (when (es--warn-on-delete-yes-or-no-p url-request-method)
+	(let* ((results-buffer (get-buffer-create result-buffer-name)))
+	  (message "Issuing %s against %s" url-request-method url)
+	  (request
+	   url
+	   :type url-request-method
+	   :parser 'buffer-string
+	   :headers es-default-headers
+	   :data (let* ((utf-raw (encode-coding-string request-data 'utf-8))
+			(utf-trimmed (string-trim utf-raw)))
+		   (if (string= "" utf-trimmed)
+		       utf-trimmed
+		     utf-raw))
+	   :timeout 600 ;; timeout of 10 minutes
+	   :complete (cl-function
+		      (lambda (&key data response error-thrown &allow-other-keys)
+			(let ((utf-data (decode-coding-string data 'utf-8)))
+			  (with-current-buffer (if (zerop es--query-number)
+						   (format "*ES: %s*" (buffer-name))
+						 (format "*ES: %s [%d]*"
+							 (buffer-name)
+							 es--query-number))
+			    (es-result--handle-response utf-data response error-thrown))))))
+	  (setq es-results-buffer results-buffer)
+	  (display-buffer-in-side-window es-results-buffer '((side . right) (window-width . 0.5)))
+	  ;; (es--maybe-show-results-buffer es-results-buffer)
+	  )))))
+
+(defun es--execute-string (request-data)
+  "Submits the active region as a query to the specified
+endpoint. If the region is not active, the whole buffer is
+used. Uses the params if it can find them or alternativly the
+vars."
+  (let* ((params (or (es--find-params)
+		     `(,(es-get-request-method) . ,(es-get-url))))
+	 (url (es--munge-url (cdr params)))
+	 (url-request-method (car params)))
+    (let ((result-buffer-name (if (zerop es--query-number)
+				  (format "*ES: %s*" (buffer-name))
+				(format "*ES: %s [%d]*"
+					(buffer-name)
+					es--query-number))))
+      (when (es--warn-on-delete-yes-or-no-p url-request-method)
+	(let ((results-buffer (get-buffer-create result-buffer-name)))
+	  (message "Issuing %s against %s" url-request-method url)
+	  (request
+	   url
+	   :type url-request-method
+	   :parser 'buffer-string
+	   :headers es-default-headers
+	   :data (let* ((utf-raw (encode-coding-string request-data 'utf-8))
+			(utf-trimmed (string-trim utf-raw)))
+		   (if (string= "" utf-trimmed)
+		       utf-trimmed
+		     utf-raw))
+	   :timeout 600 ;; timeout of 10 minutes
+	   :complete (cl-function
+		      (lambda (&key data response error-thrown &allow-other-keys)
+			(let ((utf-data (decode-coding-string data 'utf-8)))
+			  (with-current-buffer results-buffer
+			    (es-result--handle-response utf-data response error-thrown))))))
+	  (setq es-results-buffer results-buffer)
+	  (display-buffer-in-side-window es-results-buffer '((side . right) (window-width . 0.5)))
+	  ;; (es--maybe-show-results-buffer es-results-buffer)
+	  )))))
+
+(defun zxc-es--list (type)
+  "查找_cat相关信息"
+  (zxc-es--execute-string (es--munge-url (concat zxc-es-endpoint-url "_cat/" type "?v")) ""))
+
+(defun zxc-es--list-indexes ()
+  "列出index信息"
+  (interactive)
+  (zxc-es--list "indices"))
+
+(defun zxc-es--list-nodes ()
+  "列出node信息"
+  (interactive)
+  (zxc-es--list "nodes"))
+
+(defun zxc-es--query-sql ()
+  "查询sql"
+  (interactive)
+  (zxc-es--execute-string (es--munge-url (concat zxc-es-endpoint-url "_sql?sql="
+						 (s-replace-regexp "[ |\n]" "%20" (s-trim (zxc-util-get-region-or-paragraph-string))))) ""))
+
 
 (org-babel-do-load-languages
  'org-babel-load-languages

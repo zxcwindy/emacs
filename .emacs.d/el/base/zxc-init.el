@@ -362,7 +362,16 @@ even beep.)"
 (setf password-cache-expiry 2592000)
 
 (add-auto-mode 'conf-mode ".cnf$")
-(global-auto-revert-mode nil)
+;; (global-auto-revert-mode)
 
+(require 'delight)
+(delight '((abbrev-mode nil "abbrev")
+	   (projectile-mode " PJ" "projectile")
+	   (eldoc-mode nil "eldoc")
+	   (rainbow-mode)
+	   (overwrite-mode " Ov" t)
+	   (global-whitespace-mode nil "whitespace")
+	   (page-break-lines-mode nil "page-break-lines")
+	   (emacs-lisp-mode "Elisp" :major)))
 
 (provide 'zxc-init)
