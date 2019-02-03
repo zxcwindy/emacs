@@ -1,0 +1,8 @@
+# name: http servlet start
+# key: servlet
+# --
+(defservlet ${1:hello-world} ${2:text/plain} ($3)
+       (insert "${4:hello,world!}"))
+
+(let ((httpd-port ${5:9090}))
+  (httpd-start))$0

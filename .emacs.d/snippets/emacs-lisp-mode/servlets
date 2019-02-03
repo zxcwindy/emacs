@@ -1,0 +1,8 @@
+# name: http servlet start
+# key: servlets
+# --
+(defservlet* packages/:package/:version text/plain (verbose)
+  (insert (format "%s\n%s\n" package version))
+  (princ (get-description package version))
+  (when verbose
+    (insert (format "%S" (get-dependencies package version)))))$0
