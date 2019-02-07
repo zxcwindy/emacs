@@ -353,9 +353,12 @@
 ;; (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-expand)
 ;; (require 'zxc-python)
 ;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
-(zxc-shell-command "jetty")
 
 (setf es-always-pretty-print t)
 
 (require 'zxc-helm-org-rifle)
 (require 'zxc-ibuffer)
+(require 'zxc-js-components)
+
+
+(zxc-shell-command "jetty")
