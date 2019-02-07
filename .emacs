@@ -79,7 +79,7 @@
 
 ;;------------
 ;;加载插件位置
-(mapcar #'(lambda (path)
+(mapc #'(lambda (path)
 	    (add-to-list 'load-path path))
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/el/base"
@@ -242,7 +242,7 @@
 
 (autoload 'ace-jump-mode "ace-jump-mode" "Emacs quick move minor mode" t)
 (autoload 'ace-jump-mode-pop-mark "ace-jump-mode" "Ace jump back:-)" t)
-(eval-after-load "ace-jump-mode" '(ace-jump-mode-enable-mark-sync))
+;; (eval-after-load "ace-jump-mode" '(ace-jump-mode-enable-mark-sync))
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
@@ -330,7 +330,7 @@
 
 ;; (projectile-global-mode)
 
-(mapcar (lambda (mode-hook)
+(mapc (lambda (mode-hook)
 	  (add-hook mode-hook 'projectile-mode))
 	(list 'java-mode-hook 'js-mode-hook 'javascript-mode-hook))
 
@@ -359,6 +359,5 @@
 (require 'zxc-helm-org-rifle)
 (require 'zxc-ibuffer)
 (require 'zxc-js-components)
-
 
 (zxc-shell-command "jetty")

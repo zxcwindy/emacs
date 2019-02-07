@@ -21,6 +21,10 @@
 
 ;;; Commentary:
 
+(defgroup zxc-js-components nil
+  "A package for browsing and inserting the items in `zxc-js-components'."
+  :group 'comm)
+
 (defvar zxc-js-cp-root-directory (concat user-emacs-directory "js-component-snippet") "组件模板数据存放根路径")
 
 (defface zxc-js-cp-face-foreground
@@ -30,11 +34,11 @@
     (t (:foreground "gray100")))
   "Face for foreground of js components action key words")
 
-(defcustom zxc-js-cp-details-separator ""
+(defcustom zxc-js-cp-details-separator "\n"
   "The string separating entries in the `separated' style.
 See `zxc-js-cp-details-display-style'."
   :type 'string
-  :group 'zxc-js-cp)
+  :group 'zxc-js-components)
 
 (defvar zxc-js-cp-action-keys
   (list "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "c" "d" "e" "k" "l" "m" "o" "t" "u" "v" "w" "x" "y" "z")
@@ -269,6 +273,15 @@ Temporarily restore `zxc-js-cp-original-window' and
      (if ,quit
 	 (zxc-js-cp-quit)
        (zxc-js-cp-clear-preview))))
+
+
+(defun zxc-get-search-point (str &optional nums)
+  (search-forward str)
+  (- (point) (or nums 0)))
+
+(defun zxc-get-search-backward-point (str &optional nums)
+  (search-backward str)
+  (- (point) (or nums 0)))
 
 (defun zxc-kf-vue-template ()
   (let ((doc-dirs "/home/david/workspace/demo/bmsoft/ued-components/examples/docs/")
