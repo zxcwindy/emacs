@@ -71,6 +71,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ctbl:face-cell-select ((t (:background "cyan"))))
+ '(ctbl:face-row-select ((t (:background "light gray"))))
+ '(magit-blame-highlight ((t (:foreground "white" :background "grey60"))))
+ '(region ((t (:foreground "#AA8E16" :inverse-video t))))
  '(web-mode-html-attr-equal-face ((t (:foreground "#657B83"))))
  '(web-mode-html-attr-name-face ((t (:foreground "#6c71c4"))))
  '(web-mode-html-attr-value-face ((t (:foreground "#2aa198"))))
@@ -84,6 +88,7 @@
 	'("~/.emacs.d/el"
 	  "~/.emacs.d/el/base"
 	  "~/.emacs.d/el/dev"
+	  "~/.emacs.d/el/dev/zxc-template"
 	  "/usr/share/emacs/site-lisp/mu4e"
 	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
 	  ;; "~/.emacs.d/swank-js"
@@ -358,6 +363,6 @@
 
 (require 'zxc-helm-org-rifle)
 (require 'zxc-ibuffer)
-(require 'zxc-js-components)
+(require 'zxc-template)
 
 (zxc-shell-command "jetty")

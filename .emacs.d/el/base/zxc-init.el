@@ -303,7 +303,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq calendar-location-name "成都")    ;;地名
 
 (setq emmet-preview-default nil)
-(setq global-whitespace-mode t)
+(global-whitespace-mode t)
 (setq ediff-diff-options "-w")
 ;; 水平分隔window
 (setq split-height-threshold 0)

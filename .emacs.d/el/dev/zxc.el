@@ -61,7 +61,7 @@
 (define-key zxc-mode-map (kbd  "C-; eli") #'zxc-es--list-indexes)
 (define-key zxc-mode-map (kbd  "C-; eln") #'zxc-es--list-nodes)
 (define-key zxc-mode-map (kbd  "C-; es") #'zxc-es--query-sql)
-(define-key zxc-mode-map (kbd  "C-; .") #'zxc-js-cp-list)
+(define-key zxc-mode-map (kbd  "C-; ui") #'zxc-template-list-view)
 
 
 (defun code-format ()
