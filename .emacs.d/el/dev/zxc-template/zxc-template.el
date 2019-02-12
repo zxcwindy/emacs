@@ -33,6 +33,8 @@
 	    (zxc-template-action-str key 'zxc-template-details)) zxc-template-action-keys)
   (define-key zxc-template-mode-map (kbd "n") 'zxc-template-details-forward)
   (define-key zxc-template-mode-map (kbd "p") 'zxc-template-details-previous)
+  (define-key zxc-template-mode-map (kbd "f") 'zxc-template-page-forward)
+  (define-key zxc-template-mode-map (kbd "b") 'zxc-template-page-previous)
   (define-key zxc-template-mode-map (kbd "q") 'zxc-template-quit)
   (define-key zxc-template-mode-map (kbd "C-g") 'zxc-template-quit)
   (define-key zxc-template-mode-map (kbd "RET") 'zxc-template-insert-and-quit)

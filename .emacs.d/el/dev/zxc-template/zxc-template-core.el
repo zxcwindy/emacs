@@ -60,6 +60,14 @@ See `zxc-template-details-display-style'."
   nil
   "当前模板组件集合")
 
+(defvar zxc-template-page-size
+  24
+  "page size")
+
+(defvar zxc-template-current-page
+  0
+  "current page")
+
 (defconst zxc-template-buffer-name "*Zxc Template*" "buffer name")
 
 (defvar zxc-template-list nil "当前模板组集合")
@@ -126,6 +134,22 @@ Temporarily restore `zxc-template-original-window' and
   (interactive "p")
   (zxc-template-details-forward (- arg)))
 
+(defun zxc-template-page-forward (&optional arg)
+  "template page forward"
+  (interactive "p")
+  (when (and (< (* (+ (or arg 1) zxc-template-current-page) zxc-template-page-size) (zxc-template-current-total))
+	     (>= zxc-template-current-page 0))
+    (incf zxc-template-current-page (or arg 1))
+    (when (< zxc-template-current-page 0)
+      (setq zxc-template-current-page 0))
+    (zxc-template-init (get-buffer zxc-template-buffer-name) zxc-template-original-buffer)))
+
+(defun zxc-template-page-previous (&optional arg)
+  "template page previous"
+  (interactive "p")
+  (zxc-template-page-forward (- arg)))
+
+
 (defun zxc-template-details-current-string ()
   (nth zxc-template-details-pos-index zxc-template-details-snippts))
 
@@ -175,6 +199,11 @@ current point if not specified)."
   (car (nth (or index zxc-template-list-index)
 	    zxc-template-list)))
 
+(defun zxc-template-current-total (&optional index)
+  "返回当前模板集合中选中的模板分类totalnum"
+  (length (cdr (nth (or index zxc-template-list-index)
+		    zxc-template-list))))
+
 (defun zxc-template-change ()
   "切换模板，刷新展现列表"
   (interactive)
@@ -194,15 +223,21 @@ current point if not specified)."
 	  (page-break-lines-mode)
 	  (setq buffer-read-only nil)
 	  (erase-buffer)
-	  (insert (zxc-template-current-name) "\n")
-	  (let ((start (point))
-		(template (zxc-template-current)))
-	    (loop for i from 0 to (length template)
-		  do (progn
-		       (when (and (= (% i 8 ) 0))
-			 (insert "\n"))
-		       (insert (concat (propertize (nth i zxc-template-action-keys) 'face 'zxc-template-face-foreground) ":" (nth 0 (nth i template)) " "))))
-	    (align-regexp start (point) "\\(\\s-*\\)\\s-" 1 1 t)))
+	  (let* ((template (zxc-template-current))
+		(from-num (* zxc-template-current-page zxc-template-page-size))
+		(end-num (min (* (+ zxc-template-current-page 1) zxc-template-page-size) (length template))))
+	    (insert (zxc-template-current-name) " totalnum: " (format "%d" (zxc-template-current-total)) (format " from %d to %d" from-num end-num))
+	    (insert "\n\n")
+	    (let ((start (point)))
+	      (loop for i
+		    from from-num
+		    to end-num
+		    do (progn
+			 (when (nth 0 (nth i template))
+			   (when (and (= (% i 8) 0) (/= i 0))
+			     (insert "\n"))
+			   (insert (concat (propertize (nth i zxc-template-action-keys) 'face 'zxc-template-face-foreground) ":" (nth 0 (nth i template)) " ")))))
+	      (align-regexp start (point) "\\(\\s-*\\)\\s-" 1 1 t))))
       (progn
 	(setq buffer-read-only t)))))
 
@@ -278,41 +313,6 @@ clicked."
 		transient-mark-mode mark-active)
        (delete-active-region))
      (browse-kill-ring-insert-and-highlight str))))
-
-
-
-(defun zxc-get-search-point (str &optional nums)
-  (search-forward str)
-  (- (point) (or nums 0)))
-
-(defun zxc-get-search-backward-point (str &optional nums)
-  (search-backward str)
-  (- (point) (or nums 0)))
-
-(defun zxc-kf-vue-template (dir template-name)
-  (let ((doc-dirs dir)
-	(doc-result-dirs (concat zxc-template-root-directory "/" template-name)))
-    (unless (file-exists-p doc-result-dirs)
-      (mkdir doc-result-dirs t))
-    (dolist (file (directory-files doc-dirs  nil "md$"))
-      (with-temp-buffer
-	(insert-file-contents (concat doc-dirs file))
-	(let (result (list))
-	  (ignore-errors
-	    (while
-		(let ((start-point
-		       (progn
-			 (zxc-get-search-point "```html")
-			 (zxc-get-search-point "<template>")))
-		      (end-point
-		       (progn
-			 (zxc-get-search-point "```")
-			 (zxc-get-search-backward-point "</template>"))))
-		  (push (s-trim (buffer-substring-no-properties start-point end-point)) result))))
-	  (when result
-	    (add-to-list 'result (s-replace ".md" "" file))
-	    (with-temp-file (expand-file-name (s-replace ".md" ".el" file) doc-result-dirs)
-	      (insert "(push " (format "'%S" result) " " template-name ")"))))))))
 
 (defmacro zxc-template-load (catalog-var-name template-name)
   `(progn
