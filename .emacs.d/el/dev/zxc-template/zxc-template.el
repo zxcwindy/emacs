@@ -45,13 +45,19 @@
   "Display components in the `js cp' in another buffer."
   (interactive)
   (if (eq major-mode 'zxc-template-mode)
-      (error "Already viewing the js cp mode"))
-  (let* ((orig-win (selected-window))
-	 (orig-buf (window-buffer orig-win))
-	 (buf (get-buffer-create zxc-template-buffer-name)))
-    (setq zxc-template-original-window orig-win
-	  zxc-template-original-buffer orig-buf)
-    (zxc-template-init buf orig-buf)
-    (pop-to-buffer buf)))
+      (error "Already viewing the js cp mode")
+    (progn
+      (setq zxc-template-list nil)
+      (cond ((eq major-mode 'web-mode) (setq zxc-template-list zxc-template-js-ui-list))
+	    (t (setq zxc-template-list nil)))
+      (if (not zxc-template-list)
+	  (message "当前主模式暂无提示")
+	(let* ((orig-win (selected-window))
+	     (orig-buf (window-buffer orig-win))
+	     (buf (get-buffer-create zxc-template-buffer-name)))
+	(setq zxc-template-original-window orig-win
+	      zxc-template-original-buffer orig-buf)
+	(zxc-template-init buf orig-buf)
+	(pop-to-buffer buf))))))
 
 (provide 'zxc-template)

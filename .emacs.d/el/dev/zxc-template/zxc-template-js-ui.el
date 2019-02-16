@@ -37,6 +37,29 @@ See `zxc-js-cp-details-display-style'."
   (search-backward str)
   (- (point) (or nums 0)))
 
+(defun zxc-template-vue-extra (html)
+  "从elementui和kfcomponents帮助文档中提取模板信息
+正则表达式参考方法
+`(defun parse-definitions ()
+      (let ((dict nil))
+	(while (re-search-forward
+		(concat \"^\\(.*?\\)\"               ;; a term
+			\"\\s-*::\\s-*\"             ;; the separator
+			\"\\(.*\\(?:\n.*\\)*?\\)\"   ;; definition: to end of line,
+						   ;; then maybe more lines
+						   ;; (excludes any trailing \n)
+			\"\\(?:\n\\s-*\n\\|\\'\\)\") ;; blank line or EOF
+		nil :no-error)
+	  (add-to-list 'dict (cons (match-string-no-properties 1)
+				   (match-string-no-properties 2))) )
+	dict))'
+`(s-replace-regexp \"\\(<script>\\|<style>\\)\\(.*\\(?:\n.*\\)*?\\)\\(</script>\\|</style>\\)\" \"\" a)'"
+  (let* ((template-str (s-replace-regexp "\\(<script>\\|<style>\\)\\(.*\\(?:\n.*\\)*?\\)\\(</script>\\|</style>\\)" "" html))
+	 (trim-result (s-trim template-str)))
+    (if (s-starts-with? "<template>" trim-result)
+	(s-trim (substring trim-result 10 -11))
+      trim-result)))
+
 (defun zxc-kf-vue-template (dir template-name)
   "create kfvue,elementui template"
   (let ((doc-dirs dir)
@@ -50,22 +73,20 @@ See `zxc-js-cp-details-display-style'."
 	  (ignore-errors
 	    (while
 		(let ((start-point
-		       (progn
-			 (zxc-get-search-point "```html")
-			 (zxc-get-search-point "<template>")))
+		       (zxc-get-search-point "```html"))
 		      (end-point
-		       (progn
-			 (zxc-get-search-point "```")
-			 (zxc-get-search-backward-point "</template>"))))
-		  (push (s-trim (buffer-substring-no-properties start-point end-point)) result))))
+		       (- (zxc-get-search-point "```") 3)))
+		  (push (zxc-template-vue-extra (buffer-substring-no-properties start-point end-point)) result))))
 	  (when result
 	    (add-to-list 'result (s-replace ".md" "" file))
 	    (with-temp-file (expand-file-name (s-replace ".md" ".el" file) doc-result-dirs)
 	      (insert "(push " (format "'%S" result) " " template-name ")"))))))))
 
+;; (zxc-kf-vue-template "/home/david/workspace/demo/bmsoft/ued-components/examples/docs/" "kfvue")
+;; (zxc-kf-vue-template "/home/david/git/element/examples/docs/zh-CN/" "elementui")
 
+(setq zxc-template-js-ui-list nil)
 (zxc-template-load zxc-template-js-ui-list kfvue)
 (zxc-template-load zxc-template-js-ui-list elementui)
-(setq zxc-template-list zxc-template-js-ui-list)
 
 (provide 'zxc-template-js-ui)

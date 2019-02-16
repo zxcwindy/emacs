@@ -45,7 +45,7 @@ See `zxc-template-details-display-style'."
   :group 'zxc-js-components)
 
 (defvar zxc-template-action-keys
-  (list "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "c" "d" "e" "k" "l" "m" "o" "t" "u" "v" "w" "x" "y" "z")
+  (list "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "c" "d" "e" "j" "k" "l" "m" "o" "t" "v" "w" "x" "y" "z")
   "当前模板组件的快捷键")
 
 (defvar zxc-template-details-poses
@@ -228,7 +228,8 @@ current point if not specified)."
 		(end-num (min (* (+ zxc-template-current-page 1) zxc-template-page-size) (length template))))
 	    (insert (zxc-template-current-name) " totalnum: " (format "%d" (zxc-template-current-total)) (format " from %d to %d" from-num end-num))
 	    (insert "\n\n")
-	    (let ((start (point)))
+	    (let ((start (point))
+		  (action-index 0))
 	      (loop for i
 		    from from-num
 		    to end-num
@@ -236,7 +237,8 @@ current point if not specified)."
 			 (when (nth 0 (nth i template))
 			   (when (and (= (% i 8) 0) (/= i 0))
 			     (insert "\n"))
-			   (insert (concat (propertize (nth i zxc-template-action-keys) 'face 'zxc-template-face-foreground) ":" (nth 0 (nth i template)) " ")))))
+			   (insert (concat (propertize (nth action-index zxc-template-action-keys) 'face 'zxc-template-face-foreground) ":" (nth 0 (nth i template)) " "))
+			   (incf action-index))))
 	      (align-regexp start (point) "\\(\\s-*\\)\\s-" 1 1 t))))
       (progn
 	(setq buffer-read-only t)))))
@@ -245,7 +247,7 @@ current point if not specified)."
   "展现组件模板列表详情"
   (interactive)
   (let* ((short-cut (this-command-keys))
-	 (index (cl-position short-cut zxc-template-action-keys :test 'equal))
+	 (index (+ (* zxc-template-current-page zxc-template-page-size) (cl-position short-cut zxc-template-action-keys :test 'equal)))
 	 (template (zxc-template-current)))
     (progn
       (setq buffer-read-only nil)
@@ -323,8 +325,5 @@ clicked."
 		  (cons (s-upcase (symbol-name ',template-name)) ,template-name)
 		  t)
      (message "load %s template" (symbol-name ',template-name))))
-
-;; (zxc-kf-vue-template "/home/david/workspace/demo/bmsoft/ued-components/examples/docs/" "kfvue")
-
 
 (provide 'zxc-template-core)
