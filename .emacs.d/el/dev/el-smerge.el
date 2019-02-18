@@ -5,7 +5,7 @@
 (define-key smerge-mode-map "R" 'smerge-resolve)
 (define-key smerge-mode-map "A" 'smerge-keep-all)
 (define-key smerge-mode-map "B" 'smerge-keep-base)
-(define-key smerge-mode-map "O" 'smerge-keep-other)
-(define-key smerge-mode-map "M" 'smerge-keep-mine)
+(define-key smerge-mode-map "L" 'smerge-keep-lower)
+(define-key smerge-mode-map "U" 'smerge-keep-upper)
 
 (provide 'el-smerge)
