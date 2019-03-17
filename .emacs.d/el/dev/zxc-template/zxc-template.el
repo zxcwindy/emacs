@@ -22,6 +22,7 @@
 ;;; Commentary:
 
 (require 'zxc-template-js-ui)
+(require 'zxc-template-command-tldr)
 
 (define-derived-mode zxc-template-mode fundamental-mode
   "JSCP"
@@ -49,6 +50,7 @@
     (progn
       (setq zxc-template-list nil)
       (cond ((eq major-mode 'web-mode) (setq zxc-template-list zxc-template-js-ui-list))
+	    ((eq major-mode 'shell-mode) (setq zxc-template-list zxc-template-command-tldr-list))
 	    (t (setq zxc-template-list nil)))
       (if (not zxc-template-list)
 	  (message "当前主模式暂无提示")

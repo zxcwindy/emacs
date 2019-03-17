@@ -104,6 +104,8 @@
       (delete-region (nth 0 web-mode-src-content) (nth 1 web-mode-src-content))
       (goto-char (nth 0 web-mode-src-content))
       (insert edit-code)
-      (web-mode--src-find-js))))
+      (save-buffer)
+      (web-mode--src-find-js))
+    (set-buffer-modified-p nil)))
 
 (provide 'zxc-html)

@@ -1,8 +1,8 @@
-;;; zxc-js-components-snippet.el --- js component snippet
+;;; zxc-template-core.el --- template component snippet
 
 ;; Author: zhengxc <david.c.aq@gmail.com>
-;; Keywords: js component snippet
-;; version: 1.0.0
+;; Keywords:  component snippet
+;; version: 1.0.1
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as1
@@ -25,11 +25,7 @@
   "A package for browsing and inserting the items in `zxc-template'."
   :group 'comm)
 
-(defgroup zxc-js-components nil
-  "A package for browsing and inserting the items in `zxc-js-components'."
-  :group 'comm)
-
-(defvar zxc-template-root-directory (concat user-emacs-directory "js-component-snippet") "组件模板数据存放根路径")
+(defvar zxc-template-root-directory (concat user-emacs-directory "component-snippet") "组件模板数据存放根路径")
 
 (defface zxc-template-face-foreground
   '((((class color)) (:foreground "red"))
@@ -42,7 +38,7 @@
   "The string separating entries in the `separated' style.
 See `zxc-template-details-display-style'."
   :type 'string
-  :group 'zxc-js-components)
+  :group 'zxc-template)
 
 (defvar zxc-template-action-keys
   (list "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "c" "d" "e" "j" "k" "l" "m" "o" "t" "v" "w" "x" "y" "z")
@@ -67,6 +63,27 @@ See `zxc-template-details-display-style'."
 (defvar zxc-template-current-page
   0
   "current page")
+
+;; (defclass zxc-template-item (eieio-persistent)
+;;   ((info :type string
+;;	 :initarg :info
+;;	 :reader get-zxc-template-item-info
+;;	 :documentation "前端展现的信息")
+;;    (value :type string
+;;	  :initarg :value
+;;	  :accessor zxc-template-item-value
+;;	  :documentation "实际值")
+;;    (extra-value :type hashmap
+;;		:initarg :extra-value
+;;		:documentation "扩展信息"))
+;;   "模板元素信息")
+
+;; (cl-defmethod get-zxc-template-item-info ((item zxc-template-item) ())
+;;   "返回info信息，info不存在是返回value值"
+;;   (condition-case err
+;;       (slot-value item 'info)
+;;     (unbound-slot (zxc-template-item-value item))))
+
 
 (defconst zxc-template-buffer-name "*Zxc Template*" "buffer name")
 
@@ -107,9 +124,10 @@ Temporarily restore `zxc-template-original-window' and
   (setq zxc-template-details-poses (list)))
 
 (defun zxc-template-add-snippts (snippts)
+  "插入单个模板信息"
   (let ((beg (point) ))
     (push beg zxc-template-details-poses)
-    (insert snippts)))
+    (insert (or (plist-get snippts :info) (plist-get snippts :value)))))
 
 (defun zxc-template-cleanup-on-exit ()
   (zxc-template-details-poses-reset)
@@ -151,7 +169,7 @@ Temporarily restore `zxc-template-original-window' and
 
 
 (defun zxc-template-details-current-string ()
-  (nth zxc-template-details-pos-index zxc-template-details-snippts))
+  (plist-get (nth zxc-template-details-pos-index zxc-template-details-snippts) :value))
 
 (defun zxc-template-preview-update-text (preview-text)
   "Update `zxc-template-preview-overlay' to show `PREVIEW-TEXT`."
@@ -210,6 +228,7 @@ current point if not specified)."
   (incf zxc-template-list-index)
   (when (> zxc-template-list-index (- (length zxc-template-list) 1))
     (setq zxc-template-list-index 0))
+  (setq zxc-template-current-page 0)
   (zxc-template-init (get-buffer zxc-template-buffer-name) zxc-template-original-buffer))
 
 
@@ -302,20 +321,6 @@ clicked."
      (delete-active-region))
    (insert (zxc-template-details-current-string))))
 
-(defun browse-kill-ring-do-insert (buf pt quit)
-  (let ((str (browse-kill-ring-current-string buf pt)))
-    (setq kill-ring-yank-pointer
-	  (browse-kill-ring-current-kill-ring-yank-pointer buf pt))
-    (browse-kill-ring-prepare-to-insert
-     quit
-     (when browse-kill-ring-this-buffer-replace-yanked-text
-       (delete-region (mark) (point)))
-     (when (and delete-selection-mode
-		(not buffer-read-only)
-		transient-mark-mode mark-active)
-       (delete-active-region))
-     (browse-kill-ring-insert-and-highlight str))))
-
 (defmacro zxc-template-load (catalog-var-name template-name)
   `(progn
      (setq ,template-name nil)
@@ -325,5 +330,20 @@ clicked."
 		  (cons (s-upcase (symbol-name ',template-name)) ,template-name)
 		  t)
      (message "load %s template" (symbol-name ',template-name))))
+
+(defun zxc-get-search-point (str &optional nums)
+  "查找字符开始位置"
+  (search-forward str)
+  (- (point) (or nums 0)))
+
+(defun zxc-get-regexp-search-point (str &optional nums)
+  "查找正则字符开始位置"
+  (search-forward-regexp str)
+  (- (point) (or nums 0)))
+
+(defun zxc-get-search-backward-point (str &optional nums)
+  "查找字符结束位置"
+  (search-backward str)
+  (- (point) (or nums 0)))
 
 (provide 'zxc-template-core)

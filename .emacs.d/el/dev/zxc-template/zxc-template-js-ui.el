@@ -29,14 +29,6 @@ See `zxc-js-cp-details-display-style'."
   :type 'list
   :group 'zxc-template)
 
-(defun zxc-get-search-point (str &optional nums)
-  (search-forward str)
-  (- (point) (or nums 0)))
-
-(defun zxc-get-search-backward-point (str &optional nums)
-  (search-backward str)
-  (- (point) (or nums 0)))
-
 (defun zxc-template-vue-extra (html)
   "从elementui和kfcomponents帮助文档中提取模板信息
 正则表达式参考方法
@@ -56,11 +48,11 @@ See `zxc-js-cp-details-display-style'."
 `(s-replace-regexp \"\\(<script>\\|<style>\\)\\(.*\\(?:\n.*\\)*?\\)\\(</script>\\|</style>\\)\" \"\" a)'"
   (let* ((template-str (s-replace-regexp "\\(<script>\\|<style>\\)\\(.*\\(?:\n.*\\)*?\\)\\(</script>\\|</style>\\)" "" html))
 	 (trim-result (s-trim template-str)))
-    (if (s-starts-with? "<template>" trim-result)
-	(s-trim (substring trim-result 10 -11))
-      trim-result)))
+    (list :value (if (s-starts-with? "<template>" trim-result)
+		     (s-trim (substring trim-result 10 -11))
+		   trim-result))))
 
-(defun zxc-kf-vue-template (dir template-name)
+(defun zxc-template-js-ui-make (dir template-name)
   "create kfvue,elementui template"
   (let ((doc-dirs dir)
 	(doc-result-dirs (concat zxc-template-root-directory "/" template-name)))
@@ -82,8 +74,8 @@ See `zxc-js-cp-details-display-style'."
 	    (with-temp-file (expand-file-name (s-replace ".md" ".el" file) doc-result-dirs)
 	      (insert "(push " (format "'%S" result) " " template-name ")"))))))))
 
-;; (zxc-kf-vue-template "/home/david/workspace/demo/bmsoft/ued-components/examples/docs/" "kfvue")
-;; (zxc-kf-vue-template "/home/david/git/element/examples/docs/zh-CN/" "elementui")
+;; (zxc-template-js-ui-make "/home/david/workspace/demo/bmsoft/ued-components/examples/docs/" "kfvue")
+;; (zxc-template-js-ui-make "/home/david/git/element/examples/docs/zh-CN/" "elementui")
 
 (setq zxc-template-js-ui-list nil)
 (zxc-template-load zxc-template-js-ui-list kfvue)
