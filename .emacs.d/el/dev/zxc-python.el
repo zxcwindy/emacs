@@ -1,7 +1,8 @@
+(require 'python)
 (elpy-enable)  
 (setq elpy-rpc-python-command "python3.5")
 (setq elpy-rpc-backend "jedi")
-(setq jedi:complete-on-dot t)
+(setq jfedi:complete-on-dot t)
 (setq python-shell-interpreter "python3")
 
 ;;; 禁用ac

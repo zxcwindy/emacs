@@ -187,6 +187,7 @@ If NEW is set to nil, shall switch to default Emacs theme."
    '(web-mode-html-attr-value-face ((t (:foreground "#09D773"))))
    '(ctbl:face-cell-select ((t (:background "#3a5fcd"))))
    '(ctbl:face-row-select ((t (:background "#8b3a62"))))
+   '(magit-section-highlight ((t (:background "DodgerBlue4"))))
    '(region ((t (:background "blue" :foreground "#e1e1e0"))))))
 
 (defun zxc-theme-custom-day-theme ()

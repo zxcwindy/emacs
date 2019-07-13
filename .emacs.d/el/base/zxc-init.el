@@ -374,4 +374,22 @@ even beep.)"
 	   (page-break-lines-mode nil "page-break-lines")
 	   (emacs-lisp-mode "Elisp" :major)))
 
+
+(defun zxc-session-file-filter-before-save-hook ()
+  "过滤session保存文件，只保存org文件"
+  (let ((result (list))
+	(result-his (list)))
+    (mapc #'(lambda (file-alist)
+		(when (s-ends-with? "org" (car file-alist))
+		  (add-to-list 'result file-alist)
+		  (add-to-list 'result-his (car file-alist))))
+	    session-file-alist)
+    (setq session-file-alist result)
+    (setq file-name-history result-his)))
+
+(add-hook 'session-before-save-hook #'zxc-session-file-filter-before-save-hook)
+
+(setq desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\([.]*\\(sh\\|jar\\|html\\|gz\\|el\\|xml\\|json\\|java\\|js\\|conf\\|properties\\)$\\)\\|\\(^~/\\)")
+
+
 (provide 'zxc-init)

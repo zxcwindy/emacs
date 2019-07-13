@@ -18,6 +18,7 @@
  '(display-time-mode t)
  '(ecb-options-version "2.40")
  '(fci-rule-color "#eee8d5")
+ '(js-indent-level 2)
  '(js2-idle-timer-delay 2.5)
  '(linum-format (quote dynamic))
  '(make-backup-files nil)
@@ -73,8 +74,14 @@
  ;; If there is more than one, they won't work right.
  '(ctbl:face-cell-select ((t (:background "cyan"))))
  '(ctbl:face-row-select ((t (:background "light gray"))))
+ '(ediff-current-diff-A ((t (:background "#553333" :foreground "white"))))
+ '(ediff-current-diff-B ((t (:background "#335533" :foreground "white"))))
+ '(ediff-current-diff-C ((t (:background "#888833" :foreground "white"))))
  '(magit-blame-highlight ((t (:foreground "white" :background "grey60"))))
+ '(magit-diff-context-highlight ((t (:background "cornsilk" :foreground "grey70"))))
  '(region ((t (:foreground "#AA8E16" :inverse-video t))))
+ '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#22aa22" :foreground "white"))))
+ '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#aa2222" :foreground "white"))))
  '(web-mode-html-attr-equal-face ((t (:foreground "#657B83"))))
  '(web-mode-html-attr-name-face ((t (:foreground "#6c71c4"))))
  '(web-mode-html-attr-value-face ((t (:foreground "#2aa198"))))
@@ -84,16 +91,16 @@
 ;;------------
 ;;加载插件位置
 (mapc #'(lambda (path)
-	    (add-to-list 'load-path path))
-	'("~/.emacs.d/el"
-	  "~/.emacs.d/el/base"
-	  "~/.emacs.d/el/dev"
-	  "~/.emacs.d/el/dev/zxc-template"
-	  "/usr/share/emacs/site-lisp/mu4e"
-	  ;;"~/.emacs.d/jdee-2.4.1/lisp"
-	  ;; "~/.emacs.d/swank-js"
-	  "~/git/ecb"
-	  ))
+	  (add-to-list 'load-path path))
+      '("~/.emacs.d/el"
+	"~/.emacs.d/el/base"
+	"~/.emacs.d/el/dev"
+	"~/.emacs.d/el/dev/zxc-template"
+	"/usr/share/emacs/site-lisp/mu4e"
+	;;"~/.emacs.d/jdee-2.4.1/lisp"
+	;; "~/.emacs.d/swank-js"
+	"~/git/ecb"
+	))
 
 ;;用服务的方式启动
 (require 'el-server)
@@ -336,8 +343,8 @@
 ;; (projectile-global-mode)
 
 (mapc (lambda (mode-hook)
-	  (add-hook mode-hook 'projectile-mode))
-	(list 'java-mode-hook 'js-mode-hook 'javascript-mode-hook))
+	(add-hook mode-hook 'projectile-mode))
+      (list 'java-mode-hook 'js-mode-hook 'javascript-mode-hook))
 
 ;; (require 'zxc-indent)
 
@@ -365,4 +372,7 @@
 (require 'zxc-ibuffer)
 (require 'zxc-template)
 
-(zxc-shell-command "jetty")
+(make-thread #'(lambda () (zxc-shell-command "jetty")))
+
+;; (setq auto-revert-buffer-list-filter
+;;       'magit-auto-revert-repository-buffers-p)

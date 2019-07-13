@@ -10,6 +10,7 @@
 (add-to-list 'auto-mode-alist '("\\.vue$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ftl$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.wxml$" . web-mode))
 
 ;; (add-hook 'web-mode-hook
 ;;	  (lambda ()

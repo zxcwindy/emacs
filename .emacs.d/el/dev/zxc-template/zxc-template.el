@@ -41,6 +41,21 @@
   (define-key zxc-template-mode-map (kbd "RET") 'zxc-template-insert-and-quit)
   (define-key zxc-template-mode-map (kbd ".") 'zxc-template-change))
 
+(defun zxc-template-load-js ()
+  (when (not zxc-template-js-ui-list)
+    (zxc-template-load zxc-template-js-ui-list kfvue)
+    (zxc-template-load zxc-template-js-ui-list elementui)
+    (message "加载js组件完成"))
+  (setq zxc-template-list zxc-template-js-ui-list))
+
+(defun zxc-template-load-linux ()
+  (when (not zxc-template-command-tldr-list)
+    (zxc-template-load zxc-template-command-tldr-list common)
+    (zxc-template-load zxc-template-command-tldr-list linux)
+    (message "加载linxu组件完成"))
+  (setq zxc-template-list zxc-template-command-tldr-list))
+
+
 ;;;###autoload
 (defun zxc-template-list-view ()
   "Display components in the `js cp' in another buffer."
@@ -49,17 +64,47 @@
       (error "Already viewing the js cp mode")
     (progn
       (setq zxc-template-list nil)
-      (cond ((eq major-mode 'web-mode) (setq zxc-template-list zxc-template-js-ui-list))
-	    ((eq major-mode 'shell-mode) (setq zxc-template-list zxc-template-command-tldr-list))
+      (cond ((eq major-mode 'web-mode) (zxc-template-load-js))
+	    ((eq major-mode 'shell-mode) (zxc-template-load-linux))
 	    (t (setq zxc-template-list nil)))
       (if (not zxc-template-list)
 	  (message "当前主模式暂无提示")
 	(let* ((orig-win (selected-window))
-	     (orig-buf (window-buffer orig-win))
-	     (buf (get-buffer-create zxc-template-buffer-name)))
-	(setq zxc-template-original-window orig-win
-	      zxc-template-original-buffer orig-buf)
-	(zxc-template-init buf orig-buf)
-	(pop-to-buffer buf))))))
+	       (orig-buf (window-buffer orig-win))
+	       (buf (get-buffer-create zxc-template-buffer-name)))
+	  (setq zxc-template-original-window orig-win
+		zxc-template-original-buffer orig-buf)
+	  (zxc-template-init buf orig-buf)
+	  (pop-to-buffer buf))))))
+
+;;;###autoload
+(defun zxc-template-search-view (key)
+  "根据名称搜索视图"
+  (interactive "s搜索名称：")
+  (if (eq major-mode 'zxc-template-mode)
+      (error "Already viewing the js cp mode")
+    (progn
+      (setq zxc-template-temp-list nil
+	    zxc-template-list nil)
+      (cond ((eq major-mode 'web-mode) (zxc-template-load-js))
+	    ((eq major-mode 'shell-mode) (zxc-template-load-linux))
+	    (t (setq zxc-template-temp-list nil)))
+      (if (not zxc-template-temp-list)
+	  (message "当前主模式暂无提示")
+	(progn
+	  (let ((temp-result (list "*searchResult*")))
+	    (dolist (views zxc-template-temp-list temp-result)
+	      (loop for i from 1 to (length views)
+		    do (if (and (stringp (car (nth i views))) (s-contains? key (car (nth i views))))
+			   (add-to-list 'temp-result (nth i views) t))))
+	    (setq zxc-template-list  (list temp-result)))
+	  (setq zxc-template-current-page 0)
+	  (let* ((orig-win (selected-window))
+		 (orig-buf (window-buffer orig-win))
+		 (buf (get-buffer-create zxc-template-buffer-name)))
+	    (setq zxc-template-original-window orig-win
+		  zxc-template-original-buffer orig-buf)
+	    (zxc-template-init buf orig-buf)
+	    (pop-to-buffer buf)))))))
 
 (provide 'zxc-template)
