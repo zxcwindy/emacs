@@ -62,11 +62,14 @@
 (define-key zxc-mode-map (kbd  "C-; eln") #'zxc-es--list-nodes)
 (define-key zxc-mode-map (kbd  "C-; es") #'zxc-es--query-sql)
 (define-key zxc-mode-map (kbd  "C-; ul") #'zxc-template-list-view)
-
+(define-key zxc-mode-map (kbd  "C-; us") #'zxc-template-search-view)
 
 (defun code-format ()
   (interactive)
   (insert (convert-format)))
 
+(mapc #'(lambda (mode-hook)
+	  (add-hook mode-hook 'zxc-mode))
+      (list 'shell-mode-hook 'js2-mode-hook 'web-mode-hook))
 
 (provide 'zxc)

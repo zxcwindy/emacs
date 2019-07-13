@@ -232,7 +232,7 @@ current point if not specified)."
   (zxc-template-init (get-buffer zxc-template-buffer-name) zxc-template-original-buffer))
 
 
-(defun zxc-template-init (buf orig-buf)
+(defun zxc-template-init (buf orig-buf &optional is-search)
   "初始化组件buffer"
   (zxc-template-setup-preview-overlay orig-buf)
   (with-current-buffer buf
@@ -242,10 +242,11 @@ current point if not specified)."
 	  (page-break-lines-mode)
 	  (setq buffer-read-only nil)
 	  (erase-buffer)
-	  (let* ((template (zxc-template-current))
+	  (let* ((index (if (not is-search) nil 0))
+		 (template (zxc-template-current index))
 		(from-num (* zxc-template-current-page zxc-template-page-size))
 		(end-num (min (* (+ zxc-template-current-page 1) zxc-template-page-size) (length template))))
-	    (insert (zxc-template-current-name) " totalnum: " (format "%d" (zxc-template-current-total)) (format " from %d to %d" from-num end-num))
+	    (insert (zxc-template-current-name index) " totalnum: " (format "%d" (zxc-template-current-total)) (format " from %d to %d" from-num end-num))
 	    (insert "\n\n")
 	    (let ((start (point))
 		  (action-index 0))

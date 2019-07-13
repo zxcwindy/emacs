@@ -1,4 +1,4 @@
 # name: pst-proc
 # key: psp
 # --
-ps -ef|grep ${1:pst-proc}$0
+ps -ef|grep ${1:tomcat-8.0.5}$0

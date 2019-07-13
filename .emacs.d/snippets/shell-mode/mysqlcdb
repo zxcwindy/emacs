@@ -1,4 +1,4 @@
 # name: mysql create database
 # key: mysqlcdb
 # --
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ $1 /*!40100 DEFAULT CHARACTER SET utf8 */;$0
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ $1 /*!40100 DEFAULT CHARACTER SET utf8mb4 */;$0

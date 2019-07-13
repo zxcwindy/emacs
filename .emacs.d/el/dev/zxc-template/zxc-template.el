@@ -52,6 +52,7 @@
   (when (not zxc-template-command-tldr-list)
     (zxc-template-load zxc-template-command-tldr-list common)
     (zxc-template-load zxc-template-command-tldr-list linux)
+    (zxc-template-load zxc-template-command-tldr-list bigdata)
     (message "加载linxu组件完成"))
   (setq zxc-template-list zxc-template-command-tldr-list))
 
@@ -84,16 +85,15 @@
   (if (eq major-mode 'zxc-template-mode)
       (error "Already viewing the js cp mode")
     (progn
-      (setq zxc-template-temp-list nil
-	    zxc-template-list nil)
+      (setq zxc-template-list nil)
       (cond ((eq major-mode 'web-mode) (zxc-template-load-js))
 	    ((eq major-mode 'shell-mode) (zxc-template-load-linux))
-	    (t (setq zxc-template-temp-list nil)))
-      (if (not zxc-template-temp-list)
+	    (t (setq zxc-template-list nil)))
+      (if (not zxc-template-list)
 	  (message "当前主模式暂无提示")
 	(progn
 	  (let ((temp-result (list "*searchResult*")))
-	    (dolist (views zxc-template-temp-list temp-result)
+	    (dolist (views zxc-template-list temp-result)
 	      (loop for i from 1 to (length views)
 		    do (if (and (stringp (car (nth i views))) (s-contains? key (car (nth i views))))
 			   (add-to-list 'temp-result (nth i views) t))))
@@ -104,7 +104,7 @@
 		 (buf (get-buffer-create zxc-template-buffer-name)))
 	    (setq zxc-template-original-window orig-win
 		  zxc-template-original-buffer orig-buf)
-	    (zxc-template-init buf orig-buf)
+	    (zxc-template-init buf orig-buf t)
 	    (pop-to-buffer buf)))))))
 
 (provide 'zxc-template)

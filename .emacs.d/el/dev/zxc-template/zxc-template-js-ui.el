@@ -78,7 +78,5 @@ See `zxc-js-cp-details-display-style'."
 ;; (zxc-template-js-ui-make "/home/david/git/element/examples/docs/zh-CN/" "elementui")
 
 (setq zxc-template-js-ui-list nil)
-(zxc-template-load zxc-template-js-ui-list kfvue)
-(zxc-template-load zxc-template-js-ui-list elementui)
 
 (provide 'zxc-template-js-ui)
