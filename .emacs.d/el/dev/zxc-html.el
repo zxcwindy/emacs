@@ -4,9 +4,7 @@
 (add-hook 'sgml-mode-hook 'ac-emmet-html-setup)
 (add-hook 'css-mode-hook 'ac-emmet-css-setup)
 
-;; (setq web-mode-markup-indent-offset 4)
-;; (setq web-mode-css-indent-offset 4)
-(setq web-mode-code-indent-offset 4)
+
 (add-to-list 'auto-mode-alist '("\\.vue$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ftl$" . web-mode))
@@ -17,6 +15,13 @@
 ;;	    (local-set-key "\C-c\C-v" 'browse-url-of-buffer)
 ;;	    (local-set-key "\C-ci" 'js-doc-insert-function-doc)
 ;;	    (local-set-key "@" 'js-doc-insert-tag)))
+
+(add-hook 'web-mode-hook
+	  (lambda ()
+	    (setq indent-tabs-mode nil)
+	    (setq web-mode-markup-indent-offset 2)
+	    (setq web-mode-css-indent-offset 2)
+	    (setq web-mode-code-indent-offset 2)))
 
 (eval-after-load "web-mode"
   '(progn
