@@ -7,6 +7,7 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+ '(beacon-color "#dc322f")
  '(case-fold-search t)
  '(coffee-tab-width 4)
  '(custom-safe-themes
@@ -18,6 +19,7 @@
  '(display-time-mode t)
  '(ecb-options-version "2.40")
  '(fci-rule-color "#eee8d5")
+ '(frame-background-mode (quote dark))
  '(js-indent-level 2)
  '(js2-idle-timer-delay 2.5)
  '(linum-format (quote dynamic))
@@ -29,7 +31,7 @@
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
    (quote
-    (org-mind-map tide delight treemacs-projectile treemacs lsp-javascript-typescript lsp-java company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap markdown-mode magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive helm-org-rifle groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn dom docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet)))
+    (helm-org-rifle editorconfig ob-mermaid mermaid-mode org-mind-map tide delight treemacs-projectile treemacs lsp-javascript-typescript lsp-java company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn dom docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet)))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    (quote
@@ -117,7 +119,6 @@
 
 (require 'yasnippet)
 (yas-global-mode 1)
-
 
 (require 'auto-complete)
 
@@ -360,17 +361,15 @@
 (setq n4js-cli-program "~/opt/neo4j-community-3.2.2/bin/cypher-shell")
 (setq n4js-cli-arguments '("-u" "neo4j" "-p" "md999"))
 
-;; (define-key yas-minor-mode-map (kbd "<tab>") nil)
-;; (define-key yas-minor-mode-map (kbd "TAB") nil)
-;; (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-expand)
+
 ;; (require 'zxc-python)
-;; (define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 
 (setf es-always-pretty-print t)
 
 (require 'zxc-helm-org-rifle)
 (require 'zxc-ibuffer)
 (require 'zxc-template)
+(require 'zxc-sql)
 
 (make-thread #'(lambda () (zxc-shell-command "jetty")))
 
