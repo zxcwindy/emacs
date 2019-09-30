@@ -226,6 +226,7 @@
 (global-set-key [f5] #'(lambda ()
 			 (interactive)
 			 (revert-buffer :noconfirm t)))
+(global-set-key (kbd "C-+") 'zxc-set-font-size)
 
 (require 'js2-refactor)
 (js2r-add-keybindings-with-prefix  "C-c m")

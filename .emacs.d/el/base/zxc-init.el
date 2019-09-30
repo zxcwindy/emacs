@@ -66,7 +66,16 @@
 ;;-------------------
 ;;修改字体
 ;; (set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
-(set-frame-font "-unknown-DejaVu Sans Mono-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+(setq zxc-frame-font-default-size "14")
+
+(defun zxc-set-font-size (font-size)
+  "change font size"
+  (interactive (list (read-string (format "字体大小(%s): " zxc-frame-font-default-size))))
+  (setf zxc-frame-font-default-size font-size)
+  (set-frame-font (s-concat "-unknown-DejaVu Sans Mono-normal-normal-normal-*-" zxc-frame-font-default-size "-*-*-*-m-0-iso10646-1")))
+
+(zxc-set-font-size zxc-frame-font-default-size)
+
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
 ;;------------------
@@ -380,16 +389,20 @@ even beep.)"
   (let ((result (list))
 	(result-his (list)))
     (mapc #'(lambda (file-alist)
-		(when (s-ends-with? "org" (car file-alist))
-		  (add-to-list 'result file-alist)
-		  (add-to-list 'result-his (car file-alist))))
-	    session-file-alist)
+	      (when (s-ends-with? "org" (car file-alist))
+		(add-to-list 'result file-alist)
+		(add-to-list 'result-his (car file-alist))))
+	  session-file-alist)
     (setq session-file-alist result)
     (setq file-name-history result-his)))
 
 (add-hook 'session-before-save-hook #'zxc-session-file-filter-before-save-hook)
 
-(setq desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\([.]*\\(sh\\|jar\\|html\\|gz\\|el\\|xml\\|json\\|java\\|js\\|conf\\|properties\\)$\\)\\|\\(^~/\\)")
+(setq desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\([.]*\\(sh\\|jar\\|html\\|gz\\|el\\|xml\\|json\\|java\\|js\\|war\\|csv\\|ttf\\|log\\|vue\\|css\\|sql\\|conf\\|properties\\)$\\)\\|\\(^~/\\)")
+
+(add-hook 'yas-minor-mode-hook (lambda ()
+				 ;;; 当默认tab没有生效时，采用下面的按键绑定
+				 (define-key yas-minor-mode-map (kbd "TAB") yas-maybe-expand)))
 
 
 (provide 'zxc-init)
