@@ -1,5 +1,14 @@
 (require 'helm-org-rifle)
 
+(defun count-occurences (regex string)
+  "count regex match group"
+  (recursive-count regex string 0))
+
+(defun recursive-count (regex string start)
+  (if (string-match regex string start)
+      (+ 1 (recursive-count regex string (match-end 0)))
+    0))
+
 (cl-defmacro helm-org-rifle-define-command (name args docstring &key sources input (let nil) (transformer nil))
   "Define interactive helm-org-rifle command, which will run the appropriate hooks.
 Helm will be called with vars in LET bound."
@@ -7,21 +16,21 @@ Helm will be called with vars in LET bound."
      ,docstring
      (interactive)
      (unwind-protect
-         (progn
-           (run-hooks 'helm-org-rifle-before-command-hook)
-           (let* ((helm-candidate-separator " ")
-                  ,(if transformer
-                       ;; I wish there were a cleaner way to do this,
-                       ;; because if this `if' evaluates to nil, `let' will
-                       ;; try to set `nil', which causes an error.  The
-                       ;; choices seem to be to a) evaluate to a list and
-                       ;; unsplice it (since unsplicing `nil' evaluates to
-                       ;; nothing), or b) return an ignored symbol when not
-                       ;; true.  Option B is less ugly.
-                       `(helm-org-rifle-transformer ,transformer)
-                     'ignore)
-                  ,@let)
-             (helm :sources ,sources :input ,input )))
+	 (progn
+	   (run-hooks 'helm-org-rifle-before-command-hook)
+	   (let* ((helm-candidate-separator " ")
+		  ,(if transformer
+		       ;; I wish there were a cleaner way to do this,
+		       ;; because if this `if' evaluates to nil, `let' will
+		       ;; try to set `nil', which causes an error.  The
+		       ;; choices seem to be to a) evaluate to a list and
+		       ;; unsplice it (since unsplicing `nil' evaluates to
+		       ;; nothing), or b) return an ignored symbol when not
+		       ;; true.  Option B is less ugly.
+		       `(helm-org-rifle-transformer ,transformer)
+		     'ignore)
+		  ,@let)
+	     (helm :sources ,sources :input ,input )))
        (run-hooks 'helm-org-rifle-after-command-hook))))
 
 (helm-org-rifle-define-command
@@ -60,30 +69,52 @@ peace!"
 
 (add-to-list 'helm-org-rifle-actions '("select row" . zxc-helm-org-rifle-select-entry-in-buffer))
 
-
 (defun zxc-helm-org-rifle-select-entry-in-buffer-action ()
   "替换当前光标点单词"
   (interactive)
   (with-helm-alive-p
     (helm-exit-and-execute-action 'zxc-helm-org-rifle-select-entry-in-buffer)))
 
+;; (defun zxc-helm-org-rifle-select-entry-in-buffer (candidate)
+;;   (-let (((buffer . pos) candidate)
+;;	 (original-buffer (current-buffer)))
+;;     (with-current-buffer buffer
+;;       (save-excursion
+;;	(goto-char pos)
+;;	(let* ((end-pos (org-entry-end-position))
+;;	       (temp-str (buffer-substring-no-properties pos end-pos))
+;;	       (search-pos (re-search-forward helm-pattern end-pos)))
+;;	  (goto-char search-pos)
+;;	  (let ((match-content (current-line-contents)))
+;;	    (with-current-buffer original-buffer
+;;	      (let* ((word-pos (bounds-of-thing-at-point 'word))
+;;		     (word-start (car word-pos))
+;;		     (word-end (cdr word-pos)))
+;;		(delete-region word-start word-end)
+;;		(insert (s-trim match-content))))))))))
+
+
 (defun zxc-helm-org-rifle-select-entry-in-buffer (candidate)
-  (-let (((buffer . pos) candidate)
-         (original-buffer (current-buffer)))
-    (with-current-buffer buffer
-      (save-excursion
-	(goto-char pos)
-	(let* ((end-pos (org-entry-end-position))
-	       (temp-str (buffer-substring-no-properties pos end-pos))
-	       (search-pos (re-search-forward helm-pattern end-pos)))
-	  (goto-char search-pos)
-	  (let ((match-content (current-line-contents)))
-	    (with-current-buffer original-buffer
-	      (let* ((word-pos (bounds-of-thing-at-point 'word))
-		    (word-start (car word-pos))
-		    (word-end (cdr word-pos)))
-		(delete-region word-start word-end)
-		(insert (s-trim match-content))))))))))
+  "插入最大匹配数的单行文本"
+  (-let* (((buffer . pos) candidate)
+	  (original-buffer (current-buffer))
+	  (temp-str-list (s-split "\n" (substring-no-properties (helm-org-rifle--get-entry-text buffer pos))))
+	  (rx-pattern (s-concat "\\(" (s-replace-regexp " +" "\\\\|" helm-pattern) "\\)")))
+    (let ((max-match-count 0)
+	  (match-content))
+      (cl-loop for temp-str in temp-str-list
+	       do (let ((match-count (count-occurences rx-pattern temp-str)))
+		    (when (>  match-count max-match-count)
+		      (setf max-match-count match-count
+			    match-content temp-str))))
+      (with-current-buffer original-buffer
+	(let* ((word-pos (bounds-of-thing-at-point 'word))
+	       (word-start (car word-pos))
+	       (word-end (cdr word-pos)))
+	  (when (and word-start word-end)
+	    (delete-region word-start word-end))
+	  (insert (s-trim match-content)))))))
+
 
 (global-set-key (kbd "C-.") 'helm-org-rifle)
 (define-key helm-org-rifle-map (kbd "<C-return>") 'zxc-helm-org-rifle-select-entry-in-buffer-action)

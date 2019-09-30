@@ -63,7 +63,7 @@ rsync {{path/to/file}} {{remote_host_name}}:{{remote_host_location}}"
 
 ;; (zxc-template-command-tldr-make "/home/david/git/tldr/pages/common/" "common")
 ;; (zxc-template-command-tldr-make "/home/david/git/tldr/pages/linux/" "linux")
-(zxc-template-command-tldr-make "/home/david/git/tldr/pages/bigdata/" "bigdata")
+;; (zxc-template-command-tldr-make "/home/david/git/tldr/pages/bigdata/" "bigdata")
 
 (setq zxc-template-command-tldr-list nil)
 
