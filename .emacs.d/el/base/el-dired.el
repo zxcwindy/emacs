@@ -36,7 +36,7 @@
 	    (+ zxc-dired-queue-index 1)))
     (nth zxc-dired-queue-index (slot-value instance 'list-strs))))
 
-(setq zxc-dired-sort-queue (zxc-cycle-queue :list-strs (list "-Al -1 " "-Al -t" "-Al -X" "-Al -S")))
+(setq zxc-dired-sort-queue (zxc-cycle-queue :list-strs (list "-Alh -1 " "-Alh -t" "-Alh -X" "-Alh -S")))
 
 (defun zxc-dired-sort ()
   (interactive)
