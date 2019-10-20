@@ -23,6 +23,14 @@
 	    (setq web-mode-css-indent-offset 2)
 	    (setq web-mode-code-indent-offset 2)))
 
+;;; web mode 开启vue lsp
+;; (add-hook 'web-mode-hook
+;;           (lambda ()
+;;             (when (equal "vue" (file-name-extension buffer-file-name))
+;;               (let ((major-mode 'vue-mode))
+;;                 (lsp)))))
+
+
 (eval-after-load "web-mode"
   '(progn
      (define-key web-mode-map (kbd "C-c C-v") 'browse-url-of-buffer)

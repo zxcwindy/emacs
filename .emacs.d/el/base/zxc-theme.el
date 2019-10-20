@@ -178,7 +178,7 @@ If NEW is set to nil, shall switch to default Emacs theme."
 		     'zxc-change-theme day-theme night-theme)))))
 
 (defun zxc-theme-custom-night-theme ()
-  "晚上的web-mode-html标签颜色设置"
+  "晚上的theme标签颜色设置"
   (custom-set-faces
    '(web-mode-html-tag-face ((t (:foreground "#00EDE1"))))
    '(web-mode-html-tag-bracket-face ((t (:foreground "#D7D8D7"))))
@@ -191,7 +191,7 @@ If NEW is set to nil, shall switch to default Emacs theme."
    '(region ((t (:background "blue" :foreground "#e1e1e0"))))))
 
 (defun zxc-theme-custom-day-theme ()
-  "白天的web-mode-html标签颜色设置"
+  "白天的theme标签颜色设置"
   (custom-set-faces
    '(web-mode-html-tag-face ((t (:foreground "#b58900"))))
    '(web-mode-html-tag-bracket-face ((t (:foreground "#657B83"))))

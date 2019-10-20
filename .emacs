@@ -23,6 +23,7 @@
  '(js-indent-level 2)
  '(js2-idle-timer-delay 2.5)
  '(linum-format (quote dynamic))
+ '(lsp-auto-guess-root t)
  '(make-backup-files nil)
  '(minimap-dedicated-window t)
  '(minimap-window-location (quote right))
@@ -31,7 +32,7 @@
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
    (quote
-    (helm-org-rifle editorconfig ob-mermaid mermaid-mode org-mind-map tide delight treemacs-projectile treemacs lsp-javascript-typescript lsp-java company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn dom docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet)))
+    (lsp-java helm-org-rifle editorconfig ob-mermaid mermaid-mode org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet)))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    (quote
@@ -371,8 +372,10 @@
 (require 'zxc-ibuffer)
 (require 'zxc-template)
 (require 'zxc-sql)
+(require 'zxc-markdown)
 
 (make-thread #'(lambda () (zxc-shell-command "jetty")))
+
 
 ;; (setq auto-revert-buffer-list-filter
 ;;       'magit-auto-revert-repository-buffers-p)
