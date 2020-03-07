@@ -68,7 +68,7 @@
   (start-process-shell-command
    (format "emacs-livedown")
    (format "emacs-livedown-buffer")
-   (format "livedown start %s --port %s %s %s "
+   (format "/home/david/git/livedown/bin/livedown start %s --port %s %s %s "
 	   buffer-file-name
 	   livedown-port
 	   (if livedown-browser (concat "--browser " livedown-browser) "")
