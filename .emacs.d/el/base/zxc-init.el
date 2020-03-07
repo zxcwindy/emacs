@@ -405,4 +405,17 @@ even beep.)"
 				 (define-key yas-minor-mode-map (kbd "TAB") yas-maybe-expand)))
 
 
+(defun zxc-mode-action-str (mode-map newstr &optional func-or-shortcut)
+  "If FUNC-OR-SHORTCUT is non-nil and if it is a function, call it
+when STR is clicked ; if FUNC-OR-SHORTCUT is
+a string, execute the corresponding keyboard action when it is
+clicked."
+  (let ((func (if (functionp func-or-shortcut)
+		  func-or-shortcut
+		(if (stringp func-or-shortcut)
+		    (lexical-let ((macro func-or-shortcut))
+		      (lambda()(interactive)
+			(execute-kbd-macro macro)))))))
+    (define-key mode-map (kbd newstr) func)))
+
 (provide 'zxc-init)
