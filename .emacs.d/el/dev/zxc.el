@@ -52,6 +52,7 @@
 (define-key zxc-mode-map (kbd  "C-; cc") #'comet-publish-paragraph)
 (define-key zxc-mode-map (kbd  "C-; cr") #'comet-publish-region)
 (define-key zxc-mode-map (kbd  "C-; cx") #'comet-publish-html)
+(define-key zxc-mode-map (kbd  "C-; cd") #'zxc-db-send-region-decrypt)
 (define-key zxc-mode-map (kbd  "C-; dl") #'zxc-db-login)
 (define-key zxc-mode-map (kbd  "C-; de") #'zxc-db-send-region-exec)
 (define-key zxc-mode-map (kbd  "C-; ds") #'zxc-db-send-region-query)

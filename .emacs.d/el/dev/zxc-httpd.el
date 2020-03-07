@@ -20,12 +20,52 @@
 
 (require 'impatient-mode)
 
+(defun httpd--filter (proc chunk)
+  "Runs each time client makes a request.
+   重写支持汉字url路径"
+  (with-current-buffer (process-get proc :request-buffer)
+    (setf (point) (point-max))
+    (insert chunk)
+    (let ((request (process-get proc :request)))
+      (unless request
+	(when (setf request (httpd-parse))
+	  (delete-region (point-min) (point))
+	  (process-put proc :request request)))
+      (when request
+	(let ((content-length (cadr (assoc "Content-Length" request))))
+	  (when (or (null content-length)
+		    (= (buffer-size) (string-to-number content-length)))
+	    (let* ((content (buffer-string))
+		   (uri (cl-cadar request))
+		   (parsed-uri (httpd-parse-uri (concat uri)))
+		   (uri-path (httpd-unhex (nth 0 parsed-uri)))
+		   (uri-query (append (nth 1 parsed-uri)
+				      (httpd-parse-args content)))
+		   (servlet (httpd-get-servlet uri-path)))
+	      (erase-buffer)
+	      (process-put proc :request nil)
+	      (setf request (nreverse (cons (list "Content" content)
+					    (nreverse request))))
+	      (httpd-log `(request (date ,(httpd-date-string))
+				   (address ,(car (process-contact proc)))
+				   (get ,uri-path)
+				   ,(cons 'headers request)))
+	      (if (null servlet)
+		  (httpd--error-safe proc 404)
+		(condition-case error-case
+		    (funcall servlet proc uri-path uri-query request)
+		  (error (httpd--error-safe proc 500 error-case))))
+	      (when (httpd--connection-close-p request)
+		(process-send-eof proc)))))))))
+
+
 ;;;###autoload
 (defun zxc-httpd-start ()
   "start http server"
   (interactive)
   (unless (process-status "httpd")
     (let ((httpd-port 9991))
+      (setq httpd-host (format-network-address (car (network-interface-info "wlan0")) t))
       (httpd-start)
       (httpd-def-file-servlet bootstrap "/home/david/git/bootstrap")
       (httpd-def-file-servlet jquery "/home/david/git/jquery")
@@ -64,7 +104,7 @@
 		    ((eq major-mode 'dired-mode) (dired-current-directory))
 		    (t "/home/david/tmp"))))
     (eval `(httpd-def-file-servlet my ,root))
-    (message (concatenate 'string "http://localhost:9991/my relocate to " root ))))
+    (message (concatenate 'string "http://" httpd-host  ":9991/my relocate to " root ))))
 
 (defun zxc-httpd-imp ()
   "为当前buffer提供2个视图"
@@ -100,6 +140,6 @@
 			    (interactive)
 			    (zxc-httpd-start)
 			    (zxc-httpd-set-root)
-			    (browse-url-generic "http://localhost:9991/my")))
+			    (browse-url-generic (concatenate 'string "http:/" httpd-host ":9991/my"))))
 
 (provide 'zxc-httpd)

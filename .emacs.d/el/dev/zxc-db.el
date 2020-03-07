@@ -174,4 +174,16 @@ and response headers, object is an text."
   (interactive)
   (zxc-db-get-data "getSelectSql"))
 
+(defun zxc-db-send-region-decrypt ()
+  "解密当前区域密码内容"
+  (interactive)
+  (deferred:$
+    (deferred:url-get (format "%s/service/rest/api/crypto/des/decrypt" zxc-db-host) (list (cons "data" (zxc-util-get-region-or-paragraph-string))))
+    (deferred:nextc it
+      (lambda (buf)
+	(let ((data (with-current-buffer buf (buffer-string))))
+	  (kill-buffer buf)
+	  (message "%s" data))))))
+
+
 (provide 'zxc-db)
