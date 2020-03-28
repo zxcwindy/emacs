@@ -418,4 +418,30 @@ clicked."
 			(execute-kbd-macro macro)))))))
     (define-key mode-map (kbd newstr) func)))
 
+(defun last-index-of (regex str &optional ignore-case)
+  "查找字符串最后的位置"
+  (let ((start 0)
+	(case-fold-search ignore-case)
+	idx)
+    (while (string-match regex str start)
+      (setq idx (match-beginning 0))
+      (setq start (match-end 0)))
+    idx))
+
+(defun zxc-find-file ()
+  "如果当前选中文字，则查找选中文字的路径，否则进行ido查找文件"
+  (interactive)
+  (if (region-active-p)
+      (let ((path (buffer-substring-no-properties (region-beginning) (region-end))))
+	(find-file path))
+    (ido-find-file)))
+
+(defmacro open-with-file (path func)
+  "操作小文件内容,path为文件路径，func为匿名函数或单参数函数 如 (lambad (str) (insert str) )"
+  `(loop for str in (with-temp-buffer
+		      (insert-file-contents ,path)
+		      (split-string (buffer-string) "\n"))
+	 do (,func str)))
+
+
 (provide 'zxc-init)

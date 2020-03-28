@@ -16,23 +16,27 @@
 ;; create table files_(
 ;;    id int auto_increment primary key,
 ;;    file_name varchar(128),
-;;    file_path varchar(2048)
+;;    file_path varchar(2048),
+;;    update_time int
 ;; );
 
 ;; create table tag_file (
-;;      tags_id int ,
-;;      files_id int
+;;      tag_id int ,
+;;      file_id int
 ;; );
 
-;; create index tag_file_tag_id on tag_file (tags_id);
-;; create index tag_file_file_id on tag_file (files_id);
+;; create index tag_file_tag_id on tag_file (tag_id);
+;; create index tag_file_file_id on tag_file (file_id);
 
 
 (defvar zxc-ft-buffer nil
   "The buffer displaying the file tags.")
 
-(defvar zxc-ft-url "http://localhost:9990/service/rest/data/query/tag"
+(defvar zxc-ft-query-url "http://localhost:9990/service/rest/data/query/tag"
   "查询后台服务地址")
+
+(defvar zxc-ft-exec-url "http://localhost:9990/service/rest/data/exec/tag"
+  "更新后台服务地址")
 
 (defvar zxc-ft-tag-widget nil "标签选择展现的input")
 
@@ -46,7 +50,7 @@
 
 (defvar zxc-ft-tags-search nil "查询的标签")
 
-(defvar zxc-ft-begin-point nil "标签拼接起始点")
+(defvar zxc-ft-begin-ol nil "标签拼接起始点")
 
 (defvar zxc-ft-sub-tags-keys
   (nconc (list "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z")
@@ -57,6 +61,8 @@
 
 (defvar zxc-ft-sub-tags-tmp nil "临时子标签集合")
 
+(defvar zxc-ft-current-action nil "标签触发操作，nil->查询, t->管理")
+
 (defface zxc-ft-action-face-foreground
   '((((class color)) (:foreground "red"))
     (((background dark)) (:foreground "gray100"))
@@ -64,34 +70,36 @@
     (t (:foreground "gray100")))
   "触发按键的颜色")
 
+(defvar zxc-ft-init-p nil)
+
 (defun zxc-ft ()
   "启动文件标签系统"
   (interactive)
-  (if (not (buffer-live-p zxc-ft-buffer))
-      (save-excursion
-	(setq zxc-ft-buffer (get-buffer-create "*ft*"))))
-  (set-buffer zxc-ft-buffer)
-  (zxc-ft-mode))
+  (zxc-ft-init)
+  ;; (when (not (buffer-live-p zxc-ft-buffer))
+  ;;   )
+  (switch-to-buffer zxc-ft-buffer))
 
-(defvar zxc-ft-init-p nil)
 
 (define-derived-mode zxc-ft-mode fundamental-mode "FT"
   "用标签重新组织文件"
-  (switch-to-buffer zxc-ft-buffer)
-  (zxc-ft-init)
   (page-break-lines-mode)
   (mapc #'(lambda (key)
 	    (zxc-mode-action-str zxc-ft-mode-map key 'zxc-ft-tag-choose)) zxc-ft-action-keys)
-  (define-key zxc-ft-mode-map (kbd "ESC") 'zxc-ft-reset-main-view)
-  (define-key zxc-ft-mode-map (kbd "RET") 'zxc-ft-tag-query))
+  (define-key zxc-ft-mode-map (kbd "<backspace>") 'zxc-ft-reset-main-view)
+  (define-key zxc-ft-mode-map (kbd "RET") 'zxc-ft-tag-action))
 
 (defun zxc-ft-init ()
   "初始化展现"
+  (setq zxc-ft-buffer (get-buffer-create "*ft*"))
+  (set-buffer zxc-ft-buffer)
   (clrhash zxc-ft-tags-all)
   (setq zxc-ft-tags-search nil)
   (setq zxc-ft-is-sub-view nil)
   (setq zxc-ft-tags-search nil)
-  (zxc-ft-main-view))
+  (setq zxc-ft-current-action nil)
+  (zxc-ft-main-view)
+  (zxc-ft-mode))
 
 (defun zxc-ft-main-view ()
   (with-current-buffer zxc-ft-buffer
@@ -105,7 +113,7 @@
 			       :size 100
 			       :format "当前选择的标签: %v "))
       (insert "\n\n")
-      (setq zxc-ft-begin-point (point))
+      (setq zxc-ft-begin-ol (make-overlay (point) (point)))
       (zxc-ft-view-create-all-tags top-tags))
     (widget-setup)))
 
@@ -126,26 +134,29 @@
 (defun zxc-ft-view-create-sub-tags (tags)
   "创建相同shortName的标签视图"
   (let ((inhibit-read-only t))
-    (delete-region zxc-ft-begin-point (point-max))
+    (delete-region (overlay-start zxc-ft-begin-ol) (point-max))
     (goto-char (point-max))
     (loop for i from 0 to (- (length tags) 1)
 	  do (progn
 	       (when (and (= (% i 8) 0) (/= i 0))
 		 (insert "\n"))
 	       (insert "[" (zxc-get-action-key (nth i zxc-ft-sub-tags-keys)) "]" (nth 2 (nth i tags)) "\t")))
-    (align-regexp zxc-ft-begin-point (point) "\\(\\s-*\\)\\s-" 1 1 t)))
+    (align-regexp (overlay-start zxc-ft-begin-ol) (point) "\\(\\s-*\\)\\s-" 1 1 t)))
 
-(defun zxc-ft-reset-main-view ()
+(defun zxc-ft-reset-main-view (arg)
   "返回展现所有标签的主视图"
-  (interactive)
-  (when zxc-ft-is-sub-view
-    (let ((inhibit-read-only t))
-      (delete-region zxc-ft-begin-point (point-max))
-      (clrhash zxc-ft-tags-all)
-      (goto-char (point-max))
-      (zxc-ft-view-create-all-tags (zxc-ft-get-top-tags))
-      (setq zxc-ft-sub-tags-tmp nil)
-      (setq zxc-ft-is-sub-view nil))))
+  (interactive "P")
+  (if (or (null zxc-ft-current-action) (null arg))
+      (when zxc-ft-is-sub-view
+	(let ((inhibit-read-only t))
+	  (delete-region (overlay-start zxc-ft-begin-ol) (point-max))
+	  (clrhash zxc-ft-tags-all)
+	  (goto-char (point-max))
+	  (zxc-ft-view-create-all-tags (zxc-ft-get-top-tags))
+	  (setq zxc-ft-sub-tags-tmp nil)
+	  (setq zxc-ft-is-sub-view nil)
+	  (goto-line 1)))
+    (delete-window)))
 
 (defun zxc-ft-get-top-tags ()
   "获取所有的标签组,level为0"
@@ -161,9 +172,14 @@
 
 (defun zxc-ft-query-data (param)
   "标签的数据查询服务,param为cons参数"
-  (getf (http-post zxc-ft-url
+  (getf (http-post zxc-ft-query-url
 		   param)
 	:data))
+
+(defun zxc-ft-exec-data (sql)
+  "标签的数据查询服务,param为cons参数"
+  (http-post zxc-ft-exec-url
+	     (list (cons 'sql sql))))
 
 (defun zxc-get-action-key (key-str)
   "获取带有颜色的action字符串"
@@ -175,16 +191,20 @@
 	do (puthash (nth 1 tag) (cons tag (gethash (nth 1 tag) zxc-ft-tags-all)) zxc-ft-tags-all)))
 
 (defun zxc-ft-build-query (tag)
-  "构建标签查询条件,在查询中不存在时再添加"
+  "构建标签查询条件,在查询中不存在时再添加，如果存在就取消"
   (if (not (member tag zxc-ft-tags-search))
-      (progn (setq zxc-ft-tags-search (cons tag zxc-ft-tags-search))
-	     (widget-value-set zxc-ft-tag-widget
-			       (mapconcat '(lambda (temp-tag)
-					     (nth 2 temp-tag))
-					  zxc-ft-tags-search
-					  " + "))
-	     (goto-line 1))
-    (message "已经选择了 %s" (nth 2 tag))))
+      (setq zxc-ft-tags-search (cons tag zxc-ft-tags-search))
+    (setq zxc-ft-tags-search (delete tag zxc-ft-tags-search)))
+  (zxc-ft-widget-update)
+  (goto-line 1))
+
+(defun zxc-ft-widget-update ()
+  (widget-value-set zxc-ft-tag-widget "")
+  (widget-value-set zxc-ft-tag-widget
+		    (mapconcat '(lambda (temp-tag)
+				  (nth 2 temp-tag))
+			       zxc-ft-tags-search
+			       " + ")))
 
 (defun zxc-ft-tag-choose ()
   "根据选择的按键进行标签选择,输出到input中"
@@ -205,9 +225,15 @@
 		     (zxc-ft-view-create-sub-tags zxc-ft-sub-tags-tmp)))
 	  (message "没有对应的标签"))))))
 
+(defun zxc-ft-tag-action ()
+  "在zxc-ft-mode下触发时进行查询，在dired中触发时进行标签的管理"
+  (interactive)
+  (if (null zxc-ft-current-action)
+      (zxc-ft-tag-query)
+    (zxc-ft-dired-make-tags)))
+
 (defun zxc-ft-tag-query ()
   "根据标签查询文件"
-  (interactive)
   (if zxc-ft-tags-search
       (let ((buffer-name (format "*ft result %s*" (widget-value zxc-ft-tag-widget))))
 	(with-current-buffer (get-buffer-create buffer-name)
@@ -215,8 +241,10 @@
 	  (let ((results (zxc-ft-query-data (list
 					     (cons 'sql
 						   (format
-						    "select a.id,a.file_name,a.file_path,'n/a' update_time from files_ a,(select * from tag_file where tags_id in (%s) )b where a.id = b.files_id"
-						    (mapconcat #'(lambda (tag) (int-to-string (nth 0 tag))) zxc-ft-tags-search ",")))))))
+						    "select a.id,a.file_name,a.file_path,'n/a' update_time from files_ a,(select file_id from tag_file where tag_id in (%s) group by file_id having count(1) = %s )b where a.id = b.file_id"
+						    (mapconcat #'(lambda (tag) (int-to-string (nth 0 tag))) zxc-ft-tags-search ",")
+						    (length zxc-ft-tags-search)))
+					     (cons 'limit "1000")))))
 	    (setq tabulated-list-entries
 		  (zxc-ft-result-2-entries results)
 		  zxc-ft-tags-search nil)
@@ -238,9 +266,9 @@
   "搜索结果展示模型"
   (define-key zxc-ft-result-mode-map (kbd "RET") 'zxc-ft-result-view-open)
   (setq tabulated-list-format
-	`[("文件名" 40 )
-	  ("路径" 65 nil)
-	  ("更新时间" 10 nil)
+	`[("文件名" 85)
+	  ("路径" 55 nil)
+	  ("更新时间" 5 nil)
 	  ])
   (setq tabulated-list-padding 3)
   (setq tabulated-list-sort-key (cons "更新时间" nil))
@@ -251,5 +279,77 @@
   (interactive)
   (find-file (aref (tabulated-list-get-entry) 1)))
 
+
+;;; dired mode 扩展
+
+(make-local-variable 'zxc-ft-dired-file-pos )
+
+(defun zxc-ft-dired-list-tags ()
+  "展现当前文件夹下所有文件的所有标签"
+  (interactive)
+  (save-excursion
+    (remove-overlays)
+    (set 'zxc-ft-dired-file-pos (make-hash-table :test 'equal))
+    (let ((results (zxc-ft-query-data (list (cons 'sql (format "select b.tag_id,b.file_id,c.tag_name,a.file_name from (select id,FILE_NAME from FILES_ where FILE_PATH = '%s') a, tag_file b , tags_ c where a.id = b.file_id and c.id = b.tag_id" (substring (dired-current-directory) 0 -1)))))))
+      (zxc-ft-dired-show-tags results))))
+
+(defun zxc-ft-dired-show-tags (tag-infos)
+  "tag-infos是一个二维数组，每一行包含顺序为标签ID、文件ID，标签名称、文件名称"
+  (loop for tag-info in tag-infos
+	do (let* ((file-name (nth 3 tag-info))
+		  (pos (or (gethash file-name zxc-ft-dired-file-pos)
+			   (progn
+			     (goto-char (point-min))
+			     (puthash file-name (search-forward (nth 3 tag-info)) zxc-ft-dired-file-pos))))
+		  (ol (or (car (overlays-in pos pos)) (make-overlay pos pos))))
+	     (overlay-put ol 'after-string (propertize (concat (overlay-get ol 'after-string)  " " (nth 2 tag-info)) 'face 'font-lock-doc-face)))))
+
+(defun zxc-ft-dired-mark-tags ()
+  "给当前文件夹中选中的文件加上标签"
+  (interactive)
+  (save-excursion
+    (when (not (buffer-live-p zxc-ft-buffer))
+      (zxc-ft-init)))
+  (setq zxc-ft-current-action t)
+  (save-excursion
+    (setq  zxc-ft-tags-search (zxc-ft-query-data (list (cons 'sql (format "select a.id,a.short_name,a.tag_name from tags_ a ,(select tag_id from files_ b ,tag_file c where file_name = '%s' and file_path = '%s' and c.file_id = b.id) d where a.id = d.tag_id" (f-filename (dired-get-file-for-visit)) (substring (dired-current-directory) 0 -1))))))
+    (zxc-ft-widget-update)
+    (display-buffer zxc-ft-buffer)
+    (switch-window)
+    (goto-line 1)))
+
+(defun zxc-ft-dired-make-tags ()
+  "更新标签"
+  (switch-window)
+  (let* ((file-path (substring (dired-current-directory) 0 -1))
+	 (file-name (f-filename (dired-get-file-for-visit)))
+	 (file-info (zxc-ft-query-file-info file-path file-name))
+	 (file-id nil))
+    (if file-info
+	(setf file-id (nth 0 (car file-info)))
+      (progn
+	(zxc-ft-exec-data (format "insert into files_ (file_name,file_path) values ('%s','%s')" file-name file-path))
+	(setf file-id (nth 0 (car (zxc-ft-query-file-info file-path file-name))))))
+    (zxc-ft-exec-data (format "delete from tag_file where file_id = %d" file-id))
+    (mapc #'(lambda (tag)
+	      (zxc-ft-exec-data (format "insert into tag_file (tag_id,file_id) values (%d,%d)" (nth 0 tag) file-id)))
+	  zxc-ft-tags-search)
+    (delete-window (get-buffer-window zxc-ft-buffer))
+    (setq zxc-ft-current-action nil))
+  (zxc-ft-dired-list-tags))
+
+(defun zxc-ft-query-file-info (file-path file-name)
+  (zxc-ft-query-data (list (cons 'sql (format "select id,file_name,file_path from files_ where file_path = '%s' and file_name = '%s'" file-path  file-name)))))
+
+(defun zxc-ft-dired-revert-buffer ()
+  "清除标签，刷新buffer"
+  (interactive)
+  (remove-overlays)
+  (revert-buffer))
+
+(add-hook 'dired-mode-hook #'(lambda ()
+			       (define-key dired-mode-map (kbd "b") 'zxc-ft-dired-list-tags)
+			       (define-key dired-mode-map (kbd "g") 'zxc-ft-dired-revert-buffer)
+			       (define-key dired-mode-map (kbd "e") 'zxc-ft-dired-mark-tags)))
 
 (provide 'zxc-ft)
