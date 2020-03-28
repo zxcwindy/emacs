@@ -82,13 +82,15 @@
   (page-break-lines-mode)
   (mapc #'(lambda (key)
 	    (zxc-mode-action-str zxc-ft-mode-map key 'zxc-ft-tag-choose)) zxc-ft-action-keys)
-  (define-key zxc-ft-mode-map (kbd "ESC") 'zxc-ft-reset-main-view))
+  (define-key zxc-ft-mode-map (kbd "ESC") 'zxc-ft-reset-main-view)
+  (define-key zxc-ft-mode-map (kbd "RET") 'zxc-ft-tag-query))
 
 (defun zxc-ft-init ()
   "初始化展现"
   (clrhash zxc-ft-tags-all)
   (setq zxc-ft-tags-search nil)
   (setq zxc-ft-is-sub-view nil)
+  (setq zxc-ft-tags-search nil)
   (zxc-ft-main-view))
 
 (defun zxc-ft-main-view ()
@@ -202,3 +204,52 @@
 		     (setq zxc-ft-is-sub-view t)
 		     (zxc-ft-view-create-sub-tags zxc-ft-sub-tags-tmp)))
 	  (message "没有对应的标签"))))))
+
+(defun zxc-ft-tag-query ()
+  "根据标签查询文件"
+  (interactive)
+  (if zxc-ft-tags-search
+      (let ((buffer-name (format "*ft result %s*" (widget-value zxc-ft-tag-widget))))
+	(with-current-buffer (get-buffer-create buffer-name)
+	  (zxc-ft-result-mode)
+	  (let ((results (zxc-ft-query-data (list
+					     (cons 'sql
+						   (format
+						    "select a.id,a.file_name,a.file_path,'n/a' update_time from files_ a,(select * from tag_file where tags_id in (%s) )b where a.id = b.files_id"
+						    (mapconcat #'(lambda (tag) (int-to-string (nth 0 tag))) zxc-ft-tags-search ",")))))))
+	    (setq tabulated-list-entries
+		  (zxc-ft-result-2-entries results)
+		  zxc-ft-tags-search nil)
+	    (widget-value-set zxc-ft-tag-widget "")
+	    (tabulated-list-print t)))
+	(goto-char (point-max))
+	(switch-to-buffer buffer-name))
+    (message "请先选择标签")))
+
+(defun zxc-ft-result-2-entries (results)
+  (mapcar #'(lambda (r)
+	      (list (nth 0 r) `[,(nth 1 r) ,(nth 2 r) ,(nth 3 r)]))
+	  results))
+
+
+
+
+(define-derived-mode zxc-ft-result-mode tabulated-list-mode "FT Result"
+  "搜索结果展示模型"
+  (define-key zxc-ft-result-mode-map (kbd "RET") 'zxc-ft-result-view-open)
+  (setq tabulated-list-format
+	`[("文件名" 40 )
+	  ("路径" 65 nil)
+	  ("更新时间" 10 nil)
+	  ])
+  (setq tabulated-list-padding 3)
+  (setq tabulated-list-sort-key (cons "更新时间" nil))
+  (tabulated-list-init-header))
+
+(defun zxc-ft-result-view-open ()
+  "open file with current line"
+  (interactive)
+  (find-file (aref (tabulated-list-get-entry) 1)))
+
+
+(provide 'zxc-ft)
