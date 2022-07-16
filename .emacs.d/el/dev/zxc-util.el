@@ -18,6 +18,7 @@
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
 (require 'cl)
+(require 'string-inflection)
 
 (defstruct format-type split-char type-name)
 
@@ -66,7 +67,8 @@ return the positions list "
 
 
 (defun convert-format ()
-  "convert code format"
+  "convert code format
+用string-inflection替换"
   (let* ((str (filter-buffer-substring (point) (mark) t))
 	 (source (get-format-type str))
 	 (target (get-target-format-type)))

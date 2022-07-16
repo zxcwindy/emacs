@@ -133,7 +133,7 @@ sub edbi_table_info {
   my ($catalog, $schema, $table, $type) = @$args;
   $sth = $dbh->table_info( $catalog, $schema, $table, $type );
   # when use db2,uncomment under line
-  # $sth = $dbh->table_info( '','%','%','' );
+  $sth = $dbh->table_info( '','DB2INST1','%','' );
   return [$sth->{NAME}, $sth->fetchall_arrayref()];
 }
 

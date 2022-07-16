@@ -20,6 +20,8 @@
 
 ;;org模式换行
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
+(add-hook 'org-mode-hook 'valign-mode)
+
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
@@ -66,7 +68,7 @@
 ;;-------------------
 ;;修改字体
 ;; (set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
-(setq zxc-frame-font-default-size "14")
+(setq zxc-frame-font-default-size "12")
 
 (defun zxc-set-font-size (font-size)
   "change font size"
@@ -377,6 +379,8 @@ even beep.)"
 (delight '((abbrev-mode nil "abbrev")
 	   (projectile-mode " PJ" "projectile")
 	   (eldoc-mode nil "eldoc")
+	   (paredit-mode nil "Paredit")
+	   (lisp-interaction-mode nil "Lisp Interaction")
 	   (rainbow-mode)
 	   (overwrite-mode " Ov" t)
 	   (global-whitespace-mode nil "whitespace")

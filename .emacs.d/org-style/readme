@@ -12,3 +12,7 @@
 #+HTML_HEAD_EXTRA: <script type="text/javascript" src="file:///home/david/git/org-export/js/bootstrap.min.js"></script>
 #+HTML_HEAD_EXTRA: <script type="text/javascript" src="file:///home/david/git/org-export/js/application.js"></script>
 #+HTML_HEAD_EXTRA: <script type="text/javascript" src="file:///home/david/git/org-export/js/base.js"></script>
+
+#+SETUPFILE: /home/david/git/org-html-themes/setup/theme-readtheorg-local.setup
+
+#+SETUPFILE: /home/david/git/org-html-themes/setup/theme-bigblow-local.setup

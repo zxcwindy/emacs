@@ -21,7 +21,7 @@
 
 ;;; Commentary:
 
-
+(require 'ctable)
 (require 'zxc-db-ac)
 (require 'zxc-util)
 
@@ -152,7 +152,8 @@ and response headers, object is an text."
 (defun zxc-db-send-region-query ()
   "查询当前区域SQL"
   (interactive)
-  (zxc-db-send "query" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))) #'zxc-db-query-callback))
+  (zxc-db-send "query" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))
+			     (cons "limit" "500")) #'zxc-db-query-callback))
 
 (defun zxc-db-send-region-exec ()
   "执行当前区域SQL"

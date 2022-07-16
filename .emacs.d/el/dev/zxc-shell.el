@@ -19,6 +19,8 @@
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
 
+(require 'flymake-shellcheck)
+
 (eval-after-load "shell"
   '(define-key shell-mode-map "\C-a" 'comint-bol-or-process-mark))
 
@@ -39,5 +41,7 @@
 			       (setq outline-regexp "bash-4.2\$ ")
 			       (outline-minor-mode t)))
 
+(add-hook 'sh-mode-hook 'flymake-shellcheck-load)
+(add-hook 'sh-mode-hook 'flymake-mode)
 
 (provide 'zxc-shell)

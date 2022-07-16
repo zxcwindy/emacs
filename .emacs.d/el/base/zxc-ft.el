@@ -28,6 +28,7 @@
 ;; create index tag_file_tag_id on tag_file (tag_id);
 ;; create index tag_file_file_id on tag_file (file_id);
 
+(require 'wid-edit)
 
 (defvar zxc-ft-buffer nil
   "The buffer displaying the file tags.")
@@ -72,13 +73,14 @@
 
 (defvar zxc-ft-init-p nil)
 
-(defun zxc-ft ()
+(defun zxc-ft (arg)
   "启动文件标签系统"
-  (interactive)
-  (zxc-ft-init)
-  ;; (when (not (buffer-live-p zxc-ft-buffer))
-  ;;   )
-  (switch-to-buffer zxc-ft-buffer))
+  (interactive "P")
+  (if (null arg)
+      (progn
+	(zxc-ft-init)
+	(switch-to-buffer zxc-ft-buffer))
+    (zxc-ft-create-new-tag)))
 
 
 (define-derived-mode zxc-ft-mode fundamental-mode "FT"
@@ -155,7 +157,7 @@
 	  (zxc-ft-view-create-all-tags (zxc-ft-get-top-tags))
 	  (setq zxc-ft-sub-tags-tmp nil)
 	  (setq zxc-ft-is-sub-view nil)
-	  (goto-line 1)))
+	  (goto-char (point-min))))
     (delete-window)))
 
 (defun zxc-ft-get-top-tags ()
@@ -196,13 +198,13 @@
       (setq zxc-ft-tags-search (cons tag zxc-ft-tags-search))
     (setq zxc-ft-tags-search (delete tag zxc-ft-tags-search)))
   (zxc-ft-widget-update)
-  (goto-line 1))
+  (goto-char (point-min)))
 
 (defun zxc-ft-widget-update ()
   (widget-value-set zxc-ft-tag-widget "")
   (widget-value-set zxc-ft-tag-widget
-		    (mapconcat '(lambda (temp-tag)
-				  (nth 2 temp-tag))
+		    (mapconcat #'(lambda (temp-tag)
+				   (nth 2 temp-tag))
 			       zxc-ft-tags-search
 			       " + ")))
 
@@ -277,7 +279,54 @@
 (defun zxc-ft-result-view-open ()
   "open file with current line"
   (interactive)
-  (find-file (aref (tabulated-list-get-entry) 1)))
+  (find-file (concat (aref (tabulated-list-get-entry) 1) "/" (aref (tabulated-list-get-entry) 0))))
+
+
+(defun zxc-ft-create-new-tag ()
+  "创建新的标签."
+  (switch-to-buffer "*ft add tag*")
+  (kill-all-local-variables)
+  (set (make-local-variable 'short-name) nil)
+  (set (make-local-variable 'tag-name) nil)
+  (set (make-local-variable 'tag-pid) nil)
+  (let ((inhibit-read-only t))
+    (erase-buffer))
+  (remove-overlays)
+  (widget-create 'editable-field
+		 :size 13
+		 :format "短名称: %v "
+		 :notify (lambda (widget &rest ignore)
+			   (setf short-name (widget-value widget))))
+  (widget-create 'editable-field
+		 :size 13
+		 :format "全名称: %v "
+		 :notify (lambda (widget &rest ignore)
+			   (setf tag-name (widget-value widget))))
+  (widget-insert "\n")
+  (apply 'widget-create
+	 'menu-choice
+	 :tag "选择父节点"
+	 :value nil
+	 :notify (lambda (widget &rest ignore)
+		   (setq tag-pid (widget-value widget)))
+	 '(item :tag "没有父节点" :value nil)
+	 (mapcar (lambda (label) (list 'item :tag (nth 2 label) :value (nth 0 label)))
+		 (zxc-ft-query-data '((sql . "select id,short_name,tag_name from tags_ where level_=0")))))
+  (widget-insert "\n")
+  (widget-create 'push-button
+		 :notify (lambda (&rest ignore)
+			   (if (and short-name tag-name)
+			       (progn
+				 (if (null tag-pid)
+				     (zxc-ft-exec-data (format "insert into tags_ (short_name,tag_name,level_) values ('%s','%s',0) " short-name tag-name))
+				   (zxc-ft-exec-data (format "insert into tags_ (short_name,tag_name,p_id,level_) values ('%s','%s',%d, 1) " short-name tag-name tag-pid)))
+				 (message "标签 %s-%s 创建成功" short-name tag-name))
+			     (message "短名称和全名称必须填写")))
+		 "保存")
+  (widget-insert " ")
+  (widget-insert "\n")
+  (use-local-map widget-keymap)
+  (widget-setup))
 
 
 ;;; dired mode 扩展
@@ -300,9 +349,11 @@
 		  (pos (or (gethash file-name zxc-ft-dired-file-pos)
 			   (progn
 			     (goto-char (point-min))
-			     (puthash file-name (search-forward (nth 3 tag-info)) zxc-ft-dired-file-pos))))
-		  (ol (or (car (overlays-in pos pos)) (make-overlay pos pos))))
-	     (overlay-put ol 'after-string (propertize (concat (overlay-get ol 'after-string)  " " (nth 2 tag-info)) 'face 'font-lock-doc-face)))))
+			     (search-forward (nth 3 tag-info) nil t)))))
+	     (when pos
+	       (let ((ol (or (car (overlays-in pos pos)) (make-overlay pos pos))))
+		 (puthash file-name pos zxc-ft-dired-file-pos)
+		 (overlay-put ol 'after-string (propertize (concat (overlay-get ol 'after-string)  " " (nth 2 tag-info)) 'face 'font-lock-doc-face)))))))
 
 (defun zxc-ft-dired-mark-tags ()
   "给当前文件夹中选中的文件加上标签"
@@ -316,7 +367,7 @@
     (zxc-ft-widget-update)
     (display-buffer zxc-ft-buffer)
     (switch-window)
-    (goto-line 1)))
+    (goto-char (point-min))))
 
 (defun zxc-ft-dired-make-tags ()
   "更新标签"

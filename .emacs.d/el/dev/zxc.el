@@ -52,7 +52,6 @@
 (define-key zxc-mode-map (kbd  "C-; cc") #'comet-publish-paragraph)
 (define-key zxc-mode-map (kbd  "C-; cr") #'comet-publish-region)
 (define-key zxc-mode-map (kbd  "C-; cx") #'comet-publish-html)
-(define-key zxc-mode-map (kbd  "C-; cd") #'zxc-db-send-region-decrypt)
 (define-key zxc-mode-map (kbd  "C-; dl") #'zxc-db-login)
 (define-key zxc-mode-map (kbd  "C-; de") #'zxc-db-send-region-exec)
 (define-key zxc-mode-map (kbd  "C-; ds") #'zxc-db-send-region-query)
@@ -61,16 +60,31 @@
 (define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)
 (define-key zxc-mode-map (kbd  "C-; eli") #'zxc-es--list-indexes)
 (define-key zxc-mode-map (kbd  "C-; eln") #'zxc-es--list-nodes)
+(define-key zxc-mode-map (kbd  "C-; ed") #'zxc-db-send-region-decrypt)
 (define-key zxc-mode-map (kbd  "C-; es") #'zxc-es--query-sql)
 (define-key zxc-mode-map (kbd  "C-; ul") #'zxc-template-list-view)
 (define-key zxc-mode-map (kbd  "C-; us") #'zxc-template-search-view)
 
 (defun code-format ()
   (interactive)
-  (insert (convert-format)))
+  (cond
+   ;; for emacs-lisp-mode
+   ((eq major-mode 'emacs-lisp-mode)
+    (string-inflection-all-cycle))
+   ;; for java
+   ((eq major-mode 'java-mode)
+    (string-inflection-java-style-cycle))
+   ;; for python
+   ((eq major-mode 'python-mode)
+    (string-inflection-python-style-cycle))
+   ((eq major-mode 'sql-mode)
+    (string-inflection-sql-style-cycle))
+   (t
+    ;; default
+    (string-inflection-ruby-style-cycle))))
 
 (mapc #'(lambda (mode-hook)
 	  (add-hook mode-hook 'zxc-mode))
-      (list 'shell-mode-hook 'js2-mode-hook 'web-mode-hook))
+      (list 'shell-mode-hook 'js2-mode-hook 'web-mode-hook 'sql-mode-hook 'java-mode-hook))
 
 (provide 'zxc)

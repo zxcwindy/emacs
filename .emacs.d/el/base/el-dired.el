@@ -21,7 +21,7 @@
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
 (make-variable-buffer-local
- (defvar zxc-dired-queue-index 0 "当前目录排序索引"))
+ (defvar zxc-dired-queue-index -1 "当前目录排序索引"))
 
 (defclass zxc-cycle-queue ()
   ((list-strs :initarg :list-strs)
@@ -32,11 +32,11 @@
   (let ((max-length (length (slot-value instance 'list-strs))))
     (setf zxc-dired-queue-index
 	  (if (= (+ zxc-dired-queue-index 1) max-length)
-	      0
+	      -1
 	    (+ zxc-dired-queue-index 1)))
     (nth zxc-dired-queue-index (slot-value instance 'list-strs))))
 
-(setq zxc-dired-sort-queue (zxc-cycle-queue :list-strs (list "-Alh -1 " "-Alh -t" "-Alh -X" "-Alh -S")))
+(setq zxc-dired-sort-queue (zxc-cycle-queue :list-strs (list "-Alht" "-AlhX" "-AlhS")))
 
 (defun zxc-dired-sort ()
   (interactive)
