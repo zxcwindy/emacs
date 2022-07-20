@@ -45,7 +45,7 @@
 
 (defcustom openwith-associations
   '(;; ("\\.pdf\\'" "acroread" (file))
-    ("\\.pdf\\'" "okular" (file))
+    ("\\.pdf\\'" "wpspdf" (file))
     ;; ("\\.class\\'" "jad" ("-p" file))
     ("\\.mp3\\'" "xmms" (file))
     ("\\.chm\\'" "kchmviewer" (file))

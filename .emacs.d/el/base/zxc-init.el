@@ -68,15 +68,20 @@
 ;;-------------------
 ;;修改字体
 ;; (set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
-(setq zxc-frame-font-default-size "12")
 
-(defun zxc-set-font-size (font-size)
-  "change font size"
-  (interactive (list (read-string (format "字体大小(%s): " zxc-frame-font-default-size))))
-  (setf zxc-frame-font-default-size font-size)
-  (set-frame-font (s-concat "-unknown-DejaVu Sans Mono-normal-normal-normal-*-" zxc-frame-font-default-size "-*-*-*-m-0-iso10646-1")))
+;;; slackware配置
+;; (setq zxc-frame-font-default-size "12")
+;; (defun zxc-set-font-size (font-size)
+;;   "change font size"
+;;   (interactive (list (read-string (format "字体大小(%s): " zxc-frame-font-default-size))))
+;;   (setf zxc-frame-font-default-size font-size)
+;;   (set-frame-font (s-concat "-unknown-DejaVu Sans Mono-normal-normal-normal-*-" zxc-frame-font-default-size "-*-*-*-m-0-iso10646-1")))
 
-(zxc-set-font-size zxc-frame-font-default-size)
+;; (zxc-set-font-size zxc-frame-font-default-size)
+
+;;; ubuntu配置
+(set-face-attribute 'default nil :height 95)
+
 
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
 (mouse-avoidance-mode 'animate)
@@ -172,6 +177,7 @@ that was stored with ska-point-to-register."
     (save-buffers-kill-terminal)))
 
 (define-key global-map (kbd "C-x C-c") 'myclose)
+(global-unset-key (kbd "C-SPC"))
 ;;背景颜色
 ;;(set-background-color "#CCE8CF")
 
@@ -222,7 +228,7 @@ that was stored with ska-point-to-register."
   (interactive)
   (mark-paragraph)
   (unless (= (line-number-at-pos) 1)
-    (next-line)
+    (forward-line)
     (move-beginning-of-line 1)))
 
 ;;字符串分割
@@ -273,6 +279,11 @@ that was stored with ska-point-to-register."
 
 (setf org-export-preserve-breaks t)
 
+;; t: Adapt indentation for all lines
+;; headline-data: Adapt indentation for headline data lines
+;; nil: Do not adapt indentation at all
+(setq org-adapt-indentation t)
+
 (defun qiang-comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command.
 If no region is selected and current line is not blank and we are not at the end of the line,
@@ -315,7 +326,10 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 
 (setq emmet-preview-default nil)
 (global-whitespace-mode t)
-(setq ediff-diff-options "-w")
+
+(setq ediff-diff-options "-w"
+      ediff-window-setup-function #'ediff-setup-windows-plain)
+
 ;; 水平分隔window
 (setq split-height-threshold 0)
 (setq split-width-threshold nil)

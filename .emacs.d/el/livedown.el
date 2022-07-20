@@ -69,7 +69,7 @@
    (format "emacs-livedown")
    (format "emacs-livedown-buffer")
    (format "/home/david/git/livedown/bin/livedown start %s --port %s %s %s "
-	   buffer-file-name
+	   (s-replace " " "\\ " buffer-file-name)
 	   livedown-port
 	   (if livedown-browser (concat "--browser " livedown-browser) "")
 	   (if livedown-open "--open" "")))

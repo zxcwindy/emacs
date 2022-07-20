@@ -20,6 +20,9 @@
 ;; MA 02111-1307 USA
 
 (require 'flymake-shellcheck)
+(require 'bash-completion)
+
+(bash-completion-setup)
 
 (eval-after-load "shell"
   '(define-key shell-mode-map "\C-a" 'comint-bol-or-process-mark))

@@ -44,6 +44,8 @@
 (defvar db-meta "service/rest/dbMeta" "dbmeta uri")
 (defvar db-name "db2" "database name")
 
+(setq docker-run-as-root t)
+
 (define-key zxc-mode-map (kbd  "C-; cs") #'zxc-db-get-select-sql)
 (define-key zxc-mode-map (kbd  "C-; cf") #'code-format)
 (define-key zxc-mode-map (kbd  "C-; cq") #'zxc-util-convert-table-to-sql)
