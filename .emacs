@@ -11,36 +11,34 @@
  '(case-fold-search t)
  '(coffee-tab-width 4)
  '(custom-safe-themes
-   (quote
-    ("4b137a22ad4b2796afbeee80afb9ef0fab18c2440689249ebfcf7621914eb90a" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
+   '("4b137a22ad4b2796afbeee80afb9ef0fab18c2440689249ebfcf7621914eb90a" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default))
  '(delete-by-moving-to-trash t)
- '(desktop-globals-to-save (quote (desktop-missing-file-warning)))
- '(desktop-path (quote ("~/.emacs.d/")))
+ '(desktop-globals-to-save '(desktop-missing-file-warning))
+ '(desktop-path '("~/.emacs.d/"))
  '(display-time-mode t)
  '(ecb-options-version "2.40")
  '(fci-rule-color "#eee8d5")
- '(frame-background-mode (quote dark))
+ '(frame-background-mode 'dark)
  '(js-indent-level 2)
  '(js2-idle-timer-delay 2.5)
- '(linum-format (quote dynamic))
+ '(linum-format 'dynamic)
  '(lsp-auto-guess-root t)
  '(make-backup-files nil)
  '(minimap-dedicated-window t)
- '(minimap-window-location (quote right))
+ '(minimap-window-location 'right)
  '(org-agenda-files nil)
- '(org-todo-keywords (quote ((sequence "TODO" "DOING" "DONE"))))
+ '(org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
-   (quote
-    (valign emacsql-sqlite emacsql flycheck-elsa gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig ob-mermaid mermaid-mode org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet)))
+   '(bash-completion valign emacsql-sqlite emacsql flycheck-elsa gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig ob-mermaid mermaid-mode org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
-   (quote
-    ((encoding . utf-8)
+   '((encoding . utf-8)
      (checkdoc-minor-mode . t)
      (Base . 10)
      (Syntax . ANSI-Common-Lisp)
-     (require-final-newline . t))))
+     (require-final-newline . t)))
+ '(session-use-package t nil (session))
  '(size-indication-mode t)
  '(sr-speedbar-right-side nil)
  '(tool-bar-mode nil)
@@ -49,8 +47,7 @@
  '(url-show-status nil)
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
+   '((20 . "#dc322f")
      (40 . "#cb4b16")
      (60 . "#b58900")
      (80 . "#859900")
@@ -67,7 +64,7 @@
      (300 . "#d33682")
      (320 . "#6c71c4")
      (340 . "#dc322f")
-     (360 . "#cb4b16"))))
+     (360 . "#cb4b16")))
  '(vc-annotate-very-old-color nil)
  '(w3m-home-page "http://10.95.239.158:8080/log.html"))
 (custom-set-faces
@@ -99,7 +96,7 @@
 	"~/.emacs.d/el/base"
 	"~/.emacs.d/el/dev"
 	"~/.emacs.d/el/dev/zxc-template"
-	"/usr/share/emacs/site-lisp/mu4e"
+	;; "/usr/share/emacs/site-lisp/mu4e"
 	;;"~/.emacs.d/jdee-2.4.1/lisp"
 	;; "~/.emacs.d/swank-js"
 	"~/git/ecb"
@@ -220,6 +217,7 @@
 				   (if (eq major-mode 'dired-mode)
 				       (kill-new (dired-current-directory))
 				     (kill-new (buffer-file-name)))))
+
 (global-set-key (kbd "C-'") #'(lambda ()
 				(interactive)
 				(switch-to-buffer (other-buffer))))
@@ -306,8 +304,8 @@
 (require 'el-ibus)
 (global-set-key [f12] 'el-ibus-on-off)
 
-(require 'el-mu4e)
-(global-set-key (kbd "M-<backspace>") 'mu4e)
+;; (require 'el-mu4e)
+;; (global-set-key (kbd "M-<backspace>") 'mu4e)
 
 (require 'shell-here)
 (global-set-key (kbd "C-c C-z") #'(lambda ()
@@ -332,7 +330,7 @@
 (keyfreq-autosave-mode 1)
 
 ;; (require 'page-break-lines)
-(global-page-break-lines-mode)
+;; (global-page-break-lines-mode)
 
 (require 'csv-mode)
 ;;desktop
