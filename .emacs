@@ -210,7 +210,7 @@
 (global-set-key (kbd "C-x k") #'(lambda ()
 				  (interactive)
 				  (kill-buffer (current-buffer))))
-(global-set-key (kbd "C-; C-;") 'zxc-mode)
+(global-set-key (kbd "C-; C-;") 'global-zxc-mode)
 (global-set-key (kbd "<f2> m") 'rename-buffer)
 (global-set-key (kbd "<f2> c") 'calendar)
 (global-set-key (kbd "<f2> p") #'(lambda ()

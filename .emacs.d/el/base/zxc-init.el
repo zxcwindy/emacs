@@ -82,11 +82,12 @@
 ;;; ubuntu配置
 (setq zxc-frame-font-default-size 95)
 (set-face-attribute 'default nil :height zxc-frame-font-default-size)
-(defun zxc-set-font-size (font-size)
-  "change font size"
-  (interactive "n字体50-100:")
-  (setf zxc-frame-font-default-size font-size)
-  (set-face-attribute 'default nil :height zxc-frame-font-default-size))
+;; 设置字体大小,C-x C-0  , `C-x C-+’ and ‘C-x C--’ (‘text-scale-adjust’)
+;; (defun zxc-set-font-size (font-size)
+;;   "change font size"
+;;   (interactive "n字体50-100:")
+;;   (setf zxc-frame-font-default-size font-size)
+;;   (set-face-attribute 'default nil :height zxc-frame-font-default-size))
 
 
 ;;光标靠近鼠标指针时，让鼠标指针自动让开

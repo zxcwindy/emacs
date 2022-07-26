@@ -39,7 +39,6 @@
   "Minor mode for Zxc"
   :lighter (" " zxc-mode-lighter))
 
-
 (defvar zxc-host "http://localhost:9990")
 (defvar db-meta "service/rest/dbMeta" "dbmeta uri")
 (defvar db-name "db2" "database name")
@@ -88,5 +87,14 @@
 (mapc #'(lambda (mode-hook)
 	  (add-hook mode-hook 'zxc-mode))
       (list 'shell-mode-hook 'js2-mode-hook 'web-mode-hook 'sql-mode-hook 'java-mode-hook))
+
+(defun display-zxc-mode--turn-on ()
+  "Turn on `zxc-mode'."
+  (unless (minibufferp)
+    (zxc-mode)))
+
+;;;###autoload
+(define-globalized-minor-mode global-zxc-mode
+  zxc-mode display-zxc-mode--turn-on)
 
 (provide 'zxc)
