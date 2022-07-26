@@ -7,6 +7,7 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+ '(auth-source-save-behavior nil)
  '(beacon-color "#dc322f")
  '(case-fold-search t)
  '(coffee-tab-width 4)

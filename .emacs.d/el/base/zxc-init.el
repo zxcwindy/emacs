@@ -80,7 +80,13 @@
 ;; (zxc-set-font-size zxc-frame-font-default-size)
 
 ;;; ubuntu配置
-(set-face-attribute 'default nil :height 95)
+(setq zxc-frame-font-default-size 95)
+(set-face-attribute 'default nil :height zxc-frame-font-default-size)
+(defun zxc-set-font-size (font-size)
+  "change font size"
+  (interactive "n字体50-100:")
+  (setf zxc-frame-font-default-size font-size)
+  (set-face-attribute 'default nil :height zxc-frame-font-default-size))
 
 
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
@@ -273,9 +279,10 @@ that was stored with ska-point-to-register."
 	  (function (lambda ()
 		      (setq comint-output-filter-functions 'comint-truncate-buffer))))
 
-(add-hook 'ctbl:table-mode-hook #'(lambda ()
-				    (setq buffer-face-mode-face '(:family "文泉驿等宽正黑"))
-				    (buffer-face-mode)))
+;;; ctable 字体设置
+;; (add-hook 'ctbl:table-mode-hook #'(lambda ()
+;;				    (setq buffer-face-mode-face '(:family "文泉驿等宽正黑"))
+;;				    (buffer-face-mode)))
 
 (setf org-export-preserve-breaks t)
 
