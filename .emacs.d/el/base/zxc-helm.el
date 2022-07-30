@@ -1,6 +1,6 @@
 (require 'helm-config)
 
-(helm-mode 1)
+(helm-mode 0)
 
 (setq helm-split-window-inside-p t
       helm-move-to-line-cycle-in-source t)

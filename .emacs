@@ -374,6 +374,7 @@
 (require 'zxc-markdown)
 (require 'zxc-ft)
 (require 'zxc-proxy)
+(require 'zxc-helm)
 (require 'zxc-org)
 (global-set-key (kbd "C-; t") 'zxc-ft)
 
