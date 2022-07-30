@@ -31,7 +31,7 @@
  '(org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
-   '(org-roam-timestamps org-modern org-download org-roam-ui bash-completion valign emacsql-sqlite emacsql flycheck-elsa gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig ob-mermaid mermaid-mode org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode w3m vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime skewer-less shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy dsvn docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme coffee-mode browse-kill-ring archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
+   '(org-roam-timestamps org-modern org-download org-roam-ui bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    '((encoding . utf-8)
@@ -113,8 +113,8 @@
 
 (require 'el-package)
 
-(require 'el-slime)
-(global-set-key "\C-hj" 'slime-hyperspec-lookup)
+;;(require 'el-slime)
+;;(global-set-key "\C-hj" 'slime-hyperspec-lookup)
 
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -177,7 +177,7 @@
 (global-set-key (kbd "C-o") 'switch-to-buffer)
 
 (require 'vc-svn)
-(require 'dsvn)
+;;(require 'dsvn)
 (autoload 'svn-status "dsvn" "Run `svn status'." t)
 (autoload 'svn-update "dsvn" "Run `svn update'." t)
 
@@ -368,7 +368,6 @@
 
 (setf es-always-pretty-print t)
 
-(require 'zxc-helm-org-rifle)
 (require 'zxc-ibuffer)
 (require 'zxc-template)
 (require 'zxc-sql)
