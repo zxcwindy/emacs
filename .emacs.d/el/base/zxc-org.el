@@ -1,14 +1,27 @@
 (require 'org-download)
 (require 'org-roam)
 (require 'helm-org-rifle)
+(with-eval-after-load 'ox
+    (require 'ox-hugo))
 
 ;;; fix invalid function issue (helm-org-rifle-set-input-idle-delay)
 (setq helm-org-rifle-after-init-hook nil
       org-directory "~/zxc/org-roam"
-      org-roam-directory (file-truename "~/zxc/org-roam"))
+      org-roam-directory (file-truename "~/zxc/org-roam")
+      org-roam-ui-open-on-start nil
+      org-roam-ui-follow-mode nil
+      org-hugo-base-dir "~/zxc/hugo"
+      org-startup-folded t)
 
+;;; 带日期
+;; (setq org-roam-capture-templates
+;;       '(("d" "default" plain "%?" :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+OPTIONS: ^:{} \\n:t num:nil
+;; #+LANGUAGE: zh-CN
+;; #+title: ${title}") :unnarrowed t)))
+
+;;; 不带日期
 (setq org-roam-capture-templates
-      '(("d" "default" plain "%?" :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+OPTIONS: ^:{} \\n:t num:nil
+      '(("d" "default" plain "%?" :target (file+head "${slug}.org" "#+OPTIONS: ^:{} \\n:t num:nil
 #+LANGUAGE: zh-CN
 #+title: ${title}") :unnarrowed t)))
 

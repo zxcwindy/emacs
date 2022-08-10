@@ -17,22 +17,24 @@
 	       ;; ("perl" (mode . cperl-mode))
 	       ;; ("erc" (mode . erc-mode))
 	       ;; ("planner" (or
-	       ;; 		   (name . "^\\*Calendar\\*$")
-	       ;; 		   (name . "^diary$")
-	       ;; 		   (mode . muse-mode)))
+	       ;;		   (name . "^\\*Calendar\\*$")
+	       ;;		   (name . "^diary$")
+	       ;;		   (mode . muse-mode)))
 	       ("emacs" (or
 			 (name . "^\\*scratch\\*$")
 			 (name . "^\\*Messages\\*$")
 			 (mode . emacs-lisp-mode)))
 	       ;; ("gnus" (or
-	       ;; 		(mode . message-mode)
-	       ;; 		(mode . bbdb-mode)
-	       ;; 		(mode . mail-mode)
-	       ;; 		(mode . gnus-group-mode)
-	       ;; 		(mode . gnus-summary-mode)
-	       ;; 		(mode . gnus-article-mode)
-	       ;; 		(name . "^\\.bbdb$")
-	       ;; 		(name . "^\\.newsrc-dribble")))
+	       ;;		(mode . message-mode)
+	       ;;		(mode . bbdb-mode)
+	       ;;		(mode . mail-mode)
+	       ;;		(mode . gnus-group-mode)
+	       ;;		(mode . gnus-summary-mode)
+	       ;;		(mode . gnus-article-mode)
+	       ;;		(name . "^\\.bbdb$")
+	       ;;		(name . "^\\.newsrc-dribble")))
+	       ("org" (or
+		       (mode . org-mode)))
 	       ("dired" (mode . dired-mode))))))
 
 (add-hook 'ibuffer-mode-hook
