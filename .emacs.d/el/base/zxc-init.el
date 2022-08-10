@@ -83,11 +83,11 @@
 (setq zxc-frame-font-default-size 95)
 (set-face-attribute 'default nil :height zxc-frame-font-default-size)
 ;; 设置字体大小,C-x C-0  , `C-x C-+’ and ‘C-x C--’ (‘text-scale-adjust’)
-;; (defun zxc-set-font-size (font-size)
-;;   "change font size"
-;;   (interactive "n字体50-100:")
-;;   (setf zxc-frame-font-default-size font-size)
-;;   (set-face-attribute 'default nil :height zxc-frame-font-default-size))
+(defun zxc-set-font-size (font-size)
+  "change font size"
+  (interactive "n字体50-100:")
+  (setf zxc-frame-font-default-size font-size)
+  (set-face-attribute 'default nil :height zxc-frame-font-default-size))
 
 
 ;;光标靠近鼠标指针时，让鼠标指针自动让开
@@ -191,13 +191,13 @@ that was stored with ska-point-to-register."
 ;; 最大化
 (defun my-maximized ()
   (interactive)
-  (x-send-client-message
-   nil 0 nil "_NET_WM_STATE" 32
-   '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
-  (x-send-client-message
-   nil 0 nil "_NET_WM_STATE" 32
-   '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
-  )
+  ;; (x-send-client-message
+  ;;  nil 0 nil "_NET_WM_STATE" 32
+  ;;  '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+  ;; (x-send-client-message
+  ;;  nil 0 nil "_NET_WM_STATE" 32
+  ;;  '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+  (toggle-frame-maximized))
 ;; 启动emacs时窗口最大化
 (my-maximized)
 
@@ -209,8 +209,6 @@ that was stored with ska-point-to-register."
 ;;   (backward-char)
 ;;   )
 
-;;全屏
-(fullscreen-mode 1)
 ;; (defun my-fullscreen ()
 ;;   (interactive)
 ;;   (x-send-client-message
@@ -469,5 +467,7 @@ clicked."
 		      (split-string (buffer-string) "\n"))
 	 do (,func str)))
 
+;;; Set auto-save-file-name-transforms to nil to save auto-saved files to the same directory as the original file.
+(setq auto-save-file-name-transforms nil)
 
 (provide 'zxc-init)

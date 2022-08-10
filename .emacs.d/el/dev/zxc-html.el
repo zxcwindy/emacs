@@ -1,5 +1,6 @@
 ;;; html 开发扩展
 
+(require 'lsp-mode)
 (require 'ac-emmet)
 (add-hook 'sgml-mode-hook 'ac-emmet-html-setup)
 (add-hook 'css-mode-hook 'ac-emmet-css-setup)
@@ -22,6 +23,8 @@
 	    (setq web-mode-markup-indent-offset 2)
 	    (setq web-mode-css-indent-offset 2)
 	    (setq web-mode-code-indent-offset 2)))
+
+(add-hook 'web-mode-hook #'lsp)
 
 ;;; web mode 开启vue lsp
 ;; (add-hook 'web-mode-hook
