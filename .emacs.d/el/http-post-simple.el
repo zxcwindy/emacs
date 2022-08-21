@@ -47,7 +47,7 @@
 ;;; Code:
 (require 'url)
 (require 'url-http)
-(require 'cl)
+(require 'cl-lib)
 
 (defun http-post-simple (url fields &optional charset)
   "Send FIELDS to URL as an HTTP POST request, returning the response
@@ -62,8 +62,8 @@ which defaults to 'utf-8"
    `(("Content-Type"
       .
       ,(http-post-content-type
-        "application/x-www-form-urlencoded"
-        charset)))))
+	"application/x-www-form-urlencoded"
+	charset)))))
 
 
 (defun http-post-simple-multipart (url fields files &optional charset)
@@ -135,7 +135,7 @@ CHARSET defaults to 'utf-8"
   (let ((url-request-method        "POST")
 	(url-request-data          data)
 	(url-request-extra-headers extra-headers)
-        (url-mime-charset-string   (http-post-charset-name charset)))
+	(url-mime-charset-string   (http-post-charset-name charset)))
     (let (header
 	  data
 	  status)
@@ -200,10 +200,10 @@ server sends code 100 in response to a POST request."
   (defadvice url-http-parse-response (after url-http-parse-response-100 activate)
     "Turns any HTTP 100 response code to 200, to avoid getting an error."
     (declare (special url-http-response-status
-                      url-request-method))
+		      url-request-method))
     (when (and (= 100               url-http-response-status)
-               (string-equal "POST" url-request-method)
-               (string-equal "1.1"  url-http-version))
+	       (string-equal "POST" url-request-method)
+	       (string-equal "1.1"  url-http-version))
       (setf url-http-response-status 200))))
 
 

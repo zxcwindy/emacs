@@ -18,7 +18,7 @@
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
 
-(require 'cl)
+(require 'cl-lib)
 (require 'zxc-util)
 (require 'zxc-http)
 (require 'zxc-comet)

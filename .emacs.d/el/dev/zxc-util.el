@@ -17,7 +17,7 @@
 ;; License along with this program; if not, write to the Free
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
-(require 'cl)
+(require 'cl-lib)
 (require 'string-inflection)
 
 (defstruct format-type split-char type-name)
@@ -79,7 +79,7 @@ return the positions list "
 	    (setf strs (split-string-upper str))
 	  (setf strs (split-string str ( format-type-split-char source))))
 	(cond ((equal (format-type-type-name target) (format-type-type-name java-format))
-	       (concatenate 'string (downcase (car strs))
+	       (cl-concatenate 'string (downcase (car strs))
 			    (mapconcat #'capitalize
 				       (cdr strs) "")))
 	      (t (mapconcat #'downcase
@@ -123,7 +123,7 @@ return the positions list "
 	   (head (cdr (split-string head-str split-char)))
 	   (insert-str (s-concat "insert into PressCtrlH ("
 				 (mapconcat (lambda (x)
-					      (s-trim x)) (subseq head 0 (- (length head) 1)) ",")
+					      (s-trim x)) (cl-subseq head 0 (- (length head) 1)) ",")
 				 ") values")))
       (line-move 2)
       (back-to-indentation)
@@ -133,7 +133,7 @@ return the positions list "
 	(dolist (str data-str-list)
 	  (insert (s-concat "
 " insert-str "(" (mapconcat #'zxc-util-deal-sql-data
-			    (subseq (cdr (split-string str split-char)) 0 (- (length head) 1)) ",") ");")))))))
+			    (cl-subseq (cdr (split-string str split-char)) 0 (- (length head) 1)) ",") ");")))))))
 
 (defun zxc-util-deal-sql-data (x)
   "处理拼接SQL数据字段的方式"

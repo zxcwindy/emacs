@@ -3,7 +3,6 @@
 (require 'jquery-doc)
 (require 'js-doc)
 (require 'js)
-(require 'lsp-mode)
 ;; (require 'flymake-jslint)
 
 
@@ -30,8 +29,6 @@
 	    (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
 	    (define-key js2-mode-map "@" 'js-doc-insert-tag)
 	    (setq js2-strict-missing-semi-warning nil)))
-
-(add-hook 'js2-mode-hook #'lsp)
 
 ;; (add-hook 'js-mode-hook 'flymake-jslint-load)
 ;; (add-hook 'js2-mode-hook 'ac-js2-mode)

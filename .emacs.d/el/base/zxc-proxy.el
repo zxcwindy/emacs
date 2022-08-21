@@ -34,4 +34,8 @@
       (proxy-socks-disable)
     (proxy-socks-enable)))
 
+;; (setq url-proxy-services
+;;       '(("http"     . "49.234.40.183:58080")
+;;	("https"     . "49.234.40.183:58080")))
+
 (provide 'zxc-proxy)

@@ -9,9 +9,10 @@
       org-directory "~/zxc/org-roam"
       org-roam-directory (file-truename "~/zxc/org-roam")
       org-roam-ui-open-on-start nil
-      org-roam-ui-follow-mode nil
       org-hugo-base-dir "~/zxc/hugo"
       org-startup-folded t)
+
+;; (org-roam-ui-follow-mode 0)
 
 ;;; 带日期
 ;; (setq org-roam-capture-templates
@@ -147,6 +148,7 @@ peace!"
 (global-set-key (kbd "C-; c") 'org-roam-capture)
 (define-key helm-org-rifle-map (kbd "<C-return>") 'zxc-helm-org-rifle-select-entry-in-buffer-action)
 (add-hook 'dired-mode-hook 'org-download-enable)
+
 (org-roam-db-autosync-mode)
 
 (provide 'zxc-org)

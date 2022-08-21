@@ -42,7 +42,7 @@
   (interactive)
   (dired-sort-other (zxc-dired-get-current-str zxc-dired-sort-queue) ))
 
-(setf dired-listing-switches (purecopy "-alh"))
+(setf dired-listing-switches (purecopy "-alht"))
 (add-hook 'dired-mode-hook #'(lambda ()
 			       (define-key dired-mode-map (kbd "C-o") nil)
 			       (define-key dired-mode-map (kbd "s") 'zxc-dired-sort)))
