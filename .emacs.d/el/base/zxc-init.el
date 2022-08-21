@@ -1,3 +1,4 @@
+(require 'zxc-company-pom)
 ;;-----------------------
 ;;开启大小写转换和y/n回答
 (put 'downcase-region 'disabled nil)
@@ -67,7 +68,11 @@
 
 ;;-------------------
 ;;修改字体
+;;; slackware字体
 ;; (set-frame-font "-b&h-Luxi Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
+;;; ubuntu默认字体
+;; (set-frame-font "-DAMA-Ubuntu Mono-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+;; (set-frame-font "-HNYI-阿里巴巴普惠体-normal-normal-normal-*-13-*-*-*-*-0-iso10646-1")
 
 ;;; slackware配置
 ;; (setq zxc-frame-font-default-size "12")
@@ -320,6 +325,10 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (dolist (hook '(css-mode-hook less-mode))
   (add-hook hook 'rainbow-mode))
 
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+(add-hook 'nxml-mode-hook 'company-mode)
+
+
 (setq frame-title-format "emacs@%f")
 
 ;;; 成都经纬度：东经104.06，北纬30.67
@@ -467,7 +476,25 @@ clicked."
 		      (split-string (buffer-string) "\n"))
 	 do (,func str)))
 
+(defun zxc-navigate-buffer ()
+  "访问最近的buffer"
+  (interactive)
+  (if (eq last-command 'zxc-navigate-buffer)
+      (progn
+	(cl-incf zxc-navigate-index)
+	(switch-to-buffer (nth zxc-navigate-index zxc-navigate-bufferlist)))
+    (progn
+      (setq zxc-navigate-bufferlist
+	    (seq-filter (lambda (elt)
+			  (not (string-match "\\(Minibuf\\|Messages\\|Backtrace\\|Help\\)" (buffer-name elt))))
+			(buffer-list))
+	    zxc-navigate-index 1)
+      (switch-to-buffer (nth zxc-navigate-index zxc-navigate-bufferlist)))))
+
 ;;; Set auto-save-file-name-transforms to nil to save auto-saved files to the same directory as the original file.
 (setq auto-save-file-name-transforms nil)
+
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 (provide 'zxc-init)

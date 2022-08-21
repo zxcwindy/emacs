@@ -236,21 +236,6 @@
 (global-set-key (kbd "C-'") #'(lambda ()
 				(interactive)
 				(switch-to-buffer (other-buffer))))
-
-(defun zxc-navigate-buffer ()
-  "访问最近的buffer"
-  (interactive)
-  (if (eq last-command 'zxc-navigate-buffer)
-      (progn
-	(cl-incf zxc-navigate-index)
-	(switch-to-buffer (nth zxc-navigate-index zxc-navigate-bufferlist)))
-    (progn
-      (setq zxc-navigate-bufferlist
-	    (seq-filter (lambda (elt)
-			  (not (string-match "\\(Minibuf\\|Messages\\|Backtrace\\|Help\\)" (buffer-name elt))))
-			(buffer-list))
-	    zxc-navigate-index 1)
-      (switch-to-buffer (nth zxc-navigate-index zxc-navigate-bufferlist)))))
 (global-set-key (kbd "M-<backspace>") 'zxc-navigate-buffer)
 
 (require 'zxc-db-ac)
