@@ -31,7 +31,7 @@
  '(org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
-   '(typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download org-roam-ui bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode scratch sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
+   '(orderless helm-lsp exec-path-from-shell typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    '((encoding . utf-8)
@@ -67,7 +67,8 @@
      (340 . "#dc322f")
      (360 . "#cb4b16")))
  '(vc-annotate-very-old-color nil)
- '(w3m-home-page "http://10.95.239.158:8080/log.html"))
+ '(w3m-home-page "http://10.95.239.158:8080/log.html")
+ '(warning-suppress-log-types '((lsp-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -127,7 +128,7 @@
 (global-set-key (kbd "C-=") 'er/expand-region)
 
 (require 'auto-complete-config)
-(ac-config-default)
+;; (ac-config-default)
 
 (require 'el-js2)
 
@@ -212,9 +213,6 @@
 				       (kill-new (dired-current-directory))
 				     (kill-new (buffer-file-name)))))
 
-(global-set-key (kbd "C-'") #'(lambda ()
-				(interactive)
-				(switch-to-buffer (other-buffer))))
 (global-set-key (kbd "C-c j") 'join-line)
 (global-set-key [f5] #'(lambda ()
 			 (interactive)
@@ -234,6 +232,27 @@
 (add-hook 'shell-mode-hook #'(lambda ()
 			       (define-key shell-mode-map (kbd "C-c SPC") nil)
 			       (disable-paredit-mode)))
+
+(global-set-key (kbd "C-'") #'(lambda ()
+				(interactive)
+				(switch-to-buffer (other-buffer))))
+
+(defun zxc-navigate-buffer ()
+  "访问最近的buffer"
+  (interactive)
+  (if (eq last-command 'zxc-navigate-buffer)
+      (progn
+	(cl-incf zxc-navigate-index)
+	(switch-to-buffer (nth zxc-navigate-index zxc-navigate-bufferlist)))
+    (progn
+      (setq zxc-navigate-bufferlist
+	    (seq-filter (lambda (elt)
+			  (not (string-match "\\(Minibuf\\|Messages\\|Backtrace\\|Help\\)" (buffer-name elt))))
+			(buffer-list))
+	    zxc-navigate-index 1)
+      (switch-to-buffer (nth zxc-navigate-index zxc-navigate-bufferlist)))))
+(global-set-key (kbd "M-<backspace>") 'zxc-navigate-buffer)
+
 (require 'zxc-db-ac)
 
 ;; (require 'magit)
@@ -369,9 +388,10 @@
 (require 'zxc-proxy)
 (require 'zxc-helm)
 (require 'zxc-org)
+(require 'zxc-lsp)
 (global-set-key (kbd "C-; t") 'zxc-ft)
 
-;; (make-thread #'(lambda () (zxc-shell-command "jetty")))
+(make-thread #'(lambda () (zxc-shell-command "jetty")))
 (make-thread #'(lambda () (zxc-shell-command "gost")))
 ;; (add-hook 'kill-emacs-hook #'(lambda () (zxc-shell-command "close-gost-server")))
 
@@ -385,7 +405,7 @@
 
 (require 'zxc-theme)
 (add-hook 'after-init-hook '(lambda ()
-			      (session-initialize)
-			      (disable-theme 'sanityinc-solarized-light)
-			      (disable-theme 'zxc-misterioso)
+			      ;; (session-initialize)
+			      ;; (disable-theme 'sanityinc-solarized-light)
+			      ;; (disable-theme 'zxc-misterioso)
 			      (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)))
