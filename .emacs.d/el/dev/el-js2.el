@@ -30,6 +30,10 @@
 	    (define-key js2-mode-map "@" 'js-doc-insert-tag)
 	    (setq js2-strict-missing-semi-warning nil)))
 
+;; (add-hook 'json-mode-hook 'flymake-json-load)
+
+(add-hook 'json-mode-hook #'flycheck-mode)
+
 ;; (add-hook 'js-mode-hook 'flymake-jslint-load)
 ;; (add-hook 'js2-mode-hook 'ac-js2-mode)
 ;; (add-hook 'js2-mode-hook 'js2-refactor-mode)

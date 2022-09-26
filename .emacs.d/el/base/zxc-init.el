@@ -182,6 +182,27 @@ that was stored with ska-point-to-register."
   (backward-word)
   (kill-word 1))
 
+(defun zxc-copy-f-other-t-point(arg)
+  "复制指定行或者其他窗口指定行的数据到当前点"
+  (interactive "s输入行数(32|a32,46):")
+  (let* ((is-other-buffer (s-starts-with-p "a" arg))
+	 (beg-line-num (string-to-number (string-replace "a" "" (car (split-string arg ",")))))
+	 (end-line-str (cadr (split-string arg ","))))
+    (beginning-of-line)
+    (save-excursion
+      (when is-other-buffer
+	(switch-window))
+      (goto-line beg-line-num)
+      (let ((beg (line-beginning-position)))
+	(when end-line-str
+	  (goto-line (string-to-number end-line-str)))
+	(let ((end (line-end-position)))
+	  (kill-ring-save beg end))))
+    (yank)
+    (when is-other-buffer
+      (switch-window))))
+
+
 (defun myclose()
   "自定义关闭按键"
   (interactive)
@@ -256,7 +277,7 @@ that was stored with ska-point-to-register."
 			     (modify-syntax-entry ?_ "w" sql-mode-syntax-table)
 			     (modify-syntax-entry ?. "w" sql-mode-syntax-table)
 			     (sql-highlight-mysql-keywords)
-			     (zxc-db-ac-set-db-alias "kun")))
+			     (zxc-db-ac-set-db-alias "job")))
 
 (add-hook 'org-mode-hook #'(lambda ()
 			     (modify-syntax-entry ?. "w" org-mode-syntax-table)
