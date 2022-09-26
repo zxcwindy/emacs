@@ -3,6 +3,7 @@
 ;;; (setq completion-styles '(orderless))
 (require 'company)
 (require 'cl-lib)
+(require 'nxml-mode)
 
 (defun zxc-pom-parse (str)
   "输出./szjw/portal-api/1.5/portal-api-1.5.pom
@@ -36,8 +37,16 @@
     (insert-file-contents filePath)
     (split-string (buffer-string) "\n" t)))
 
-;; (with-temp-file "~/.emacs.d/el/dev/zxc-company-pom-file.el"
-;;   (insert "(setq zxc-company-pom-list " (format "'%S" (read-lines "/home/david/tmp/pom-list-sort") ) ")"))
+(defun zxc-company-pom-update ()
+  "刷新pom列表"
+  (interactive)
+  (shell-command "cd ~/.m2/repository/ ; find ./ -name \"*pom\" | sort -nr > /home/david/tmp/pom-list-sort" )
+  (with-temp-file "~/.emacs.d/el/dev/zxc-company-pom-file.el"
+    (insert "(setq zxc-company-pom-list " (format "'%S" (read-lines "/home/david/tmp/pom-list-sort") ) ")"))
+  (byte-compile-file "~/.emacs.d/el/dev/zxc-company-pom-file.el")
+  (load-file "~/.emacs.d/el/dev/zxc-company-pom-file.elc")
+  (setq zxc-company-pom-candidates (mapcar 'zxc-pom-parse zxc-company-pom-list)))
+
 
 (load-file "~/.emacs.d/el/dev/zxc-company-pom-file.elc")
 
