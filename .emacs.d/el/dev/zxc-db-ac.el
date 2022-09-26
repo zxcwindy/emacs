@@ -22,6 +22,7 @@
 ;;; Commentary:
 
 (require 'deferred)
+(require 'company)
 
 (defvar zxc-db-ac-tablename-url "%s/service/rest/dbMeta/%s/%s" "host,alias,tablename service url")
 
@@ -38,6 +39,8 @@
     ;; (cache)
     )
   "table name candidates")
+
+(defvar zxc-db-ac-alias-db-map (make-hash-table :test 'equal))
 
 
 (defun zxc-db-ac-set-db-alias (alias)
@@ -82,6 +85,14 @@ return json format [{tableSchema:\"schema\",tableName:\"tablename\"},...]
   (zxc-db-ac-get-tables)
   zxc-db-ac-table-name-candidates)
 
+(defun zxc-db-tablename-candidates (prefix)
+  "company backbend"
+  (mapcar #'(lambda (item)
+	      (string-replace
+	       (concat (gethash zxc-db-ac-db-alias zxc-db-ac-alias-db-map zxc-db-ac-db-alias) ".") "" item))
+	  (http-get (format zxc-db-ac-tablename-url zxc-db-host zxc-db-ac-db-alias
+			    (concat (gethash zxc-db-ac-db-alias zxc-db-ac-alias-db-map zxc-db-ac-db-alias) "." prefix)))))
+
 (defun zxc-db-ac-toggle ()
   "toggle ac db sources"
   (interactive)
@@ -91,5 +102,25 @@ return json format [{tableSchema:\"schema\",tableName:\"tablename\"},...]
     (setq ac-sources '(zxc-db-ac-source))
     (auto-complete-mode t)
     (message "启用db-ac")))
+
+(defun zxc-company-sql-backend (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+  (cl-case command
+    (interactive (company-begin-backend 'zxc-company-sql-backend))
+    (prefix (and (eq major-mode 'sql-mode)
+		 (company-grab-symbol)))
+    (candidates (zxc-db-tablename-candidates arg))
+    (sorted t)
+    (duplicates t)))
+
+(add-to-list 'company-backends 'zxc-company-sql-backend)
+
+(add-hook 'sql-mode-hook #'(lambda ()
+			     (company-mode)
+			     (set (make-local-variable 'company-backends)
+				  '((company-capf
+				     zxc-company-sql-backend
+				     company-yasnippet)))
+))
 
 (provide 'zxc-db-ac)

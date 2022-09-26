@@ -58,7 +58,7 @@
 (define-key zxc-mode-map (kbd  "C-; ds") #'zxc-db-send-region-query)
 (define-key zxc-mode-map (kbd  "C-; dt") #'zxc-db-get-table-sql)
 (define-key zxc-mode-map (kbd  "C-; aa") #'zxc-db-ac-set-db-alias)
-(define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)
+;; (define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)
 (define-key zxc-mode-map (kbd  "C-; eli") #'zxc-es--list-indexes)
 (define-key zxc-mode-map (kbd  "C-; eln") #'zxc-es--list-nodes)
 (define-key zxc-mode-map (kbd  "C-; ed") #'zxc-db-send-region-decrypt)
