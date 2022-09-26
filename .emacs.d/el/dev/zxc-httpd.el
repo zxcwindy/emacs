@@ -19,6 +19,7 @@
 ;; MA 02111-1307 USA
 
 (require 'impatient-mode)
+(require 'cl-lib)
 
 (defun httpd--filter (proc chunk)
   "Runs each time client makes a request.
@@ -47,9 +48,9 @@
 	      (setf request (nreverse (cons (list "Content" content)
 					    (nreverse request))))
 	      (httpd-log `(request (date ,(httpd-date-string))
-				   (address ,(car (process-contact proc)))
-				   (get ,uri-path)
-				   ,(cons 'headers request)))
+			    (address ,(car (process-contact proc)))
+			    (get ,uri-path)
+			    ,(cons 'headers request)))
 	      (if (null servlet)
 		  (httpd--error-safe proc 404)
 		(condition-case error-case
@@ -65,8 +66,8 @@
   (interactive)
   (unless (process-status "httpd")
     (let ((httpd-port 9991))
-      ;; (setq httpd-host (format-network-address (car (network-interface-info "wlan0")) t))
-      (setq httpd-host "0.0.0.0")
+      (setq httpd-host (format-network-address (car (network-interface-info "wlp0s20f3")) t))
+      ;; (setq httpd-host "0.0.0.0")
       (httpd-start)
       (httpd-def-file-servlet bootstrap "/home/david/git/bootstrap")
       (httpd-def-file-servlet jquery "/home/david/git/jquery")
@@ -105,7 +106,7 @@
 		    ((eq major-mode 'dired-mode) (dired-current-directory))
 		    (t "/home/david/tmp"))))
     (eval `(httpd-def-file-servlet my ,root))
-    (message (concatenate 'string "http://" httpd-host  ":9991/my relocate to " root ))))
+    (message (cl-concatenate 'string "http://" httpd-host  ":9991/my relocate to " root ))))
 
 (defun zxc-httpd-imp ()
   "为当前buffer提供2个视图"
@@ -135,12 +136,13 @@
       (with-httpd-buffer proc "application/json;charset=utf-8"
 	(insert-buffer-substring buffer))))))
 
+(defun zxc-httpd-server ()
+  (interactive)
+  (zxc-httpd-start)
+  (zxc-httpd-set-root)
+  (browse-url-generic (cl-concatenate 'string "http:/" httpd-host ":9991/my")))
 
-(global-set-key [f10] #'zxc-httpd-imp)
-(global-set-key [M-f10] #'(lambda ()
-			    (interactive)
-			    (zxc-httpd-start)
-			    (zxc-httpd-set-root)
-			    (browse-url-generic (concatenate 'string "http:/" httpd-host ":9991/my"))))
+;; (global-set-key [f10] #'zxc-httpd-imp)
+(global-set-key [f10] 'zxc-httpd-server)
 
 (provide 'zxc-httpd)

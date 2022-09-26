@@ -69,6 +69,7 @@ return the positions list "
 (defun convert-format ()
   "convert code format
 用string-inflection替换"
+  (interactive)
   (let* ((str (filter-buffer-substring (point) (mark) t))
 	 (source (get-format-type str))
 	 (target (get-target-format-type)))
