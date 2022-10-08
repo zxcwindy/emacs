@@ -366,12 +366,12 @@
     (setq  zxc-ft-tags-search (zxc-ft-query-data (list (cons 'sql (format "select a.id,a.short_name,a.tag_name from tags_ a ,(select tag_id from files_ b ,tag_file c where file_name = '%s' and file_path = '%s' and c.file_id = b.id) d where a.id = d.tag_id" (f-filename (dired-get-file-for-visit)) (substring (dired-current-directory) 0 -1))))))
     (zxc-ft-widget-update)
     (display-buffer zxc-ft-buffer)
-    (switch-window)
+    (other-window 1)
     (goto-char (point-min))))
 
 (defun zxc-ft-dired-make-tags ()
   "更新标签"
-  (switch-window)
+  (other-window 1)
   (let* ((file-path (substring (dired-current-directory) 0 -1))
 	 (file-name (f-filename (dired-get-file-for-visit)))
 	 (file-info (zxc-ft-query-file-info file-path file-name))

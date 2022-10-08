@@ -31,7 +31,7 @@
  '(org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
-   '(orderless helm-lsp exec-path-from-shell typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer switch-window sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
+   '(ace-window company-tabnine orderless helm-lsp exec-path-from-shell typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    '((encoding . utf-8)
@@ -184,7 +184,7 @@
 (global-set-key (kbd "C-; w") 'zxc-copy-word-at-point)
 (global-set-key (kbd "M-w") 'zxc-copy-line-or-region)
 (global-set-key (kbd "C-; y") 'zxc-delete-and-yank)
-(global-set-key (kbd "C-; x") 'zxc-delete-current-word)
+(global-set-key (kbd "C-; x") 'zxc-copy-f-other-t-point)
 (global-set-key (kbd "<up>")    'move-text-up)
 (global-set-key (kbd "<down>")  'move-text-down)
 ;; (global-set-key (kbd "<left>")  'tabbar-backward-tab)
@@ -365,6 +365,7 @@
 
 (setf es-always-pretty-print t)
 
+(require 'zxc-eaf)
 (require 'zxc-ibuffer)
 (require 'zxc-template)
 (require 'zxc-sql)
@@ -389,8 +390,11 @@
 (require 'zxc-quick-marco)
 
 (require 'zxc-theme)
-(add-hook 'after-init-hook '(lambda ()
-			      ;; (session-initialize)
-			      ;; (disable-theme 'sanityinc-solarized-light)
-			      ;; (disable-theme 'zxc-misterioso)
-			      (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)))
+
+;;; The emacs-startup-hook runs later than the after-init-hook
+;; (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)
+(add-hook 'emacs-startup-hook '(lambda ()
+				 ;; (session-initialize)
+				 ;; (disable-theme 'sanityinc-solarized-light)
+				 ;; (disable-theme 'zxc-misterioso)
+				 (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)))

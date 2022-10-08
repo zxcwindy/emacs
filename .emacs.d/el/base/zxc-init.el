@@ -191,7 +191,7 @@ that was stored with ska-point-to-register."
     (beginning-of-line)
     (save-excursion
       (when is-other-buffer
-	(switch-window))
+	(other-window 1))
       (goto-line beg-line-num)
       (let ((beg (line-beginning-position)))
 	(when end-line-str
@@ -200,7 +200,7 @@ that was stored with ska-point-to-register."
 	  (kill-ring-save beg end))))
     (yank)
     (when is-other-buffer
-      (switch-window))))
+      (other-window 1))))
 
 
 (defun myclose()
@@ -328,7 +328,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
     (comment-dwim arg)))
 
 ;;切换窗口
-(global-set-key (kbd "C-x o") 'switch-window)
+(global-set-key (kbd "C-x o") 'ace-window)
 (setq tab-width 4)
 (setq tab-stop-list (number-sequence 4 200 4))
 
