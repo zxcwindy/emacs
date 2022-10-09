@@ -61,6 +61,7 @@ rsync {{path/to/file}} {{remote_host_name}}:{{remote_host_location}}"
 	    (with-temp-file (expand-file-name (s-replace ".md" ".el" file) doc-result-dirs)
 	      (insert "(push " (format "'%S" result) " " template-name ")"))))))))
 
+;;; 重新编译时打开下面注释
 ;; (zxc-template-command-tldr-make "/home/david/git/tldr/pages/common/" "common")
 ;; (zxc-template-command-tldr-make "/home/david/git/tldr/pages/linux/" "linux")
 ;; (zxc-template-command-tldr-make "/home/david/git/tldr/pages/bigdata/" "bigdata")

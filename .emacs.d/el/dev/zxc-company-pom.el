@@ -37,6 +37,7 @@
     (insert-file-contents filePath)
     (split-string (buffer-string) "\n" t)))
 
+;;;###autoload
 (defun zxc-company-pom-update ()
   "刷新pom列表"
   (interactive)

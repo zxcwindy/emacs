@@ -1,6 +1,7 @@
 (require 'lsp-mode)
 (require 'web-mode)
 (require 'lsp-java)
+(require 'company-tabnine)
 ;; (require 'lsp-java-boot)
 
 (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
@@ -24,10 +25,73 @@
 					   (lsp)))
 (add-hook 'js2-mode-hook #'lsp)
 
+(add-hook 'python-mode-hook #'lsp)
+
+;;; lsp-workspace-restart
+;; (setq lsp-java-vmargs
+;;       (append lsp-java-vmargs (list "-javaagent:/opt/sts-4.15.1.RELEASE/lombok.jar")))
+
+(setq lsp-java-vmargs (list "-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx2G" "-Xms512m" "-javaagent:/opt/sts-4.15.1.RELEASE/lombok.jar"))
+
+(cl-defun zxc-lsp-find-java-descriptor ()
+  "查找当前方法的签名"
+  (interactive)
+  (let ((loc (lsp-request "textDocument/definition"
+			  (append (lsp--text-document-position-params) nil))))
+    (if (seq-empty-p loc)
+	(lsp--error "Not found for: %s" (or (thing-at-point 'symbol t) ""))
+      (let* ((tmp-data (lsp--locations-to-xref-items loc))
+	     (methon-name (replace-regexp-in-string " .* " "\\\\(.*\\\\)" (string-trim (substring-no-properties (xref-item-summary (car tmp-data)) 1 (string-match "(" (xref-item-summary (car tmp-data)))))) )
+	     (file-path (xref-location-group (xref-item-location (car tmp-data))))
+	     (class-name (replace-regexp-in-string "\\.home.*.cache\\."  ""  (string-replace "/" "." (string-replace ".java" "" (replace-regexp-in-string ".*java/" "" file-path)))))
+	     (class-path (if (s-starts-with-p "com.kun" class-name)
+			     (replace-regexp-in-string "src.*" "target/classes" file-path)
+			   "."))
+	     (javap-cmd (concat "javap -s -p -cp " class-path " " class-name "| sed -n \"/" methon-name "/,+1 p\"")))
+	(with-current-buffer (get-buffer-create "*jni*")
+	  (erase-buffer)
+	  (message javap-cmd)
+	  (call-process "/bin/bash" nil "*jni*" nil "-c" javap-cmd)
+	  (switch-to-buffer "*jni*")
+	  (sleep-for 0.8)
+	  (search-forward "descriptor: ")
+	  (copy-region-as-kill (point) (line-end-position)))))))
 
 
 
+
+;; (add-to-list 'company-backends '(company-tabnine :with company-capf))
+
+;; (add-hook 'java-mode-hook #'(lambda ()
+;;			      (lsp)
+;;			      (set (make-local-variable 'company-backends)
+;;				   '((company-capf
+;;				      company-tabnine
+;;				      company-files)))))
 (add-hook 'java-mode-hook #'lsp)
+
+
+(add-hook 'nxml-mode-hook #'(lambda ()
+			      (lsp)
+			      (set (make-local-variable 'company-backends)
+				   '((company-capf
+				      zxc-company-pom-backend)))))
+
+;; Trigger completion immediately.
+(setq company-idle-delay 0)
+
+;; Number the candidates (use M-1, M-2 etc to select completions).
+(setq company-show-quick-access t)
+
+;;; 样例代码
+;; (set (make-local-variable 'company-backends)
+;;        '((company-capf
+;;           :with
+;;           company-tabnine
+;;           company-yasnippet
+;;           company-files
+;;           company-dabbrev-code)))
+
 ;;; ~/.emacs.d/workspace
 ;; (setq lsp-java-workspace-dir "/home/david/workspace/4.0/")
 
@@ -49,6 +113,8 @@
 
 ;; current VSCode defaults
 ;; (setq lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx2G" "-Xms100m"))
+
+(define-key lsp-mode-map (kbd "C-c C-l p") 'zxc-lsp-find-java-descriptor)
 
 
 (provide 'zxc-lsp)

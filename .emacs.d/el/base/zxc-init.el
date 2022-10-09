@@ -452,7 +452,7 @@ even beep.)"
 
 (add-hook 'session-before-save-hook #'zxc-session-file-filter-before-save-hook)
 
-(setq desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\([.]*\\(sh\\|jar\\|html\\|gz\\|el\\|xml\\|json\\|java\\|js\\|war\\|csv\\|ttf\\|log\\|vue\\|css\\|sql\\|conf\\|properties\\)$\\)\\|\\(^~/\\)")
+(setq desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\([.]*\\(sh\\|jar\\|html\\|gz\\|el\\|xml\\|json\\|java\\|js\\|war\\|csv\\|ttf\\|log\\|vue\\|css\\|sql\\|conf\\|png\\|pom\\|class\\|ini\\|md\\|gitignore\\|so\\|zip\\|properties\\)$\\)\\|\\(^~/\\)")
 
 (add-hook 'yas-minor-mode-hook (lambda ()
 				 ;;; 当默认tab没有生效时，采用下面的按键绑定
