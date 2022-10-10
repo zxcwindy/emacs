@@ -57,6 +57,8 @@
 (define-key zxc-mode-map (kbd  "C-; de") #'zxc-db-send-region-exec)
 (define-key zxc-mode-map (kbd  "C-; dss") #'zxc-db-send-region-query)
 (define-key zxc-mode-map (kbd  "C-; dsi") #'zxc-db-send-region-format-insert-sql)
+(define-key zxc-mode-map (kbd  "C-; dsd") #'zxc-db-send-region-format-delete-sql)
+(define-key zxc-mode-map (kbd  "C-; dsu") #'zxc-db-send-region-format-update-sql)
 (define-key zxc-mode-map (kbd  "C-; dt") #'zxc-db-get-table-sql)
 (define-key zxc-mode-map (kbd  "C-; aa") #'zxc-db-ac-set-db-alias)
 ;; (define-key zxc-mode-map (kbd  "C-; ac") #'zxc-db-ac-toggle)

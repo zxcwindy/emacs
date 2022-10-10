@@ -81,7 +81,7 @@ and response headers, object is an text."
   "创建表头"
   (mapcar #'(lambda (meta-info)
 	      (make-ctbl:cmodel :title (s-replace-regexp ".*\\." "" meta-info) :align 'center :sorter nil))
-	  (getf zxc-db-result :metadata)))
+	  (cl-getf zxc-db-result :metadata)))
 
 (defun zxc-db-create-table-buffer ()
   "创建结果表格"
@@ -91,7 +91,7 @@ and response headers, object is an text."
 	  :model
 	  (make-ctbl:model
 	   :column-model (zxc-db-create-column)
-	   :data (getf zxc-db-result :data))))
+	   :data (cl-getf zxc-db-result :data))))
 	(pre-10-tbl (get-buffer (format "*Table: %d*" (- ctbl:uid 10)))))
     (delete-other-windows)		;fix windows bug
     (display-buffer (ctbl:cp-get-buffer cp))
@@ -100,21 +100,62 @@ and response headers, object is an text."
 
 (defun zxc-db-create-sql-insert ()
   "根据结果创建insert sql"
-  (let* ((tmp-meta (getf zxc-db-result :metadata))
-	 (tmp-data (getf zxc-db-result :data))
+  (let* ((tmp-meta (cl-getf zxc-db-result :metadata))
+	 (tmp-data (cl-getf zxc-db-result :data))
 	 (tmp-tablename (s-replace-regexp "\\..*" "" (nth 0 tmp-meta))))
     (when (> (length tmp-data) 0)
       (insert "\n"))
-    (loop for row-data in tmp-data
-	  do  (let ((value-str ""))
-		(loop for item in row-data
-		      do (if (eq 'string (type-of item))
-			     (setf value-str (s-concat value-str "'" item "',"))
-			   (setf value-str (s-concat value-str (prin1-to-string item) ","))))
-		(insert "\ninsert into " tmp-tablename " (" (s-join "," (mapcar #'(lambda (meta)
-										    (s-replace-regexp ".*\\." "" meta))
-										tmp-meta))
-			") values (" (substring value-str 0 (- (length value-str) 1)) ");" )))))
+    (cl-loop for row-data in tmp-data
+	     do  (let ((value-str ""))
+		   (cl-loop for item in row-data
+			    do (if (eq 'string (type-of item))
+				   (setf value-str (s-concat value-str "'" item "',"))
+				 (setf value-str (s-concat value-str (prin1-to-string item) ","))))
+		   (insert "\ninsert into " tmp-tablename " (" (s-join "," (mapcar #'(lambda (meta)
+										       (s-replace-regexp ".*\\." "" meta))
+										   tmp-meta))
+			   ") values (" (substring value-str 0 (- (length value-str) 1)) ");" )))))
+
+(defun zxc-db-create-sql-delete ()
+  "根据结果创建delete sql"
+  (let* ((tmp-meta (mapcar #'(lambda (meta)
+			       (s-replace-regexp ".*\\." "" meta))
+			   (cl-getf zxc-db-result :metadata)))
+	 (tmp-data (cl-getf zxc-db-result :data))
+	 (tmp-tablename (s-replace-regexp "\\..*" "" (nth 0 (cl-getf zxc-db-result :metadata)))))
+    (when (> (length tmp-data) 0)
+      (insert "\n"))
+    (cl-loop for row-data in tmp-data
+	     do  (let ((value-str ""))
+		   (cl-loop for item in row-data
+			    for index from 0 below (length row-data)
+			    do (if (eq 'string (type-of item))
+				   (setf value-str (s-concat value-str (nth index tmp-meta) "='" item "' and "))
+				 (setf value-str (s-concat value-str (nth index tmp-meta) "=" (prin1-to-string item) " and "))))
+		   (insert "\ndelete from " tmp-tablename " where "(substring value-str 0 (- (length value-str) 5)) ";")))))
+
+(defun zxc-db-create-sql-update ()
+  "根据结果创建update sql"
+  (let* ((tmp-meta (mapcar #'(lambda (meta)
+			       (s-replace-regexp ".*\\." "" meta))
+			   (cl-getf zxc-db-result :metadata)))
+	 (tmp-data (cl-getf zxc-db-result :data))
+	 (tmp-tablename (s-replace-regexp "\\..*" "" (nth 0 (cl-getf zxc-db-result :metadata)))))
+    (when (> (length tmp-data) 0)
+      (insert "\n"))
+    (cl-loop for row-data in tmp-data
+	     do  (let ((value-str "")
+		       (where-str ""))
+		   (cl-loop for item in row-data
+			    for index from 0 below (length row-data)
+			    do (let ((item-str (if (eq 'string (type-of item))
+						   (s-concat "'" item "'")
+						 (prin1-to-string item))))
+				 (if (= index 0)
+				     (setf where-str (s-concat (nth 0 tmp-meta) "=" item-str))
+				   (setf value-str (s-concat value-str (nth index tmp-meta) "=" item-str ",")))))
+		   (insert "\nupdate " tmp-tablename " set " (substring value-str 0 (- (length value-str) 1)) " where " where-str ";")))))
+
 
 
 
@@ -133,7 +174,7 @@ and response headers, object is an text."
 
 (defun zxc-db-query-callback ()
   "查询结果回调函数"
-  (let ((error-msg (getf zxc-db-result :errorMsg)))
+  (let ((error-msg (cl-getf zxc-db-result :errorMsg)))
     (if (null error-msg)
 	(save-excursion
 	  (zxc-db-create-table-buffer))
@@ -147,13 +188,13 @@ and response headers, object is an text."
   "执行结果回调函数"
   ;; (with-current-buffer (get-buffer-create "*zxc-db-log*")
   ;;   (goto-char (point-max))
-  ;;   ;; (insert (concat "\n" (getf zxc-db-result :msg)))
+  ;;   ;; (insert (concat "\n" (cl-getf zxc-db-result :msg)))
   ;;   (insert (concat "\n" (int-to-string zxc-db-result)))
   ;;   (goto-char (point-max)))
   ;; (display-buffer "*zxc-db-log*")
-  (let ((error-msg (getf zxc-db-result :errorMsg)))
+  (let ((error-msg (cl-getf zxc-db-result :errorMsg)))
     (if (null error-msg)
-	(message "更新记录%s" (getf zxc-db-result :result))
+	(message "更新记录%s" (cl-getf zxc-db-result :result))
       (with-current-buffer (get-buffer-create "*zxc-db-log*")
 	(goto-char (point-max))
 	(insert (decode-coding-string (concat "\n" error-msg) 'utf-8))
@@ -200,6 +241,18 @@ and response headers, object is an text."
   (interactive)
   (zxc-db-send "query" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))
 			     (cons "limit" "500")) #'zxc-db-create-sql-insert))
+
+(defun zxc-db-send-region-format-delete-sql ()
+  "查询当前区域SQL并转化为delete语句"
+  (interactive)
+  (zxc-db-send "query" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))
+			     (cons "limit" "500")) #'zxc-db-create-sql-delete))
+
+(defun zxc-db-send-region-format-update-sql ()
+  "查询当前区域SQL并转化为update语句"
+  (interactive)
+  (zxc-db-send "query" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))
+			     (cons "limit" "500")) #'zxc-db-create-sql-update))
 
 
 (defun zxc-db-send-region-decrypt ()
