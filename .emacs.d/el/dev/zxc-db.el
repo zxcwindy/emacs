@@ -80,7 +80,7 @@ and response headers, object is an text."
 (defun zxc-db-create-column ()
   "创建表头"
   (mapcar #'(lambda (meta-info)
-	      (make-ctbl:cmodel :title meta-info :align 'center :sorter nil))
+	      (make-ctbl:cmodel :title (s-replace-regexp ".*\\." "" meta-info) :align 'center :sorter nil))
 	  (getf zxc-db-result :metadata)))
 
 (defun zxc-db-create-table-buffer ()
@@ -97,6 +97,26 @@ and response headers, object is an text."
     (display-buffer (ctbl:cp-get-buffer cp))
     (when pre-10-tbl
       (kill-buffer pre-10-tbl))))
+
+(defun zxc-db-create-sql-insert ()
+  "根据结果创建insert sql"
+  (let* ((tmp-meta (getf zxc-db-result :metadata))
+	 (tmp-data (getf zxc-db-result :data))
+	 (tmp-tablename (s-replace-regexp "\\..*" "" (nth 0 tmp-meta))))
+    (when (> (length tmp-data) 0)
+      (insert "\n"))
+    (loop for row-data in tmp-data
+	  do  (let ((value-str ""))
+		(loop for item in row-data
+		      do (if (eq 'string (type-of item))
+			     (setf value-str (s-concat value-str "'" item "',"))
+			   (setf value-str (s-concat value-str (prin1-to-string item) ","))))
+		(insert "\ninsert into " tmp-tablename " (" (s-join "," (mapcar #'(lambda (meta)
+										    (s-replace-regexp ".*\\." "" meta))
+										tmp-meta))
+			") values (" (substring value-str 0 (- (length value-str) 1)) ");" )))))
+
+
 
 (defun zxc-db-get-table-name ()
   "取得表名"
@@ -174,6 +194,13 @@ and response headers, object is an text."
   "获取查询语句"
   (interactive)
   (zxc-db-get-data "getSelectSql"))
+
+(defun zxc-db-send-region-format-insert-sql ()
+  "查询当前区域SQL并转化为insert语句"
+  (interactive)
+  (zxc-db-send "query" (list (cons "sql" (zxc-util-get-region-or-paragraph-string))
+			     (cons "limit" "500")) #'zxc-db-create-sql-insert))
+
 
 (defun zxc-db-send-region-decrypt ()
   "解密当前区域密码内容"

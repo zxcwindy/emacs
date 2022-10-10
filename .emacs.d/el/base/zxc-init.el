@@ -90,7 +90,7 @@
 ;; 设置字体大小,C-x C-0  , `C-x C-+’ and ‘C-x C--’ (‘text-scale-adjust’)
 (defun zxc-set-font-size (font-size)
   "change font size"
-  (interactive "n字体50-100:")
+  (interactive "n字体50-300:")
   (setf zxc-frame-font-default-size font-size)
   (set-face-attribute 'default nil :height zxc-frame-font-default-size))
 
