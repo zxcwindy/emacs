@@ -192,10 +192,10 @@ that was stored with ska-point-to-register."
     (save-excursion
       (when is-other-buffer
 	(other-window 1))
-      (goto-line beg-line-num)
+      (forward-line beg-line-num)
       (let ((beg (line-beginning-position)))
 	(when end-line-str
-	  (goto-line (string-to-number end-line-str)))
+	  (forward-line (string-to-number end-line-str)))
 	(let ((end (line-end-position)))
 	  (kill-ring-save beg end))))
     (yank)
@@ -329,6 +329,10 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 
 ;;切换窗口
 (global-set-key (kbd "C-x o") 'ace-window)
+(custom-set-faces
+ '(aw-leading-char-face
+   ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+
 (setq tab-width 4)
 (setq tab-stop-list (number-sequence 4 200 4))
 

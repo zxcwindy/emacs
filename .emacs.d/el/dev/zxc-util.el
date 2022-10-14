@@ -152,5 +152,12 @@ return the positions list "
 		 (point))))
       (buffer-substring-no-properties start end))))
 
+;;; 更新时处理，pom-list需要reverse排序 sort -rn pom-list
+(defun read-lines (filePath)
+  "Return a list of lines of a file at filePath."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (split-string (buffer-string) "\n" t)))
+
 
 (provide 'zxc-util)
