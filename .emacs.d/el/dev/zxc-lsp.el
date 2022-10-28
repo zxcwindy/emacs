@@ -11,6 +11,7 @@
 
 ;;; Increase the amount of data which Emacs reads from the process#
 (setq read-process-output-max (* 3 1024 1024)) ;; 3mb
+;; (setq lsp-keep-workspace-alive nil)
 
 (setq lsp-log-io nil
       lsp-auto-guess-root t)
@@ -24,7 +25,7 @@
 					   (indent-whole)
 					   (lsp)))
 (add-hook 'js2-mode-hook #'lsp)
-
+(add-hook 'typescript-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
 
 ;;; lsp-workspace-restart
@@ -70,12 +71,15 @@
 ;;				      company-files)))))
 (add-hook 'java-mode-hook #'lsp)
 
-
 (add-hook 'nxml-mode-hook #'(lambda ()
 			      (lsp)
-			      (set (make-local-variable 'company-backends)
-				   '((company-capf
-				      zxc-company-pom-backend)))))
+			      (sleep-for 0.5)
+			      (setq-local company-backends
+					  '((company-capf :with zxc-company-pom-backend)))))
+
+;; (add-hook 'nxml-mode-hook #'(lambda ()
+;;			      (lsp)
+;;			      (setq company-backends '((company-capf :with zxc-company-pom-backend)))))
 
 ;; Trigger completion immediately.
 (setq company-idle-delay 0)
@@ -115,6 +119,9 @@
 ;; (setq lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx2G" "-Xms100m"))
 
 (define-key lsp-mode-map (kbd "C-c C-l p") 'zxc-lsp-find-java-descriptor)
+(define-key lsp-mode-map (kbd "C-c C-l !") #'(lambda ()
+					       (interactive)
+					       (lsp-execute-code-action-by-kind "quickfix")))
 
 
 (provide 'zxc-lsp)

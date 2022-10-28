@@ -4,6 +4,7 @@
 (require 'company)
 (require 'cl-lib)
 (require 'nxml-mode)
+(require 'zxc-util)
 
 (defun zxc-pom-parse (str)
   "输出./szjw/portal-api/1.5/portal-api-1.5.pom
@@ -28,14 +29,6 @@
 		<artifactId>%s</artifactId>
 		<version>%s</version>
 	    </dependency>" group-id artifact-id version-id)))
-
-
-;;; 更新时处理，pom-list需要reverse排序 sort -rn pom-list
-(defun read-lines (filePath)
-  "Return a list of lines of a file at filePath."
-  (with-temp-buffer
-    (insert-file-contents filePath)
-    (split-string (buffer-string) "\n" t)))
 
 ;;;###autoload
 (defun zxc-company-pom-update ()

@@ -391,7 +391,6 @@
 (require 'zxc-quick-marco)
 
 (require 'zxc-theme)
-
 ;;; The emacs-startup-hook runs later than the after-init-hook
 ;; (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)
 (add-hook 'emacs-startup-hook '(lambda ()

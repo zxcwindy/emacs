@@ -29,6 +29,14 @@
 (puthash "135" (list :userName "oracle" :host "10.1.234.135" :password "oracle") shell-host-alias-interface)
 (puthash "38" (list :userName "shandong" :host "10.1.235.38" :password "shandong") shell-host-alias-interface)
 
+(puthash "dam" "kun_361" zxc-db-ac-alias-db-map)
+(puthash "dc" "dam" zxc-db-ac-alias-db-map)
+(puthash "dev" "kun_dam_3.6.1_dev" zxc-db-ac-alias-db-map)
+(puthash "txpyspider" "pyspider" zxc-db-ac-alias-db-map)
+(puthash "370" "kun_dam_3.7.0_dev" zxc-db-ac-alias-db-map)
+(puthash "361" "kun_dam_3.6.1_dev" zxc-db-ac-alias-db-map)
+
+
 (defvar zxc-db-data-result nil
   "返回结果集")
 
@@ -71,7 +79,7 @@ which defaults to 'utf-8"
     (if (not zxc-db-is-working-time)
 	(deferred:$
 	  ;; =s_sh600248,s_sz300327,s_sh603799,s_sh688660
-	  (deferred:url-get "http://qt.gtimg.cn/q=s_sh603799,s_sh688660,s_sz000858,s_sh600276,s_sh600763,s_sh000001")
+	  (deferred:url-get "http://qt.gtimg.cn/q=s_sh603799,s_sz000157,s_sz000858,s_sh600276,s_sz002078,s_sz300327,s_sh000001")
 	  (deferred:nextc it
 	    (lambda (buf)
 	      (let ((data (with-current-buffer buf (buffer-string))))
@@ -121,5 +129,12 @@ which defaults to 'utf-8"
 (defun zxc-cancel-db-time ()
   (cancel-timer zxc-db-gp-query-timer)
   (setq m123 ""))
+
+
+(defun zxc-nginx-conf-notify-callback (event)
+  (call-process "/bin/bash" nil "*nginx*" nil "-c" "myresty -s reload"))
+
+(file-notify-add-watch
+ "/home/david/opt/openresty-1.11.2.3/nginx/conf/nginx.conf" '(change) 'zxc-nginx-conf-notify-callback)
 
 (provide 'my-yas-var)

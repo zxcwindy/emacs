@@ -192,10 +192,10 @@ that was stored with ska-point-to-register."
     (save-excursion
       (when is-other-buffer
 	(other-window 1))
-      (forward-line beg-line-num)
+      (goto-line beg-line-num)
       (let ((beg (line-beginning-position)))
 	(when end-line-str
-	  (forward-line (string-to-number end-line-str)))
+	  (goto-line (string-to-number end-line-str)))
 	(let ((end (line-end-position)))
 	  (kill-ring-save beg end))))
     (yank)

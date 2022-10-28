@@ -31,7 +31,7 @@
   (interactive)
   (let ((command-path (s-concat (projectile-acquire-root) "._command"))
 	(his-commands nil)
-	(default-commands "mvn clean compile\nmvn clean package\n"))
+	(default-commands "mvn clean compile\nmvn clean package\nmvn clean install\n"))
     (if (file-exists-p command-path)
 	(setf his-commands (read-lines command-path))
       (progn
