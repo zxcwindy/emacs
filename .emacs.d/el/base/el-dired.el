@@ -1,6 +1,13 @@
 (require 'dired)
 (require 'dired-details)
 ;;(dired-details-install)
+(require 'dired-x)
+
+;;; M-n进行切换
+(setq dired-guess-shell-alist-user
+      '(("\\.tar\\.gz$" "tar -xf")
+	("\\.jar$" "java -jar" (concat "jar -xvf " file " ") (concat "jar -uvf " file " "))
+	("pom.xml" "mvn clean package -Dmaven.test.skip=true -Dfindbugs.skip=true -f" "mvn clean compile -Dmaven.test.skip=true -Dfindbugs.skip=true -f")))
 
 
 

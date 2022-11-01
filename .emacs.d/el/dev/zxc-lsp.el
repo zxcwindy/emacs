@@ -36,7 +36,6 @@
 
 (cl-defun zxc-lsp-find-java-descriptor ()
   "查找当前方法的签名"
-  (interactive)
   (let ((loc (lsp-request "textDocument/definition"
 			  (append (lsp--text-document-position-params) nil))))
     (if (seq-empty-p loc)
@@ -118,7 +117,40 @@
 ;; current VSCode defaults
 ;; (setq lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx2G" "-Xms100m"))
 
-(define-key lsp-mode-map (kbd "C-c C-l p") 'zxc-lsp-find-java-descriptor)
+(defun zxc-lsp-location-maven-path ()
+  "快速打开maven对应的本地路径"
+  (save-excursion
+    (let* ((start-pos (progn (search-backward "<dependency>")
+			     (point)))
+	   (end-pos (progn (search-forward "</dependency>")
+			   (point)))
+	   (mvn-xml (xml-parse-region start-pos end-pos))
+	   (group-id nil)
+	   (artifact-id nil)
+	   (version nil))
+      (cl-loop for temp-list in (car mvn-xml)
+	       do (when (and temp-list (eq (type-of temp-list) 'cons))
+		    (cond ((eq (nth 0 temp-list) 'groupId)
+			   (setf group-id (nth 2 temp-list)))
+			  ((eq (nth 0 temp-list) 'artifactId)
+			   (setf artifact-id (nth 2 temp-list)))
+			  ((eq (nth 0 temp-list) 'version)
+			   (setf version (nth 2 temp-list))))))
+      (find-file (concat "/home/david/.m2/repository/" (s-replace "." "/" group-id) "/"
+			 (concat artifact-id "/" (if (and version
+							  (not (s-contains? "$" version)))
+						     version
+						   "")))))))
+
+;;;
+
+(define-key lsp-mode-map (kbd "C-c C-l p") #'(lambda ()
+					       (interactive)
+					       (cond ((eq major-mode 'java-mode)
+						      (zxc-lsp-find-java-descriptor))
+						     ((eq major-mode 'nxml-mode)
+						      (zxc-lsp-location-maven-path)))))
+
 (define-key lsp-mode-map (kbd "C-c C-l !") #'(lambda ()
 					       (interactive)
 					       (lsp-execute-code-action-by-kind "quickfix")))

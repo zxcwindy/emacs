@@ -59,6 +59,7 @@
   (cl-case command
     (interactive (company-begin-backend 'zxc-company-pom-backend))
     (prefix (and (eq major-mode 'nxml-mode)
+		 (s-contains? "pom" (buffer-name (current-buffer)))
 		 (company-grab-symbol)))
     (candidates (zxc-company-pom-predicate arg))
     (sorted t)
