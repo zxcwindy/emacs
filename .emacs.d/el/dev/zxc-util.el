@@ -70,7 +70,7 @@ return the positions list "
   "convert code format
 用string-inflection替换"
   (interactive)
-  (let* ((str (filter-buffer-substring (point) (mark) t))
+  (let* ((str (buffer-substring-no-properties (point) (mark)))
 	 (source (get-format-type str))
 	 (target (get-target-format-type)))
     (if (equal (format-type-type-name source) (format-type-type-name target))

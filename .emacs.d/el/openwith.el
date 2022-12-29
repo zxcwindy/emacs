@@ -50,7 +50,7 @@
     ("\\.mp3\\'" "xmms" (file))
     ("\\.chm\\'" "kchmviewer" (file))
     ;; ("\\.\\(?:xls\\|doc\\|ods\\)\\'" "et" (file))
-    ("\\.\\(?:mpe?g\\|avi\\|wmv\\|mp4\\|webm\\|mkv\\)\\'" "vlc" ("--config=/home/david/snap/vlc/common/vlcrc" file))
+    ("\\.\\(?:mpe?g\\|avi\\|wmv\\|mp4\\|webm\\|mkv\\|MOV\\)\\'" "vlc" ("--config=/home/david/snap/vlc/common/vlcrc" file))
     ;; ("\\.\\(?:jp?g\\|png\\)\\'" "display" (file))
     ;; ("\\.\\(?:xlsx?\\|docx?\\|ods\\|odt\\|doc\\)\\'" "soffice" (file))
     ("\\.xlsx?\\'" "et" (file))

@@ -85,7 +85,7 @@
     (string-inflection-sql-style-cycle))
    (t
     ;; default
-    (string-inflection-ruby-style-cycle))))
+    (string-inflection-java-style-cycle))))
 
 (mapc #'(lambda (mode-hook)
 	  (add-hook mode-hook 'zxc-mode))
