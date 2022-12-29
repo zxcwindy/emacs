@@ -32,7 +32,7 @@
 ;; (setq lsp-java-vmargs
 ;;       (append lsp-java-vmargs (list "-javaagent:/opt/sts-4.15.1.RELEASE/lombok.jar")))
 
-(setq lsp-java-vmargs (list "-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx2G" "-Xms512m" "-javaagent:/opt/sts-4.15.1.RELEASE/lombok.jar"))
+(setq lsp-java-vmargs (list "-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms512m" "-javaagent:/opt/sts-4.15.1.RELEASE/lombok.jar"))
 
 (cl-defun zxc-lsp-find-java-descriptor ()
   "查找当前方法的签名"
@@ -142,6 +142,15 @@
 						     version
 						   "")))))))
 
+(add-hook 'go-mode-hook #'lsp-deferred)
+
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
 ;;;
 
 (define-key lsp-mode-map (kbd "C-c C-l p") #'(lambda ()
@@ -150,7 +159,7 @@
 						      (zxc-lsp-find-java-descriptor))
 						     ((eq major-mode 'nxml-mode)
 						      (zxc-lsp-location-maven-path)))))
-
+;;;  添加java注释 type /** | */ and invoke M-x company-complete with cursor at |.
 (define-key lsp-mode-map (kbd "C-c C-l !") #'(lambda ()
 					       (interactive)
 					       (lsp-execute-code-action-by-kind "quickfix")))
