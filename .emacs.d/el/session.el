@@ -126,7 +126,7 @@
 
 ;; General Emacs/XEmacs-compatibility compile-time macros
 (eval-when-compile
-  (require 'cl)
+  (require 'cl-lib)
   (defmacro cond-emacs-xemacs (&rest args)
     (cond-emacs-xemacs-macfn
      args "`cond-emacs-xemacs' must return exactly one element"))
@@ -402,7 +402,7 @@ After writing `session-save-file', set mode bits of that file to this
 value if it is non-nil."
   :group 'session-globals
   :type '(choice (const :tag "Don't change" nil) integer))
-  
+
 (defvar session-before-save-hook nil
   "Hook to be run before `session-save-file' is saved.
 The functions are called after the global variables are written,
@@ -747,8 +747,8 @@ number of entries skipped additionally."
 		   len (length (car elem)))
 	     (push (list* pos (+ pos len) (- len)) back-list)
 	     (when pos1			; adopt POS{1,2} if after deletion
-	       (if (>  pos1 pos) (incf pos1 len))
-	       (if (>= pos2 pos) (incf pos2 len))))
+	       (if (>  pos1 pos) (cl-incf pos1 len))
+	       (if (>= pos2 pos) (cl-incf pos2 len))))
 	    ((integerp (car elem))	; insertion: (START . END)
 	     (setq pos (car elem)
 		   len (- (cdr elem) pos))
@@ -766,15 +766,15 @@ number of entries skipped additionally."
 	    ((null pos1)		; looking for undo-boundaries
 	     (when (if elem
 		       (and (zerop num) pos)
-		     (<= (decf num) 0))
+		     (<= (cl-decf num) 0))
 	       (setq undo-list nil)))
 	    ((eq elem t)		; uninteresting element
 	     (setq pos nil))
 	    ((> num 0)			; interesting, but not the NUM's one
-	     (decf num)
+	     (cl-decf num)
 	     (setq pos nil))
 	    ((and (<= pos1 pos) (<= pos pos2)) ; inside start region
-	     (incf session-jump-to-last-change-counter)
+	     (cl-incf session-jump-to-last-change-counter)
 	     (setq pos nil))
 	    (t
 	     (setq undo-list nil))))
@@ -787,14 +787,14 @@ number of entries skipped additionally."
 	   (setq pos session-last-change))
 	  (t				; pos in undo-list
 	   (if session-jump-to-last-change-counter
-	       (incf session-jump-to-last-change-counter))
+	       (cl-incf session-jump-to-last-change-counter))
 	   (setq back-list (cdr back-list))))
     (when pos
       (while back-list
 	(setq elem (pop back-list))
 	(cond ((null elem))		; integer position in undo-list
 	      ((> pos (cadr elem))	; position after affected region
-	       (incf pos (cddr elem)))	; increment/decrement position
+	       (cl-incf pos (cddr elem)))	; increment/decrement position
 	      ((> pos (car elem))	; position in affected region
 	       (setq pos (car elem)))))	; set position to region begin
       pos)))
@@ -819,7 +819,7 @@ to it due to intermediate insert/delete elements in the
 	    (undo-list (and (consp buffer-undo-list) buffer-undo-list)))
 	(setq arg 1)
 	(while (and undo-list (null (car undo-list))) (pop undo-list))
-	(while undo-list (or (pop undo-list) (incf arg)))
+	(while undo-list (or (pop undo-list) (cl-incf arg)))
 	(message "Store %d as special last-change position (%s %d %s)"
 		 pos
 		 (substitute-command-keys "\\[universal-argument]")
@@ -867,7 +867,7 @@ to it due to intermediate insert/delete elements in the
 		    (message "Jumped to stored last-change position"))
 		   ((null arg)
 		    (setq this-command 'session-jump-to-last-change-seq)))
-             (run-hooks 'session-after-jump-to-last-change-hook))))))
+	     (run-hooks 'session-after-jump-to-last-change-hook))))))
 
 
 ;;;===========================================================================
@@ -1071,9 +1071,9 @@ a file in the menu."
 	     postfix)
 	(when (cdr components)		; more than one remaining dir component
 	  (setq components (nreverse components))
-	  (incf len (length (car components)))
+	  (cl-incf len (length (car components)))
 	  (push (pop components) postfix) ; always use last one
-	  (while (<= (incf len (1+ (length (car components)))) max-string)
+	  (while (<= (cl-incf len (1+ (length (car components)))) max-string)
 	    (push (pop components) postfix))
 	  (concat prefix sep-string " ... " sep-string
 		  (mapconcat 'identity postfix sep-string)))))))
@@ -1483,7 +1483,7 @@ Elements in the list are not printed if one of the following is true:
 				 (read estr))
 			     (error t))))
 	      (push estr slist)
-	      (decf len)))))
+	      (cl-decf len)))))
       (when (and slist (null val))	; don't print non-true lists
 	(insert (format "(setq-default %S '(" symbol))
 	(setq slist (nreverse slist))

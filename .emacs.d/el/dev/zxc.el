@@ -19,6 +19,7 @@
 ;; MA 02111-1307 USA
 
 (require 'cl-lib)
+(require 'image-mode)
 (require 'zxc-util)
 (require 'zxc-http)
 (require 'zxc-comet)
@@ -45,6 +46,22 @@
 
 (setq docker-run-as-root t)
 
+(advice-add 'docker-container-shell-selection :override
+	    (lambda (prefix)
+	      (interactive "P")
+	      (docker-utils-ensure-items)
+	      (--each (docker-utils-get-marked-items-ids)
+		(docker-with-sudo
+		  (docker-container-shell it prefix)))))
+
+;; (defun docker-container-shell-selection (prefix)
+;;   "Run `docker-container-shell' on the containers selection forwarding PREFIX."
+;;   (interactive "P")
+;;   (docker-utils-ensure-items)
+;;   (--each (docker-utils-get-marked-items-ids)
+;;     (docker-with-sudo
+;;       (docker-container-shell it prefix))))
+
 (define-key zxc-mode-map (kbd  "C-; cs") #'zxc-db-get-select-sql)
 (define-key zxc-mode-map (kbd  "C-; cf") #'code-format)
 (define-key zxc-mode-map (kbd  "C-; cq") #'zxc-util-convert-table-to-sql)
@@ -68,6 +85,8 @@
 (define-key zxc-mode-map (kbd  "C-; es") #'zxc-es--query-sql)
 (define-key zxc-mode-map (kbd  "C-; ul") #'zxc-template-list-view)
 (define-key zxc-mode-map (kbd  "C-; us") #'zxc-template-search-view)
+
+(define-key image-mode-map (kbd "i") #'zxc-db-send-image-orc)
 
 (defun code-format ()
   (interactive)

@@ -34,7 +34,7 @@
 (defun zxc-company-pom-update ()
   "刷新pom列表"
   (interactive)
-  (shell-command "cd ~/.m2/repository/ ; find ./ -name \"*pom\" | sort -nr > /home/david/tmp/pom-list-sort" )
+  (shell-command "cd ~/.m2/repository/ ; find ./ -name \"*pom\" -type f | sort -nr > /home/david/tmp/pom-list-sort" )
   (with-temp-file "~/.emacs.d/el/dev/zxc-company-pom-file.el"
     (insert "(setq zxc-company-pom-list " (format "'%S" (read-lines "/home/david/tmp/pom-list-sort") ) ")"))
   (byte-compile-file "~/.emacs.d/el/dev/zxc-company-pom-file.el")
