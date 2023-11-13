@@ -271,5 +271,30 @@ and response headers, object is an text."
 	  (with-current-buffer cur-buf
 	    (replace-string-in-region origin-password data decrypt-start decrypt-end)))))))
 
+(defun zxc-db-send-image-orc ()
+  "图片识别"
+  (interactive)
+  (let  ((cur-path (url-encode-url (buffer-file-name))))
+    (deferred:$
+      (deferred:url-get (format "%s/service/rest/api/ai/ocr" zxc-db-host) (list (cons "imagePath" cur-path)))
+      (deferred:nextc it
+	(lambda (buf)
+	  (let ((data (with-current-buffer buf (buffer-string)))
+		(json-object-type 'plist)
+		(json-array-type 'list)
+		(json-false nil))
+	    (kill-buffer buf)
+	    (let* ((word-result (json-read-from-string (decode-coding-string data 'utf-8)))
+		   (words (cl-getf word-result :words_result))
+		   (ocr-buf (get-buffer-create "*ocr-result*")))
+	      (with-current-buffer ocr-buf
+		(erase-buffer)
+		(cl-loop for word in words
+			 do (insert (cl-getf word :words) "\n")))
+	      (split-window-right)
+	      (switch-to-buffer ocr-buf))))))))
+
+
+
 
 (provide 'zxc-db)

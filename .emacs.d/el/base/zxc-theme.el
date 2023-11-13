@@ -66,7 +66,7 @@
 
 ;;;外观&主题
 (require 'color-theme-sanityinc-solarized)
-(require 'cl)
+(require 'cl-lib)
 (require 'solar)
 
 (defvar theme-changer-mode "deftheme"
@@ -127,29 +127,29 @@ If NEW is set to nil, shall switch to default Emacs theme."
     (if new
 	(apply (symbol-function new) '()))))
 
-;; (defun change-theme (day-theme night-theme)
-;;   (let*
-;;       ((now (current-time))
+(defun change-theme (day-theme night-theme)
+  (let*
+      ((now (current-time))
 
-;;        (today-times    (sunrise-sunset-times (today)))
-;;        (tomorrow-times (sunrise-sunset-times (tomorrow)))
+       (today-times    (sunrise-sunset-times (today)))
+       (tomorrow-times (sunrise-sunset-times (tomorrow)))
 
-;;        (sunrise-today (first today-times))
-;;        (sunset-today (second today-times))
-;;        (sunrise-tomorrow (first tomorrow-times)))
+       (sunrise-today (first today-times))
+       (sunset-today (second today-times))
+       (sunrise-tomorrow (first tomorrow-times)))
 
-;;     (if (daytime-p sunrise-today sunset-today)
-;;	(progn
-;;	  (switch-theme night-theme day-theme)
-;;	  (run-at-time (+second sunset-today) nil
-;;		       'change-theme day-theme night-theme))
+    (if (daytime-p sunrise-today sunset-today)
+	(progn
+	  (switch-theme night-theme day-theme)
+	  (run-at-time (+second sunset-today) nil
+		       'change-theme day-theme night-theme))
 
-;;       (switch-theme day-theme night-theme)
-;;       (if (time-less-p now sunrise-today)
-;;	  (run-at-time (+second sunrise-today) nil
-;;		       'change-theme day-theme night-theme)
-;;	(run-at-time (+second sunrise-tomorrow) nil
-;;		     'change-theme day-theme night-theme)))))
+      (switch-theme day-theme night-theme)
+      (if (time-less-p now sunrise-today)
+	  (run-at-time (+second sunrise-today) nil
+		       'change-theme day-theme night-theme)
+	(run-at-time (+second sunrise-tomorrow) nil
+		     'change-theme day-theme night-theme)))))
 
 (defun zxc-change-theme (day-theme night-theme)
   (let*
@@ -173,9 +173,9 @@ If NEW is set to nil, shall switch to default Emacs theme."
       (zxc-theme-custom-night-theme)
       (if (time-less-p now sunrise-today)
 	  (run-at-time (+second sunrise-today) nil
-		       'zxc-change-theme day-theme night-theme)
+			  'zxc-change-theme day-theme night-theme)
 	(run-at-time (+second sunrise-tomorrow) nil
-		     'zxc-change-theme day-theme night-theme)))))
+			'zxc-change-theme day-theme night-theme)))))
 
 (defun zxc-theme-custom-night-theme ()
   "晚上的theme标签颜色设置"
