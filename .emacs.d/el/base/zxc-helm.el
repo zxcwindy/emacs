@@ -1,4 +1,4 @@
-(require 'helm-config)
+;; (require 'helm-config)
 
 (helm-mode 0)
 

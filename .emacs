@@ -31,7 +31,7 @@
  '(org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
-   '(mu4e-alert polymode ov company-tabnine orderless helm-lsp exec-path-from-shell typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
+   '(magit-popup mu4e-alert polymode ov company-tabnine orderless helm-lsp exec-path-from-shell typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    '((encoding . utf-8)
@@ -102,7 +102,8 @@
 	"/opt/mu-1.8.11/share/emacs/site-lisp/mu4e"
 	;;"~/.emacs.d/jdee-2.4.1/lisp"
 	;; "~/.emacs.d/swank-js"
-	"~/git/ecb"
+	;; "~/git/ecb"
+	;; "~/git/openai"
 	))
 
 ;;用服务的方式启动
@@ -287,7 +288,7 @@
 ;; (require 'browse-kill-ring)
 ;; (global-set-key (kbd "C-c k") 'browse-kill-ring)
 
-(require 'helm-config)
+;; (require 'helm-config)
 (global-set-key (kbd "C-c h") 'helm-mini)
 ;;; auto-rever-tail-mode
 ;;; follow-mode
