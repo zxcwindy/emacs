@@ -4,6 +4,8 @@
       (quote (("default"
 	       ("shell" (or
 			 (mode . shell-mode)))
+	       ("EAF" (or
+			 (mode . eaf-mode)))
 	       ("java" (or
 		       (mode . java-mode)))
 	       ("web" (or

@@ -10,6 +10,7 @@
  '(auth-source-save-behavior nil)
  '(beacon-color "#dc322f")
  '(case-fold-search t)
+ '(codeium/metadata/api_key "a1688793-5edf-4c2d-a65a-90052adbc60f")
  '(coffee-tab-width 4)
  '(custom-safe-themes
    '("4b137a22ad4b2796afbeee80afb9ef0fab18c2440689249ebfcf7621914eb90a" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default))
@@ -31,7 +32,7 @@
  '(org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
  '(outline-minor-mode-prefix (kbd "C-;"))
  '(package-selected-packages
-   '(magit-popup mu4e-alert polymode ov company-tabnine orderless helm-lsp exec-path-from-shell typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
+   '(use-package magit-popup mu4e-alert polymode ov company-tabnine orderless helm-lsp exec-path-from-shell typescript-mode ox-hugo json-mode org-roam-timestamps org-modern org-download bash-completion valign gnu-elpa-keyring-update flymake-shellcheck go-mode lsp-java helm-org-rifle editorconfig org-mind-map tide delight treemacs-projectile treemacs company-lsp lsp-ui lsp-mode helm helm-core ztree zenburn-theme yaml-mode whitespace-cleanup-mode websocket web-mode vue-mode vlf tramp-hdfs tle time-ext theme-changer sudo-edit subatomic-enhanced-theme ssh smex slime shell-here scss-mode sass-mode rainbow-mode rainbow-delimiters projectile php-mode peek-mode paredit page-break-lines oauth2 nginx-mode n4js multi-web-mode move-text minimap magit lua-mode look-mode logstash-conf less-css-mode js2-refactor js-doc js-comint jquery-doc ipcalc impatient-mode hive groovy-mode graphviz-dot-mode gradle-mode google-maps fullscreen-mode flymake-jslint flycheck-package expand-region ess-R-data-view es-mode erlang ensime elpy docker dired-details csv-mode crontab-mode concurrent color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme archive-rpm apache-mode anything angular-snippets ag ac-js2 ac-emmet))
  '(recentf-max-saved-items 400)
  '(safe-local-variable-values
    '((encoding . utf-8)
@@ -215,6 +216,12 @@
 				       (kill-new (dired-current-directory))
 				     (kill-new (buffer-file-name)))))
 
+(global-set-key (kbd "<f2> P") #'(lambda ()
+				   (interactive)
+				   (if (eq major-mode 'dired-mode)
+				       (start-process "" nil "xdg-open" (dired-current-directory))
+				     (message "No directory available to open."))))
+
 (global-set-key (kbd "C-c j") 'join-line)
 (global-set-key [f5] #'(lambda ()
 			 (interactive)
@@ -396,12 +403,13 @@
 
 (require 'zxc-quick-marco)
 (require 'zxc-mybaits)
+(require 'zxc-aimodel)
 
 (require 'zxc-theme)
 ;;; The emacs-startup-hook runs later than the after-init-hook
-;; (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)
-(add-hook 'emacs-startup-hook '(lambda ()
-				 ;; (session-initialize)
-				 ;; (disable-theme 'sanityinc-solarized-light)
-				 ;; (disable-theme 'zxc-misterioso)
-				 (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)))
+(zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)
+;; (add-hook 'emacs-startup-hook '(lambda ()
+;;				 ;; (session-initialize)
+;;				 ;; (disable-theme 'sanityinc-solarized-light)
+;;				 ;; (disable-theme 'zxc-misterioso)
+;;				 (zxc-change-theme 'sanityinc-solarized-light 'zxc-misterioso)))

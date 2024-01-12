@@ -14,7 +14,8 @@
 ;; (setq lsp-keep-workspace-alive nil)
 
 (setq lsp-log-io nil
-      lsp-auto-guess-root t)
+      lsp-auto-guess-root t
+      lsp-java-java-path "/home/david/opt/jdk-17.0.7/bin/java")
 
 (add-hook 'web-mode-hook #'lsp)
 
